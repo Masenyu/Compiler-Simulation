@@ -209,38 +209,3 @@ module.exports =function simplifyDFA( DFA){
 
 module.exports.StateTransition= StateTransition;
 module.exports.AcceptStateList= AcceptStateList;
-// module.exports = router;
-//
-// // 测试
-// var stateTransitions = new Array();
-// var acceptStates = new Array();
-//
-// var term = new StateTransition( 0 , 'a' , 1 );
-// var term1 = new StateTransition( 0 , 'b' , 2 );
-// var term2 = new StateTransition( 1 , 'a' , 3 );
-// var term3 = new StateTransition( 1 , 'b' , 2 );
-// var term4 = new StateTransition( 2 , 'a' , 1 );
-// var term5 = new StateTransition( 2 , 'b' , 4 );
-// var term6 = new StateTransition( 3 , 'a' , 3 );
-// var term7 = new StateTransition( 3 , 'b' , 5 );
-// var term8 = new StateTransition( 4 , 'a' , 6 );
-// var term9 = new StateTransition( 4 , 'b' , 5 );
-// var term10 = new StateTransition( 5 , 'a' , 6 );
-// var term11 = new StateTransition( 6 , 'b' , 5 );
-// var term12 = new StateTransition( 6 , 'a' , 3 );
-//
-//
-// stateTransitions.push( term , term1 ,term2, term3 , term4 , term5 , term6 , term7, term8 , term9 ,term10,term11,term12);
-//
-// var acceptTerm = new AcceptStateList( 3 , 1 );
-// var acceptTerm2 = new AcceptStateList( 4 , 1 );
-// var acceptTerm3 = new AcceptStateList( 5 , 1 );
-// var acceptTerm4 = new AcceptStateList( 6 , 1 );
-//
-// acceptStates.push(acceptTerm , acceptTerm2 ,acceptTerm3 , acceptTerm4);
-//
-// var res = new simplifyDFA(stateTransitions , ['a','b'] , acceptStates );
-// var stateTrans = res.resStateTrans;
-// var alphabets = res.alphabets;
-// var acceptStates = res.acceptStates;
-// console.log('run');
