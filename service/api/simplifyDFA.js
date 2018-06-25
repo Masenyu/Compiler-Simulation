@@ -63,7 +63,7 @@ function judge_next( res , stPoint , edge , stateTransitions ){
   return -1;
 }
 module.exports =function simplifyDFA( DFA){
-  //该函数返回的结果是resStateTrans，alphabets , acceptStateList
+  //该函数返回的结果是resStateTrans,alphabets , acceptStateList
   //console.log(DFA)
   var stateTransitions=DFA.stateTransition
   var alphabets=DFA.alphabet
@@ -116,21 +116,21 @@ module.exports =function simplifyDFA( DFA){
               break;
             }
           }
-          //完全匹配，标记为归到同一组
+          //完全匹配,标记为归到同一组
           if( m === eachJumpNext.length ){
             belongTo.push(l);
             break;
           }
         }
 
-        //找不到匹配项，要分为新的一类
+        //找不到匹配项,要分为新的一类
         if( l === jumpNext.length ){
           jumpNext.push( eachJumpNext );
           belongTo.push( jumpNext.length - 1 );
         }
       }
 
-      //大于1，说明有不同的分组，要进行拆分、删除、添加
+      //大于1,说明有不同的分组,要进行拆分、删除、添加
       if( jumpNext.length > 1 ){
         var toBeRemove = new Array();
 
@@ -173,7 +173,7 @@ module.exports =function simplifyDFA( DFA){
     }
   }
 
-  //对新分好的分组构建状态转化流数组，即resStateTrans
+  //对新分好的分组构建状态转化流数组,即resStateTrans
   for( var i = 0 ; i < res.length ; i ++ ){
     for( var j = 0 ;  j < alphabets.length ; j ++ ){
       var goToState = judge_next(res,res[i][0],alphabets[j],stateTransitions)
