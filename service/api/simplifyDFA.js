@@ -206,6 +206,9 @@ module.exports =function simplifyDFA( DFA){
 
   return { stateTransition:resStateTrans , alphabet:alphabets , acceptStateList:resAcceptStateList};
 }
+
+module.exports.StateTransition= StateTransition;
+module.exports.AcceptStateList= AcceptStateList;
 // module.exports = router;
 //
 // // 测试
