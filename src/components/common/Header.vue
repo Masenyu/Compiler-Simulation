@@ -6,7 +6,7 @@
                     <span>Compiler Stimulation</span>
                 </div>
                 <div class="nav-menu">
-                    <el-menu text-color="#040404" class="el-menu-demo" mode="horizontal" id="navigator" unique-opened router>
+                    <el-menu :default-active="activeIndex" text-color="#040404" class="el-menu-demo" mode="horizontal" id="navigator" unique-opened router>
                         <template v-for="item in items">
                             <el-menu-item :index="item.index">
                             <template class="nav-tab"><i :class="item.icon"></i><span class="nav-tab">{{ item.title }}</span></template>
@@ -37,6 +37,7 @@ export default {
   data () {
     return {
       name: '账号',
+      activeIndex: '/index/lexical-analysis',
       items: [
         {
           icon: 'el-icon-menu',

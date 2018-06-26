@@ -5,7 +5,8 @@
         <div>
           <el-row>
             <el-col :span="24">
-              <p style="font-size: 35px;">{{title}}</p>
+              <!--p style="font-size: 35px;">{{title}}</p-->
+              <img src="../../assets/logo1.png" />
             </el-col>
             <el-col :span="24" style="margin-top:50px;">
               <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
@@ -13,7 +14,19 @@
                   <el-input style="font-size:20px;" placeholder="请输入词法规则：" type="textarea" :autosize="{ minRows: 10, maxRows: 10}" v-model="REForm.RE"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button :disabled="NFA.hasbegin" type="primary" @click="generateFA('REForm')">构建状态机</el-button>
+                  <el-popover
+                    placement="top"
+                    width="160"
+                    :disabled="!available"
+                    v-model="visible2">
+                    <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
+                    <div style="text-align: right; margin: 0">
+                      <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                      <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
+                    </div>
+                    <el-button slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
+                  </el-popover>
+                  <!--el-button :disabled="available" type="primary" @click="generateFA('REForm')">构建状态机</el-button-->
                   <el-button @click="resetForm('REForm')" icon="el-icon-circle-close-outline" circle></el-button>
                   <el-button icon="el-icon-star-off" circle></el-button>
                 </el-form-item>
@@ -51,10 +64,14 @@
                 </div>
                 <el-row>
                   <div class="controller">
-                    <el-button :disabled="isFirsttime" @click="startButton(NFA)" :type="NFA.startbuttonType">{{NFA.startbuttonText}}</el-button>
-                    <el-button :disabled="!NFA.hasbegin" @click="previous(NFA)">上一步</el-button>
-                    <el-button :disabled="!NFA.hasbegin" @click="next(NFA)">下一步</el-button>
-                    <el-button :disabled="!NFA.hasbegin" @click="autoControl(NFA)" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                    <el-row class="buttonela">
+                      <el-button :disabled="isFirsttime" @click="startButton(NFA)" :type="NFA.startbuttonType">{{NFA.startbuttonText}}</el-button>
+                      <el-button :disabled="!NFA.hasbegin" @click="previous(NFA, 0)">上一步</el-button>
+                    </el-row>
+                    <el-row class="buttonelb">
+                      <el-button :disabled="!NFA.hasbegin" @click="autoControl(NFA, 0)" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                      <el-button :disabled="!NFA.hasbegin" @click="next(NFA, 0)">下一步</el-button>
+                    </el-row>
                   </div>
                 </el-row>
               </div>
@@ -82,10 +99,14 @@
                 </div>
                 <el-row>
                   <div class="controller">
-                    <el-button @click="startButton(DFA)" :type="DFA.startbuttonType">{{DFA.startbuttonText}}</el-button>
-                    <el-button @click="previousFocus(DFA)">上一步</el-button>
-                    <el-button @click="nextFocus(DFA)">下一步</el-button>
-                    <el-button @click="autoControlFocus(DFA)" :type="DFA.autobuttonType" plain>{{DFA.autobuttonText}}</el-button>
+                    <el-row class="buttonela">
+                      <el-button :disabled="isFirsttime" @click="startButton(DFA)" :type="DFA.startbuttonType">{{DFA.startbuttonText}}</el-button>
+                      <el-button :disabled="!DFA.hasbegin" @click="previous(DFA, 1)">上一步</el-button>
+                    </el-row>
+                    <el-row class="buttonelb">
+                      <el-button :disabled="!DFA.hasbegin" @click="autoControl(DFA, 1)" :type="DFA.autobuttonType" plain>{{DFA.autobuttonText}}</el-button>
+                      <el-button :disabled="!DFA.hasbegin" @click="next(DFA, 1)">下一步</el-button>
+                    </el-row>
                   </div>
                 </el-row>
               </div>
@@ -113,10 +134,14 @@
                 </div>
                 <el-row>
                   <div class="controller">
-                    <el-button @click="startButton(DFA_S)" :type="DFA_S.startbuttonType">{{DFA_S.startbuttonText}}</el-button>
-                    <el-button @click="previousFocus(DFA_S)">上一步</el-button>
-                    <el-button @click="nextFocus(DFA_S)">下一步</el-button>
-                    <el-button @click="autoControlFocus(DFA_S)" :type="DFA_S.autobuttonType" plain>{{DFA_S.autobuttonText}}</el-button>
+                    <el-row class="buttonela">
+                      <el-button :disabled="isFirsttime" @click="startButton(DFA_S)" :type="DFA_S.startbuttonType">{{DFA_S.startbuttonText}}</el-button>
+                      <el-button :disabled="!DFA_S.hasbegin" @click="previous(DFA_S, 2)">上一步</el-button>
+                    </el-row>
+                    <el-row class="buttonelb">
+                      <el-button :disabled="!DFA_S.hasbegin" @click="autoControl(DFA_S, 2)" :type="DFA_S.autobuttonType" plain>{{DFA_S.autobuttonText}}</el-button>
+                      <el-button :disabled="!DFA_S.hasbegin" @click="next(DFA_S, 2)">下一步</el-button>
+                    </el-row>
                   </div>
                 </el-row>
               </div>
@@ -161,6 +186,7 @@ export default {
     }
     return {
       title: '词法分析',
+      visible2: false,
       REForm: {
         RE: ''
       },
@@ -220,7 +246,8 @@ export default {
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
         isFull_screen: false,
-        zoomicon: 'el-icon-zoom-in'
+        zoomicon: 'el-icon-zoom-in',
+        magnifier: false
       },
       DFA: {
         data: {
@@ -244,7 +271,8 @@ export default {
         startbuttonText: '开始分词',
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
-        isFull_screen: false
+        isFull_screen: false,
+        magnifier: false
       },
       DFA_S: {
         data: {
@@ -292,11 +320,17 @@ export default {
         startbuttonText: '开始分词',
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
-        isFull_screen: false
+        isFull_screen: false,
+        magnifier: false
       },
       layout: true,
       RE_offset: 1,
       isFirsttime: true
+    }
+  },
+  computed: {
+    available() {
+      return this.NFA.hasbegin || this.DFA.hasbegin || this.DFA_S.hasbegin
     }
   },
   methods: {
@@ -346,6 +380,14 @@ export default {
           return false
         }
       })
+    },
+    judgeGenerate () {
+      if(this.available === false) 
+        this.generateFA('REForm')
+    },
+    judgeGenerateSure (){
+      this.visible2 = false 
+      this.generateFA('REForm')
     },
     // 生成状态机图
     async fresh () {
@@ -434,6 +476,10 @@ export default {
       self.NFA.vis = new Network(NFAcontainer, NFAdata, options)
       self.DFA.vis = new Network(DFAcontainer, DFAdata, options)
       self.DFA_S.vis = new Network(DFA_Scontainer, DFA_Sdata, options)
+
+      self.doubleClick(self.NFA)
+      self.doubleClick(self.DFA)
+      self.doubleClick(self.DFA_S)
     },
     // 重置表单
     resetForm (formName) {
@@ -542,165 +588,160 @@ export default {
         easingFunction: 'easeInOutQuad'
       }
       object.vis.fit({ animation: options })
+      object.magnifier = false
     },
     // NFA下一步
-    next (object) {
+    next (object, flag) {
       const self = this
       object.lastState = object.nextState
       object.nextState = object.machine.nextStep()
-      switch (object.nextState.code) {
-        case NFA_CODE.DONE:
-          self.$message({
-            type: 'success',
-            message: 'Token提取完成'
-          })
-          break
-        case NFA_CODE.DOCLOSURE:
-          self.$message({
-            type: 'success',
-            message: '闭包'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 2)
-          break
-        case NFA_CODE.READCHAR:
-          self.$message({
-            type: 'success',
-            message: '读取字符'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          break
-        case NFA_CODE.ACCEPT:
-          self.$message({
-            type: 'success',
-            message: '提取Token'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          break
-        case NFA_CODE.REJECT:
-          // self.$message({
-          //   type: 'error',
-          //   message: '遇到了NFA拒绝的输入'
-          // })
-          alert('遇到了NFA拒绝的输入')
-          break
-        case NFA_CODE.UNKNOWN:
-          // self.$message({
-          //   type: 'error',
-          //   message: '遇到了NFA不认识的字符'
-          // })
-          alert('遇到了NFA不认识的字符')
-          break
-        default:
-          break
-      }
-    },
-    nextFocus (object) {
-      const self = this
-      object.lastState = object.nextState
-      object.nextState = object.machine.nextStep()
-      switch (object.nextState.code) {
-        case DFA_CODE.DONE:
-          self.$message({
-            type: 'success',
-            message: 'Token提取完成'
-          })
-          self.fitAnimated(object)
-          break
-        case DFA_CODE.NEXTSTEP:
-          self.$message({
-            type: 'success',
-            message: '读取字符'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 2)
-          self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
-          break
-        case DFA_CODE.READCHAR:
-          self.$message({
-            type: 'info',
-            message: '遵循最长子串原则继续重复做闭包和读字符'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
+      if (flag === 0)
+        switch (object.nextState.code) {
+          case NFA_CODE.DONE:
+            self.$message({
+              type: 'success',
+              message: 'Token提取完成'
+            })
+            break
+          case NFA_CODE.DOCLOSURE:
+            self.$message({
+              type: 'success',
+              message: '闭包'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 2)
+            break
+          case NFA_CODE.READCHAR:
+            self.$message({
+              type: 'success',
+              message: '读取字符'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            break
+          case NFA_CODE.ACCEPT:
+            self.$message({
+              type: 'success',
+              message: '提取Token'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            break
+          case NFA_CODE.REJECT:
+            // self.$message({
+            //   type: 'error',
+            //   message: '遇到了NFA拒绝的输入'
+            // })
+            alert('遇到了NFA拒绝的输入')
+            break
+          case NFA_CODE.UNKNOWN:
+            // self.$message({
+            //   type: 'error',
+            //   message: '遇到了NFA不认识的字符'
+            // })
+            alert('遇到了NFA不认识的字符')
+            break
+          default:
+            break
+        }
+      else
+        switch (object.nextState.code) {
+          case DFA_CODE.DONE:
+            self.$message({
+              type: 'success',
+              message: 'Token提取完成'
+            })
+            self.fitAnimated(object)
+            break
+          case DFA_CODE.NEXTSTEP:
+            self.$message({
+              type: 'success',
+              message: '读取字符'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 2)
+            self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
+            break
+          case DFA_CODE.READCHAR:
+            self.$message({
+              type: 'info',
+              message: '遵循最长子串原则继续重复做闭包和读字符'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
 
-          break
-        case DFA_CODE.ACCEPT:
-          self.$message({
-            type: 'success',
-            message: '提取Token'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
+            break
+          case DFA_CODE.ACCEPT:
+            self.$message({
+              type: 'success',
+              message: '提取Token'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
 
-          break
-        case DFA_CODE.REJECT:
-          self.$message({
-            type: 'success',
-            message: '遇到了DFA拒绝的输入'
-          })
-          break
-        case DFA_CODE.UNKNOWN:
-          self.$message({
-            type: 'success',
-            message: '遇到了DFA不认识的字符'
-          })
-          break
-        default:
-          break
-      }
+            break
+          case DFA_CODE.REJECT:
+            self.$message({
+              type: 'success',
+              message: '遇到了DFA拒绝的输入'
+            })
+            break
+          case DFA_CODE.UNKNOWN:
+            self.$message({
+              type: 'success',
+              message: '遇到了DFA不认识的字符'
+            })
+            break
+          default:
+            break
+        }
     },
     // NFA上一步
-    previous (object) {
+    previous (object, flag) {
       const self = this
       object.lastState = object.nextState
       object.nextState = object.machine.preStep()
-      switch (object.nextState.code) {
-        case NFA_CODE.NOPRESTEP:
-          self.$message({
-            type: 'info',
-            message: '已经是第一个状态了'
-          })
-          break
-        case NFA_CODE.PRESTEP:
-          self.$message({
-            type: 'success',
-            message: '返回到上一个步骤'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          break
-        default:
-          break
-      }
-    },
-    previousFocus (object) {
-      const self = this
-      object.lastState = object.nextState
-      object.nextState = object.machine.preStep()
-      self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
-      switch (object.nextState.code) {
-        case DFA_CODE.NOPRESTEP:
-          self.$message({
-            type: 'info',
-            message: '已经是第一个状态了'
-          })
-          break
-        case DFA_CODE.PRESTEP:
-          self.$message({
-            type: 'success',
-            message: '返回到上一个步骤'
-          })
-          self.changeWindow(object)
-          self.changeGraph(object, 1)
-          break
-        default:
-          break
-      }
+      if (flag === 0)
+        switch (object.nextState.code) {
+          case NFA_CODE.NOPRESTEP:
+            self.$message({
+              type: 'info',
+              message: '已经是第一个状态了'
+            })
+            break
+          case NFA_CODE.PRESTEP:
+            self.$message({
+              type: 'success',
+              message: '返回到上一个步骤'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            break
+          default:
+            break
+        }
+      else
+        switch (object.nextState.code) {
+          case DFA_CODE.NOPRESTEP:
+            self.$message({
+              type: 'info',
+              message: '已经是第一个状态了'
+            })
+            break
+          case DFA_CODE.PRESTEP:
+            self.$message({
+              type: 'success',
+              message: '返回到上一个步骤'
+            })
+            self.changeWindow(object)
+            self.changeGraph(object, 1)
+            self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
+            break
+          default:
+            break
+        }
     },
     // 改变文字框
     changeWindow (object) {
@@ -772,36 +813,16 @@ export default {
       }
       return str1
     },
-    autoControl (object) {
+    autoControl (object, flag) {
       const self = this
       if (object.autobuttonText === '自动展示') {
         object.autobuttonText = '停止'
         object.autobuttonType = 'danger'
         object.timer = setInterval(() => {
-          self.next(object)
-          if (object.nextState.code === NFA_CODE.DONE) {
+          self.next(object, flag)
+          if (object.nextState.code === NFA_CODE.DONE || object.nextState.code === NFA_CODE.REJECT || object.nextState.code === NFA_CODE.UNKNOWN) {
             object.autobuttonText = '自动展示'
             object.autobuttonType = 'primary'
-            clearInterval(object.timer)
-          }
-        }, 1000)
-      } else {
-        object.autobuttonText = '自动展示'
-        object.autobuttonType = 'primary'
-        clearInterval(object.timer)
-      }
-    },
-    autoControlFocus (object) {
-      const self = this
-      if (object.autobuttonText === '自动展示') {
-        object.autobuttonText = '停止'
-        object.autobuttonType = 'danger'
-        object.timer = setInterval(() => {
-          self.nextFocus(object)
-          if (object.nextState.code === NFA_CODE.DONE) {
-            object.autobuttonText = '自动展示'
-            object.autobuttonType = 'primary'
-            self.fitAnimated(object)
             clearInterval(object.timer)
           }
         }, 1000)
@@ -821,7 +842,20 @@ export default {
         }
       }
       object.vis.focus(val, options)
+      object.magnifier = true
       // object.magnifier = true
+    },
+    // 聚焦到坐标
+    focusPosition (val, object) {
+      var options = {
+        scale: 1.0,
+        position: {x: val.x, y: val.y},
+        animation: {
+          duration: 500,
+          easingFunction: 'linear'
+        }
+      }
+      object.vis.moveTo(options)
     },
     // 全屏化/还原
     full_screen (object) {
@@ -858,27 +892,46 @@ export default {
           self.fitAnimated(self.DFA_S)
         })
       }
+      if (self.NFA.autobuttonText === '停止')
+      {
+        self.NFA.autobuttonText = '自动展示'
+        self.NFA.autobuttonType = 'primary'
+        clearInterval(self.NFA.timer)
+      }
+      if (self.DFA.autobuttonText === '停止')
+      {
+        self.DFA.autobuttonText = '自动展示'
+        self.DFA.autobuttonType = 'primary'
+        clearInterval(self.DFA.timer)
+      }
+      if (self.DFA_S.autobuttonText === '停止')
+      {
+        self.DFA_S.autobuttonText = '自动展示'
+        self.DFA_S.autobuttonType = 'primary'
+        clearInterval(self.DFA_S.timer)
+      }
+    },
+    doubleClick (object) {
+      const self = this
+      object.vis.on('doubleClick', (params) => {
+        params.event = '[original event]'
+        self.$emit('node_double_click', params)
+        console.log('双击事件' + params)
+        if (object.magnifier === false) {
+          object.magnifier = true
+          self.focusPosition(params.pointer.canvas, object)
+        } else {
+          object.magnifier = false
+          self.fitAnimated(object)
+        }
+      })
+      object.vis.on('zoom', (params) => {
+        params.event = '[original event]'
+        self.$emit('zoom', params)
+        console.log('滚动滚轮事件' + params)
+        object.magnifier = true
+      })
     }
-    // doubleClick (object) {
-    //   object.vis.on('doubleClick', (params) => {
-    //     params.event = '[original event]'
-    //     this.$emit('node_double_click', params)
-    //     console.log('双击事件' + params)
-    //     if (this.magnifier === false) {
-    //       this.magnifier = true
-    //       this.focusPosition(params.pointer.canvas, object)
-    //     } else {
-    //       this.magnifier = false
-    //       this.fitAnimated(object)
-    //     }
-    //   })
-    //   object.vis.on('zoom', (params) => {
-    //     params.event = '[original event]'
-    //     this.$emit('zoom', params)
-    //     console.log('滚动滚轮事件' + params)
-    //     this.magnifier = true
-    //   })
-    // }
   }
 }
 </script>
@@ -897,11 +950,18 @@ export default {
   height: 70px;
 }
 .controller {
-  width: 100%;
-  height: 30%;
-  margin-top: 6%;
-  margin-bottom: 8%;
-  text-align: center;
+  width: 50%;
+  margin-right: 10%;
+  text-align: right;
+  float: right;
+}
+.buttonela{
+  margin: 5%;
+  margin-bottom: 2.5%
+}
+.buttonelb{
+  margin: 5%;
+  margin-top: 2.5%
 }
 .p {
   text-align: center;
@@ -928,7 +988,7 @@ div.graph.active div.vis {
   height: 95%;
 }
 div.graph div.vis {
-  height: 350px;
+  height: 400px;
 }
 </style>
 
