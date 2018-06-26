@@ -141,7 +141,7 @@ console.log("EClosure",EClosure);
     for (num = 0;dfa_start_state[num]!=undefined; num++)//开始计算move（A，a），move（A,b）......dfa_start_state[num]!=undefined
     {
       //console.log("dfa_start_state[num]",dfa_start_state[num]);
-      for (c = 0; alphabet[c] != 'ε'; c++)//每个转换条件都计算一遍
+      for (c = 0; alphabet[c] != 'ε'&&alphabet[c] != undefined; c++)//每个转换条件都计算一遍
       {
 
 
