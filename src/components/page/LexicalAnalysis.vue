@@ -57,7 +57,7 @@
                 <div class="token">
                 <div v-if="NFA.hasbegin">
                   <div class="scroll_bar">
-                    <div class="p" v-html="NFA.Token"></div>
+                    <div :id="NFA.TokenId" v-html="NFA.Token"></div>
                   </div>
                 </div>
                 <div v-else>
@@ -94,7 +94,7 @@
                 <div class="token">
                 <div v-if="DFA.hasbegin">
                   <div class="scroll_bar">
-                    <div class="p" v-html="DFA.Token"></div>
+                    <div :id="DFA.TokenId" v-html="DFA.Token"></div>
                   </div>
                 </div>
                 <div v-else>
@@ -131,7 +131,7 @@
                 <div class="token">
                 <div v-if="DFA_S.hasbegin">
                   <div class="scroll_bar">
-                    <div class="p" v-html="DFA_S.Token"></div>
+                    <div :id="DFA_S.TokenId" v-html="DFA_S.Token"></div>
                   </div>
                 </div>
                 <div v-else>
@@ -174,29 +174,39 @@ import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
 export default {
   data () {
-    // 验证正则表达式是否合法
+    // 验证表单输入是否合法
     var validateRe = (rule, value, callback) => {
       let input = value.split('\n')
+      let empty = true
       for (let i = 0; i < input.length; i++) {
-        try {
-          let index = input[i].indexOf('=')
-          if (index === -1) {
-            callback(new Error('第' + (i + 1).toString() + "条规则缺少'=',请按格式输入"))
-          } else if (index < 1) {
+        if (input[i] !== '') {
+          empty = false
+          try {
+            let index = input[i].indexOf('=')
+            if (index === -1) {
+              callback(new Error('第' + (i + 1).toString() + "条规则缺少'=',请按格式输入"))
+            } else if (index < 1) {
             // 等式左侧不能为空
-            callback(new Error('第' + (i + 1).toString() + '条规则等式左侧不能为空'))
-          } else {
-            let re = new RegExp(input[i].substring(input[i].indexOf('=') + 1))
-          }
-        } catch (e) {
-          callback(
-            new Error(
-              '第' + (i + 1).toString() + '条规则不合法，请重新输入'
+              callback(new Error('第' + (i + 1).toString() + '条规则等式左侧不能为空'))
+            } else if (index === input[i].length - 1) {
+              callback(new Error('第' + (i + 1).toString() + '条规则等式右侧不能为空'))
+            } else {
+              let re = new RegExp(input[i].substring(input[i].indexOf('=') + 1))
+            }
+          } catch (e) {
+            callback(
+              new Error(
+                '第' + (i + 1).toString() + '条规则不合法，请重新输入'
+              )
             )
-          )
+          }
         }
       }
-      callback()
+      if (empty === true) {
+        callback(new Error('输入不能为空'))
+      } else {
+        callback()
+      }
     }
     return {
       title: '词法分析',
@@ -206,7 +216,6 @@ export default {
       },
       rulesRE: {
         RE: [
-          { required: true, message: '输入不能为空', tirgger: 'blur' },
           { max: 1200, message: '不能超过1200个字符', tirgger: 'blur' },
           { validator: validateRe, trigger: 'blur' }
         ]
@@ -228,7 +237,8 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
-        TokenId: 0,
+        TokenId: 'NFAToken',
+        ScanId: 'NFAScan',
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
@@ -251,7 +261,8 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
-        TokenId: 1,
+        TokenId: 'DFAToken',
+        ScanId: 'DFAScan',
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
@@ -274,7 +285,8 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
-        TokenId: 2,
+        TokenId: 'DFA_SToken',
+        ScanId: 'DFA_SScan',
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
@@ -301,16 +313,19 @@ export default {
       self.$refs[formName].validate(valid => {
         if (valid) {
           let re = []
+          let regulation = []
           let input = self.REForm.RE.split('\n')
           for (let i = 0; i < input.length; i++) {
-            re.push(input[i].substring(input[i].indexOf('=') + 1))
+            if (input[i] !== '') {
+              regulation.push(input[i])
+              re.push(input[i].substring(input[i].indexOf('=') + 1))
+            }
           }
           let url = '/api/lexical/regularExpression'
           let Params = { RE: re }
           self.$axios
             .post(url, Params)
             .then(function (response) {
-              console.log(response)
               self.NFA.data.transitionTable = response.data[0].transitionTable
               self.NFA.data.alphabet = response.data[0].alphabet
               self.NFA.data.acceptState = response.data[0].acceptStateList
@@ -321,7 +336,7 @@ export default {
                 response.data[2].transitionTable
               self.DFA_S.data.alphabet = response.data[2].alphabet
               self.DFA_S.data.acceptState = response.data[2].acceptStateList
-              sessionStorage.setItem('input', self.REForm.RE)
+              sessionStorage.setItem('regulation', regulation)
               self.addCSS(self.getCsstext())
               self.isFirsttime = false
               self.fresh()
@@ -524,7 +539,7 @@ export default {
       head.appendChild(style)
     },
     getCsstext () {
-      let length = sessionStorage.getItem('input').split('\n').length
+      let length = sessionStorage.getItem('regulation').split(',').length
       let cssText = '\n'
       for (let i = 0; i < length; i++) {
         cssText =
@@ -754,14 +769,13 @@ export default {
       ]
       recognized.push(scanning)
       recognized.push(remains)
-      let html = self.cut(object.TokenForm, recognized)
+      let html = self.cut(object.TokenForm, recognized, object)
       object.Token = html
       // 自动滑动滚动条，把扫描框聚焦在中央
       try {
-        document.getElementsByClassName('p')[object.TokenId].scrollLeft =
-          document.getElementsByClassName('mode999')[object.TokenId]
-            .offsetLeft -
-          document.getElementsByClassName('token')[object.TokenId].offsetWidth /
+        document.getElementById(object.TokenId).scrollLeft =
+          document.getElementById(object.ScanId).offsetLeft -
+          document.getElementById(object.TokenId).offsetWidth /
             2
       } catch (e) {
       }
@@ -781,7 +795,7 @@ export default {
         status
       )
     },
-    cut (str, arr) {
+    cut (str, arr, object) {
       let str1 = ''
       for (let i of arr) {
         if (i[2] < 888) {
@@ -793,8 +807,16 @@ export default {
             str.substring(i[0], i[1]) +
             '&nbsp;' +
             '<span class="tooltiptext">' +
-            sessionStorage.getItem('input').split('\n')[i[2]] +
+            sessionStorage.getItem('regulation').split(',')[i[2]] +
             '</span></div>'
+        } else if (i[2] === 999) {
+          str1 =
+            str1 +
+            "<span id='" + object.ScanId + "' class='mode" +
+            i[2].toString() +
+            "'>" +
+            str.substring(i[0], i[1]) +
+            '</span>'
         } else {
           str1 =
             str1 +
@@ -954,7 +976,7 @@ export default {
   margin: 5%;
   margin-top: 2.5%
 }
-.p {
+#NFAToken,#DFAToken,#DFA_SToken{
   text-align: center;
   font-size: 45px;
   margin: 0px;
