@@ -387,7 +387,31 @@ export default {
     },
     judgeGenerateSure (){
       this.visible2 = false 
+      this.clearData(this.NFA)
+      this.clearData(this.DFA)
+      this.clearData(this.DFA_S)
       this.generateFA('REForm')
+    },
+    //重新生成状态机，刷新数据
+    clearData (object) {
+      object.data.transitionTable = []
+      object.data.alphabet = []
+      object.data.acceptState = []
+      object.machine = null
+      object.nodes = null
+      object.edges = null
+      object.lastState = null
+      object.nextState = null
+      object.TokenForm = ''
+      object.Token = ''
+      object.hasbegin = false
+      object.startbuttonType = 'primary'
+      object.startbuttonText = '开始分词'
+      object.autobuttonType = 'primary'
+      object.autobuttonText = '自动展示'
+      object.isFull_screen = false
+      object.magnifier = false
+      object.vis = null
     },
     // 生成状态机图
     async fresh () {
