@@ -43,10 +43,12 @@
                 </el-row>
                 <div class="token">
                 <div v-if="NFA.hasbegin">
-                  <div class="p" v-html="NFA.Token"></div>
+                  <div class="scroll_bar">
+                    <div class="p" v-html="NFA.Token"></div>
+                  </div>
                 </div>
                 <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" v-model="NFA.TokenForm"></el-input>
+                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input>
                 </div>
                 </div>
                 <el-row>
@@ -66,26 +68,28 @@
                     <span style="font-size: 35px;">DFA</span>
                     <div style="float: right">
                       <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                      <el-button @click="full_screen(DFA)">全屏/还原</el-button>
-                      <el-button @click="fitAnimated(DFA)">适应屏幕</el-button>
+                      <el-button type="info" :icon="DFA.zoomicon" circle @click="full_screen(DFA)"></el-button>
+                      <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(DFA)"></el-button>
                     </div>
                     <div class="vis" id="DFAvis"></div>
                   </div>
                 </el-row>
                 <div class="token">
                 <div v-if="DFA.hasbegin">
-                  <div class="p" v-html="DFA.Token"></div>
+                  <div class="scroll_bar">
+                    <div class="p" v-html="DFA.Token"></div>
+                  </div>
                 </div>
                 <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" v-model="DFA.TokenForm"></el-input>
+                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA.TokenForm"></el-input>
                 </div>
                 </div>
                 <el-row>
                   <div class="controller">
-                    <el-button @click="startButton(DFA)" :type="DFA.startbuttonType">{{DFA.startbuttonText}}</el-button>
-                    <el-button @click="previousFocus(DFA)">上一步</el-button>
-                    <el-button @click="nextFocus(DFA)">下一步</el-button>
-                    <el-button @click="autoControlFocus(DFA)" :type="DFA.autobuttonType" plain>{{DFA.autobuttonText}}</el-button>
+                    <el-button :disabled="isFirsttime" @click="startButton(DFA)" :type="DFA.startbuttonType">{{DFA.startbuttonText}}</el-button>
+                    <el-button :disabled="!DFA.hasbegin" @click="previousFocus(DFA)">上一步</el-button>
+                    <el-button :disabled="!DFA.hasbegin" @click="nextFocus(DFA)">下一步</el-button>
+                    <el-button :disabled="!DFA.hasbegin" @click="autoControlFocus(DFA)" :type="DFA.autobuttonType" plain>{{DFA.autobuttonText}}</el-button>
                   </div>
                 </el-row>
               </div>
@@ -97,26 +101,28 @@
                     <span style="font-size: 35px;">DFA化简</span>
                     <div style="float: right">
                       <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                      <el-button @click="full_screen(DFA_S)">全屏/还原</el-button>
-                      <el-button @click="fitAnimated(DFA_S)">适应屏幕</el-button>
+                      <el-button type="info" :icon="DFA_S.zoomicon" circle @click="full_screen(DFA_S)"></el-button>
+                      <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(DFA_S)"></el-button>
                     </div>
                     <div class="vis" id="DFA_Svis"></div>
                   </div>
                 </el-row>
                 <div class="token">
                 <div v-if="DFA_S.hasbegin">
-                  <div class="p" v-html="DFA_S.Token"></div>
+                  <div class="scroll_bar">
+                    <div class="p" v-html="DFA_S.Token"></div>
+                  </div>
                 </div>
                 <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 2, maxRows: 2}" v-model="DFA_S.TokenForm"></el-input>
+                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA_S.TokenForm"></el-input>
                 </div>
                 </div>
                 <el-row>
                   <div class="controller">
-                    <el-button @click="startButton(DFA_S)" :type="DFA_S.startbuttonType">{{DFA_S.startbuttonText}}</el-button>
-                    <el-button @click="previousFocus(DFA_S)">上一步</el-button>
-                    <el-button @click="nextFocus(DFA_S)">下一步</el-button>
-                    <el-button @click="autoControlFocus(DFA_S)" :type="DFA_S.autobuttonType" plain>{{DFA_S.autobuttonText}}</el-button>
+                    <el-button :disabled="isFirsttime" @click="startButton(DFA_S)" :type="DFA_S.startbuttonType">{{DFA_S.startbuttonText}}</el-button>
+                    <el-button :disabled="!DFA_S.hasbegin" @click="previousFocus(DFA_S)">上一步</el-button>
+                    <el-button :disabled="!DFA_S.hasbegin" @click="nextFocus(DFA_S)">下一步</el-button>
+                    <el-button :disabled="!DFA_S.hasbegin" @click="autoControlFocus(DFA_S)" :type="DFA_S.autobuttonType" plain>{{DFA_S.autobuttonText}}</el-button>
                   </div>
                 </el-row>
               </div>
@@ -148,11 +154,19 @@ export default {
       let input = value.split('\n')
       for (let i = 0; i < input.length; i++) {
         try {
-          let re = new RegExp(input[i].substring(input[i].indexOf('=') + 1))
+          let index = input[i].indexOf('=')
+          if (index === -1) {
+            callback(new Error('第' + (i + 1).toString() + "条规则缺少'=',请按格式输入"))
+          } else if (index < 1) {
+            // 等式左侧不能为空
+            callback(new Error('第' + (i + 1).toString() + '条规则等式左侧不能为空'))
+          } else {
+            let re = new RegExp(input[i].substring(input[i].indexOf('=') + 1))
+          }
         } catch (e) {
           callback(
             new Error(
-              '第' + (i + 1).toString() + '条正则表达式不合法，请重新输入'
+              '第' + (i + 1).toString() + '条规则不合法，请重新输入'
             )
           )
         }
@@ -167,6 +181,7 @@ export default {
       rulesRE: {
         RE: [
           { required: true, message: '输入不能为空', tirgger: 'blur' },
+          { max: 1200, message: '不能超过1200个字符', tirgger: 'blur' },
           { validator: validateRe, trigger: 'blur' }
         ]
       },
@@ -176,36 +191,9 @@ export default {
       },
       NFA: {
         data: {
-          transitionTable: [
-            [[1, 5], [], [], [], [], [], []],
-            [[], [2], [], [], [], [], []],
-            [[3], [], [], [], [], [], []],
-            [[], [], [4], [], [], [], []],
-            [[], [], [], [], [], [], []],
-            [[], [6], [], [], [], [], []],
-            [[7], [], [], [], [], [], []],
-            [[], [], [8], [], [], [], []],
-            [[9], [], [], [], [], [], []],
-            [[], [], [], [10], [], [], []],
-            [[11], [], [], [], [], [], []],
-            [[], [], [], [], [12], [], []],
-            [[13], [], [], [], [], [], []],
-            [[], [], [], [], [], [14], []],
-            [[15], [], [], [], [], [], []],
-            [[], [], [], [], [], [], [16]],
-            [[], [], [], [], [], [], []]
-          ],
-          alphabet: ['ε', 'd', 'o', 'u', 'b', 'l', 'e'],
-          acceptState: [
-            {
-              state: 4,
-              REId: 0
-            },
-            {
-              state: 16,
-              REId: 1
-            }
-          ]
+          transitionTable: [],
+          alphabet: [],
+          acceptState: []
         },
         machine: null,
         nodes: null,
@@ -214,6 +202,7 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
+        TokenId: 0,
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
@@ -224,13 +213,9 @@ export default {
       },
       DFA: {
         data: {
-          transitionTable: [
-          ],
-
+          transitionTable: [],
           alphabet: [],
-
-          acceptState: [
-          ]
+          acceptState: []
         },
         machine: null,
         nodes: null,
@@ -239,46 +224,20 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
+        TokenId: 1,
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
-        isFull_screen: false
+        isFull_screen: false,
+        zoomicon: 'el-icon-zoom-in'
       },
       DFA_S: {
         data: {
-          transitionTable: [
-            [[], [1], [], [], [], [], [7]], // 0
-            [[], [], [], [], [2], [], []], // 1
-            [[], [], [], [], [], [3], []], // 2
-            [[4], [], [], [], [], [], []], // 3
-            [[], [], [], [5], [], [], []], // 4
-            [[], [], [6], [], [], [], []], // 5
-            [[], [], [], [], [], [], []], // 6
-            [[], [], [], [], [], [], []] // 7
-          ],
-
-          alphabet: ['b', 'd', 'e', 'l', 'o', 'u', 'x'],
-
-          acceptState: [
-            {
-              state: 2,
-              REId: 0
-            },
-            {
-              state: 6,
-              REId: 1
-            },
-            {
-              state: 1,
-              REId: 2
-            },
-            {
-              state: 7,
-              REId: 3
-            }
-          ]
+          transitionTable: [],
+          alphabet: [],
+          acceptState: []
         },
         machine: null,
         nodes: null,
@@ -287,14 +246,15 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
+        TokenId: 2,
         hasbegin: false,
         startbuttonType: 'primary',
         startbuttonText: '开始分词',
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
-        isFull_screen: false
+        isFull_screen: false,
+        zoomicon: 'el-icon-zoom-in'
       },
-      layout: true,
       RE_offset: 1,
       isFirsttime: true
     }
@@ -312,31 +272,35 @@ export default {
             re.push(input[i].substring(input[i].indexOf('=') + 1))
           }
           let url = '/api/lexical/regularExpression'
-          let Params = {RE: re}
-          self.$axios.post(url, Params).then(function (response) {
-            console.log(response)
-            self.NFA.data.transitionTable = response.data[0].transitionTable
-            self.NFA.data.alphabet = response.data[0].alphabet
-            self.NFA.data.acceptState = response.data[0].acceptStateList
-            self.DFA.data.transitionTable = response.data[1].transitionTable
-            self.DFA.data.alphabet = response.data[1].alphabet
-            self.DFA.data.acceptState = response.data[1].acceptStateList
-            self.DFA_S.data.transitionTable = response.data[2].transitionTable
-            self.DFA_S.data.alphabet = response.data[2].alphabet
-            self.DFA_S.data.acceptState = response.data[2].acceptStateList
-            sessionStorage.setItem('input', self.REForm.RE)
-            self.addCSS(self.getCsstext())
-            self.isFirsttime = false
-            self.fresh()
-          }).catch(function (error) {
-            self.loading = false
-            console.log(error)
-            Message({
-              message: '请检查网络并重试',
-              type: 'error',
-              center: true
+          let Params = { RE: re }
+          self.$axios
+            .post(url, Params)
+            .then(function (response) {
+              console.log(response)
+              self.NFA.data.transitionTable = response.data[0].transitionTable
+              self.NFA.data.alphabet = response.data[0].alphabet
+              self.NFA.data.acceptState = response.data[0].acceptStateList
+              self.DFA.data.transitionTable = response.data[1].transitionTable
+              self.DFA.data.alphabet = response.data[1].alphabet
+              self.DFA.data.acceptState = response.data[1].acceptStateList
+              self.DFA_S.data.transitionTable =
+                response.data[2].transitionTable
+              self.DFA_S.data.alphabet = response.data[2].alphabet
+              self.DFA_S.data.acceptState = response.data[2].acceptStateList
+              sessionStorage.setItem('input', self.REForm.RE)
+              self.addCSS(self.getCsstext())
+              self.isFirsttime = false
+              self.fresh()
             })
-          })
+            .catch(function (error) {
+              self.loading = false
+              console.log(error)
+              Message({
+                message: '请检查网络并重试',
+                type: 'error',
+                center: true
+              })
+            })
         } else {
           Message({
             message: '格式错误，请检查输入',
@@ -477,7 +441,7 @@ export default {
         object.startbuttonType = 'primary'
         object.startbuttonText = '开始分词'
         self.refresh(object)
-        if (self.NFA.autobuttonText === '停止') {
+        if (object.autobuttonText === '停止') {
           self.autoControl(object)
         }
       }
@@ -726,10 +690,15 @@ export default {
       recognized.push(remains)
       let html = self.cut(object.TokenForm, recognized)
       object.Token = html
-      console.log(document.getElementsByClassName('graph')[0].offsetWidth)
-      document.getElementsByClassName('p')[0].scrollLeft =
-        document.getElementsByClassName('mode999')[0].offsetLeft -
-        document.getElementsByClassName('graph')[0].offsetWidth / 2
+      // 自动滑动滚动条，把扫描框聚焦在中央
+      try {
+        document.getElementsByClassName('p')[object.TokenId].scrollLeft =
+          document.getElementsByClassName('mode999')[object.TokenId]
+            .offsetLeft -
+          document.getElementsByClassName('token')[object.TokenId].offsetWidth /
+            2
+      } catch (e) {
+      }
     },
     changeGraph (object, status) {
       const self = this
@@ -859,26 +828,6 @@ export default {
         })
       }
     }
-    // doubleClick (object) {
-    //   object.vis.on('doubleClick', (params) => {
-    //     params.event = '[original event]'
-    //     this.$emit('node_double_click', params)
-    //     console.log('双击事件' + params)
-    //     if (this.magnifier === false) {
-    //       this.magnifier = true
-    //       this.focusPosition(params.pointer.canvas, object)
-    //     } else {
-    //       this.magnifier = false
-    //       this.fitAnimated(object)
-    //     }
-    //   })
-    //   object.vis.on('zoom', (params) => {
-    //     params.event = '[original event]'
-    //     this.$emit('zoom', params)
-    //     console.log('滚动滚轮事件' + params)
-    //     this.magnifier = true
-    //   })
-    // }
   }
 }
 </script>
@@ -894,7 +843,7 @@ export default {
 }
 .token {
   background-color: #bbbbbb;
-  height: 70px;
+  height: 100px;
 }
 .controller {
   width: 100%;
@@ -905,13 +854,19 @@ export default {
 }
 .p {
   text-align: center;
-  font-size: 46px;
+  font-size: 45px;
   margin: 0px;
   /* word-wrap: break-word; */
-  height: 70px;
+  height: 60px;
+  padding: 20px 10px;
   white-space: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
+}
+.scroll_bar{
+  /* background-color: #bbbbbb; */
+  height:80px;
+  overflow: hidden;
 }
 div.graph.active {
   position: fixed;
@@ -944,16 +899,16 @@ span.mode999 {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  min-width: 120px;
+  height: 20px;
   background-color: black;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
-  font-size: 12px;
-  /* 定位 */
+  padding: 0px 5px;
+  font-size: 15px;
   position: absolute;
-  z-index: 1;
+  z-index: 5;
   bottom: 100%;
   left: 50%;
   margin-left: -60px;
