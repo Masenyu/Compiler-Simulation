@@ -14,13 +14,17 @@ time.sleep(3)
 buttons = driver.find_elements_by_css_selector(".el-button.el-button--primary")
 buttons[0].click()
 
-
 texts[1].clear()
 texts[1].send_keys(res2)
 
-button_start_participle= driver.find_element_by_css_selector(".el-button.el-button--primary.is-disabled")
-button_start_participle.click()
+button_start_participle= driver.find_element_by_css_selector(".el-button.el-button--primary")
+buttons[1].click()
 
+button_auto_show= driver.find_element_by_css_selector(".el-button.el-button--primary.is-plain")
+button_auto_show.click()
+
+button_auto_show_again = wait(driver,50,2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.el-button.el-button--primary.is-plain')))
+driver.quit()
 #button_autoshow = 
 #driver.find_element_by_class_name("el-button.el-button--primary.is-disabled.is-plain").click()
 #buttons1 = driver.find_elements_by_css_selector(".el-button.el-button--default.is-disabled")
