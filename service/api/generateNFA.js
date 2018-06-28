@@ -1,4 +1,5 @@
 
+
 var stateTransition1=function(s,i,e){
   this.startState=s;
   this.inputChar=i;
