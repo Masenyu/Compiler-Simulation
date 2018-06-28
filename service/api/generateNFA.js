@@ -1,4 +1,155 @@
 
+//运算符优先级表
+var OperatorInformationTable=[
+  {operator:'(',priority:0,numOfParams:0},
+  {operator:'|',priority:1,numOfParams:2},
+  {operator:'.',priority:2,numOfParams:2},
+  {operator:'*',priority:3,numOfParams:1},
+  {operator:'+',priority:3,numOfParams:1},
+  {operator:'{',priority:3,numOfParams:1},
+  {operator:'?',priority:3,numOfParams:1},
+  {operator:')',priority:4,numOfParams:0}]
+
+//返回运算符优先级的函数
+function Priority(char){
+  var priority=-1;
+  for(var i=0;i<OperatorInformationTable.length;i++)
+  {
+    if(char==OperatorInformationTable[i].operator){priority=OperatorInformationTable[i].priority;break;}
+  }
+  return priority;
+}
+
+//运算符压入
+function OperatorInToStack(temp_char) {
+  switch (temp_char){
+    case'|':
+      while(!this.OperatorStack.nullOrNot()){
+        //逐步弹出所有比|优先级高的操作符 并且执行
+        //遇到(或者| 停止
+        var operator=this.OperatorStack.top()
+        if(operator=='.'){
+          this.connectOperator()
+        }
+        else{if(operator=='('||operator=='|'){break;}else{console.log(' error！！！！！ |读入时符号栈里面出现',operator)}}
+      }
+      //将|压入OperatorStack
+      this.OperatorStack.push('|')
+      break;
+    case"+":
+      this.addOperator();
+      if(i+1<length){
+        if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+          if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+            this.OperatorStack.push('.')
+          }
+        }
+      }
+      break;
+    case"[":
+
+      this.addOperator();
+      if(i+1<length){
+        if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+          if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+            this.OperatorStack.push('.')
+          }
+        }
+      }
+      break;
+    case"{":
+
+      this.questionMarkOperator();
+      if(i+1<length){
+        console.log(1111111111111111)
+        if(i+1<length){
+          if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+              this.OperatorStack.push('.')
+            }
+          }
+        }
+      }
+      break;
+    case"?":
+      this.questionMarkOperator();
+      if(i+1<length){
+        console.log(1111111111111111)
+        if(i+1<length){
+          if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+              this.OperatorStack.push('.')
+            }
+          }
+        }
+      }
+      break;
+    case'(':
+      //将(压入OperatorStack
+      this.OperatorStack.push('(')
+      break;
+    case')':
+      while(!this.OperatorStack.nullOrNot()){
+        //逐步弹出所有操作符 并且执行
+        //遇到(停止
+
+        var operator =this.OperatorStack.top();
+        if(operator!='('){
+          switch (operator){
+            case '|':
+              this.selectOperator()
+              break;
+            case '.':
+              this.connectOperator()
+              break;
+          }
+        }else{
+          this.OperatorStack.pop()
+          break;
+        }
+
+      }
+      //逐步弹出所有操作符 并且执行
+      //遇到( 停止
+      if(i+1<length){
+        if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+          if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+            this.OperatorStack.push('.')
+          }
+        }
+      }
+      break;
+    case'*':
+      //逐步弹出所有比*优先级高的操作符（理论上只有‘)’） 并且执行
+      this.clodureOperator();
+      if(i+1<length){
+        if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+          if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+            this.OperatorStack.push('.')
+          }
+        }
+      }
+      break;
+    default:
+
+      var regularChar=new NFA(this.state,this.state+1)
+      regularChar.stateTransitionList[regularChar.stateTransitionList.length]=new stateTransition1(this.state,temp_char,this.state+1)
+      this.state+=2
+      this.NFAStack.push(regularChar)
+
+
+      if(i+1<length){
+        if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+          if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+            this.OperatorStack.push('.')
+          }
+        }
+      }
+      break;
+  }
+}
+
+
 
 var stateTransition1=function(s,i,e){
   this.startState=s;
@@ -62,15 +213,18 @@ var singalNFA =function(str){
   this.state=0;
   this.new_state=0
   this.generateNFA=generateNFA;
-  this.OperatorInformationTable=[
-    {operator:'(',priority:0,numOfParams:0},
-    {operator:'|',priority:1,numOfParams:2},
-    {operator:'.',priority:2,numOfParams:2},
-    {operator:'*',priority:3,numOfParams:1},
-    {operator:'+',priority:3,numOfParams:1},
-    {operator:'{',priority:3,numOfParams:1},
-    {operator:'?',priority:3,numOfParams:1},
-    {operator:')',priority:4,numOfParams:0}]
+  this.OperatorPerform=OperatorPerform;  //运算符弹出并执行
+  this.OperatorInToStack=OperatorInToStack;//运算符入栈
+
+  // this.OperatorInformationTable=[
+  //     {operator:'(',priority:0,numOfParams:0},
+  //     {operator:'|',priority:1,numOfParams:2},
+  //     {operator:'.',priority:2,numOfParams:2},
+  //     {operator:'*',priority:3,numOfParams:1},
+  //     {operator:'+',priority:3,numOfParams:1},
+  //     {operator:'{',priority:3,numOfParams:1},
+  //     {operator:'?',priority:3,numOfParams:1},
+  //     {operator:')',priority:4,numOfParams:0}]
 
   // this.updateNFA1=updateNFA1;
   this.connectOperator=connectOperator;
@@ -93,34 +247,17 @@ function generateNFA(){
   //遍历
   for(var i=0;i<length;i++){
     var temp_char = str[i];
+    //****************运算符入栈******************
     switch (temp_char){
       case'|':
         while(!this.OperatorStack.nullOrNot()){
           //逐步弹出所有比|优先级高的操作符 并且执行
           //遇到(或者| 停止
-          // var temp_priority=this.getOperatorStackTopPriority(this);
-          // if(temp_priority==-1){console.log("-1!!!!!!!!!!!!!")}else{
-          //   var operator =this.OperatorStack.top();
-          //   if(temp_priority>this.getOperatorPriority(this,temp_char)){
-          //     switch (operator){
-          //       case '|':
-          //         this.selectOperator(this)
-          //         break;
-          //       case '*':
-          //         this.clodureOperator(this)
-          //         break;
-          //       case '.':
-          //         this.connectOperator(this)
-          //         break;
-          //     }
-          //   }else{
-          //     break;
-          //   }
-          // }
           var operator=this.OperatorStack.top()
           if(operator=='.'){
             this.connectOperator()
-          }else{if(operator=='('||operator=='|'){break;}else{console.log(' error！！！！！ |读入时符号栈里面出现',operator)}}
+          }
+          else{if(operator=='('||operator=='|'){break;}else{console.log(' error！！！！！ |读入时符号栈里面出现',operator)}}
         }
         //将|压入OperatorStack
         this.OperatorStack.push('|')
@@ -183,19 +320,19 @@ function generateNFA(){
           //遇到(停止
 
           var operator =this.OperatorStack.top();
-            if(operator!='('){
-              switch (operator){
-                case '|':
-                  this.selectOperator()
-                  break;
-                case '.':
-                  this.connectOperator()
-                  break;
-              }
-            }else{
-              this.OperatorStack.pop()
-              break;
+          if(operator!='('){
+            switch (operator){
+              case '|':
+                this.selectOperator()
+                break;
+              case '.':
+                this.connectOperator()
+                break;
             }
+          }else{
+            this.OperatorStack.pop()
+            break;
+          }
 
         }
         //逐步弹出所有操作符 并且执行
@@ -236,6 +373,7 @@ function generateNFA(){
         }
         break;
     }
+    //****************运算符入栈******************
   }
   //console.log("遍历完成")
   //遍历完成
@@ -248,25 +386,28 @@ function generateNFA(){
 
     var operator =this.OperatorStack.top();
     //console.log(operator)
-    switch (operator){
-      case '|':
-        this.selectOperator()
-        break;
-      case '*':
-        this.clodureOperator()
-        break;
-      case '.':
-        this.connectOperator()
-        break;
-    }
+    //****************运算符出栈******************
+    // switch (operator){
+    //   case '|':
+    //     this.selectOperator()
+    //     break;
+    //   case '*':
+    //     this.clodureOperator()
+    //     break;
+    //   case '.':
+    //     this.connectOperator()
+    //     break;
+    // }
+    this.OperatorPerform(operator);
+    //****************运算符出栈******************
   }
-  //this.printSingalNFA()
+ this.printSingalNFA()
 
   //弹出完毕
   //更新状态
-  this.generateStateTable()
+  //this.generateStateTable()
 
-  this.updateNFA()
+  //this.updateNFA()
   //更新状态完毕
   //this.printSingalNFA()
   //生成字母表
@@ -324,6 +465,16 @@ function updateNFA(){
 }
 
 
+function OperatorPerform(char) {
+  switch(char){
+    case '.':
+      this.connectOperator()
+      break;
+    case '|':
+      this.selectOperator()
+      break;
+  }
+}
 function connectOperator(){
   var op2=new NFA(0,0);
   op2.init(this.NFAStack.top());
@@ -339,21 +490,28 @@ function connectOperator(){
   this.OperatorStack.pop();
 }
 function selectOperator(){
-  var op2=new NFA(0,0);
-  op2.init(this.NFAStack.top());
-  this.NFAStack.pop();
   var op1=new NFA(0,0);
   op1.init(this.NFAStack.top());
   this.NFAStack.pop();
   var op3=new NFA(this.state,this.state+1)
-  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList,op2.stateTransitionList)
+  this.state+=2;
+  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
-  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op2.startState)
   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
-  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op2.endState,'ε',op3.endState)
-  this.state=this.state+2
+  while(!this.OperatorStack.nullOrNot())
+  {
+    var op1=new NFA(0,0);
+    op1.init(this.NFAStack.top());
+    this.NFAStack.pop();
+    this.state+=2;
+    op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
+    op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
+    op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
+    this.OperatorStack.pop();
+  }
   this.NFAStack.push(op3);
-  this.OperatorStack.pop();
+
+  op3.printNFA();
 }
 function clodureOperator(){
   var op1=new NFA(0,0);
