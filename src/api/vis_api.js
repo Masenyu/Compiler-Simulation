@@ -1,5 +1,9 @@
 export { createEdges, createNodes }
-function createEdges(transitionTable, alphabet) {
+import { NFALayout } from './nfaLayout'
+function createEdges(transitionTable, alphabet, rest) {
+  if (alphabet.indexOf('ε') != -1) {
+    if(rest!=[])transitionTable = NFALayout(transitionTable, alphabet);
+  }
   var Edges = []
   let _range = length => Array.from({ length }).map((v, k) => k)
   for (var fState of _range(transitionTable.length)) {

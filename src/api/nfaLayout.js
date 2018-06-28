@@ -1,5 +1,6 @@
-
-function Layout(TB, A) {
+/* eslint-disable */
+export { NFALayout }
+function NFALayout(TB, A) {
 	let _range = length => Array.from({ length }).map((v, k) => k);
 	let _new_arr_with_v = (length, value) => Array.from({ length }).map((v) => value);
 	var transitionTable = TB;
@@ -65,7 +66,7 @@ function Layout(TB, A) {
 
 	function isStemOf(node1, node2) {
 		// 判断在遍历图走到 node1 的路上是否经过 node2
-		trace_node1 = traceback(node1);
+		let trace_node1 = traceback(node1);
 		if (trace_node1.indexOf(node2) === -1) return false;
 		else return true;
 	}
@@ -120,6 +121,12 @@ function Layout(TB, A) {
 						// 之前 nextNode 的前置设置正确， 不用做更改
 					} else if (isStemOf(node, nextNode)) {
 						// 返回边，不理
+						let pres = nodesInfo.get(node).nextNodes;
+						let index;
+						pres.forEach(e => {
+							if (e === nextNode) index = transitionTable[node][alphabet.indexOf('ε')].indexOf(e);
+						})
+						if (index != -1) transitionTable[node][alphabet.indexOf('ε')].splice(index, 1)
 					} else {
 						if (stems[nextNode].length > 1) {
 							// 似乎可以肯定 nextNode 是一个并点
@@ -137,6 +144,11 @@ function Layout(TB, A) {
 								// 把所有受影响的 node 的 levels 改正确
 								// 注意后面的节点的排序目前认为是正确的，故只需要遍历一下改正 level 就 ok 
 								resetLevelsOf(nextNode);
+								let t = nodesInfo.get(nextNode).prenNodes.pop();
+								if (t === node) t = nodesInfo.get(nextNode).prenNodes.pop()
+								let i = transitionTable[t][alphabet.indexOf('ε')].indexOf(nextNode);
+								if (i != -1) transitionTable[t][alphabet.indexOf('ε')].splice(i, 1)
+								//
 							} else {
 								// nextNode 是一个并点
 								stems[nextNode].push(node);
@@ -149,9 +161,8 @@ function Layout(TB, A) {
 		}
 	}
 
-	var graph = [];
-	var l = 0;
-	while (l < level) graph.push(_indexsOf(levels, l++));
-
-	return graph;
+	// var graph = [];
+	// var l = 0;
+	// while (l < level) graph.push(_indexsOf(levels, l++));
+	return transitionTable;
 }
