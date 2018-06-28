@@ -45,4 +45,3 @@ autoTest(driver3)
 driver4 = webdriver.Ie()
 print("IE: ",end="")
 autoTest(driver4)
-

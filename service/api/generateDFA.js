@@ -206,7 +206,7 @@ console.log("dfa_mid",dfa_mid);
 
   function getDFA2(dfa_mid, dfa_tran) {
     var state = new Array();
-    var isin;
+    var isin=0;
     for (i = 0; dfa_mid[i] != undefined; i++)
     {
       isin=0;
@@ -234,7 +234,7 @@ console.log("dfa_mid",dfa_mid);
 
     }
 
-    //endState
+    //endState编号
     for (i = 0; dfa_mid[i] != undefined; i++)
     {
       isin=0;
@@ -272,7 +272,7 @@ console.log("dfa_mid",dfa_mid);
           if (dfa_mid[i].endState[k] != state[j][k]) {
             break;
           }
-          if (dfa_mid[i].endState[k] == state[j][k] && state[j][k + 1] == undefined) {
+          if (dfa_mid[i].endState[k] == state[j][k] && state[j][k + 1] == undefined&&dfa_mid[i].endState[k+1]==undefined) {
             end = j;
           }
         }
@@ -304,6 +304,8 @@ console.log("dfa_mid",dfa_mid);
     alphabet: nfaAlphabet,
     acceptStateList: nfaAcceptState
   }
+  console.log("00000000000000000000000000000");
+  console.log(result);
   return result;
 }
 
