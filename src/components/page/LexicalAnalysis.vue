@@ -667,7 +667,7 @@ export default {
           case DFA_CODE.READCHAR:
             self.$message({
               type: 'info',
-              message: '遵循最长子串原则继续重复做闭包和读字符'
+              message: '遵循最长子串原则继续读字符'
             })
             self.changeWindow(object)
             self.changeGraph(object, 1)
@@ -685,16 +685,18 @@ export default {
 
             break
           case DFA_CODE.REJECT:
-            self.$message({
-              type: 'success',
-              message: '遇到了DFA拒绝的输入'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '遇到了DFA拒绝的输入'
+            // })
+            alert('遇到了DFA拒绝的输入')
             break
           case DFA_CODE.UNKNOWN:
-            self.$message({
-              type: 'success',
-              message: '遇到了DFA不认识的字符'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '遇到了DFA不认识的字符'
+            // })
+            alert('遇到了DFA不认识的字符')
             break
           default:
             break
@@ -952,7 +954,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page {
-  /* width: 85%; */
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 40px;
