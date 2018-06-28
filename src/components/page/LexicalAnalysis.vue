@@ -42,39 +42,56 @@
         <div class="tab">
           <el-tabs v-model="TabActiveName" @tab-click="handleClick">
             <el-tab-pane label="NFA生成" name="NFAGeneration">
-              <div style="background-color: #dddddd; height: 100%">
-                <el-row>
-                  <div :class="{'active':NFA.isFull_screen,'graph':true}">
-                    <span style="font-size: 35px;">NFA</span>
-                    <div style="float: right">
-                      <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                      <el-button type="info" :icon="NFA.zoomicon" circle @click="full_screen(NFA)"></el-button>
-                      <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button>
+              <div style="background-color: #fff; height: 100%">
+                <div style="background-color: #dddddd;">
+                  <el-row>
+                    <div :class="{'active':NFA.isFull_screen,'graph':true}">
+                      <span style="font-size: 35px;">NFA</span>
+                      <div style="float: right">
+                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
+                        <el-button type="info" :icon="NFA.zoomicon" circle @click="full_screen(NFA)"></el-button>
+                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button>
+                      </div>
+                      <div class="vis" id="NFAvis"></div>
                     </div>
-                    <div class="vis" id="NFAvis"></div>
-                  </div>
-                </el-row>
-                <div class="token">
-                <div v-if="NFA.hasbegin">
-                  <div class="scroll_bar">
-                    <div :id="NFA.TokenId" v-html="NFA.Token"></div>
+                  </el-row>
+                  <div class="token">
+                    <div v-if="NFA.hasbegin">
+                      <div class="scroll_bar">
+                        <div :id="NFA.TokenId" v-html="NFA.Token"></div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input>
+                    </div>
                   </div>
                 </div>
-                <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input>
-                </div>
-                </div>
-                <el-row>
-                  <div class="controller">
-                    <el-row class="buttonela">
-                      <el-button :disabled="isFirsttime" @click="startButton(NFA)" :type="NFA.startbuttonType">{{NFA.startbuttonText}}</el-button>
-                      <el-button :disabled="!NFA.hasbegin" @click="previous(NFA, 0)">上一步</el-button>
-                    </el-row>
-                    <el-row class="buttonelb">
-                      <el-button :disabled="!NFA.hasbegin" @click="autoControl(NFA, 0)" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
-                      <el-button :disabled="!NFA.hasbegin" @click="next(NFA, 0)">下一步</el-button>
-                    </el-row>
-                  </div>
+                <el-row style="margin-top: 20px">
+                  <el-col :span="16">
+                    <div class="box">
+                      <div class="wrapper" ref="messBoxNFA">
+                        <div>
+                          <div>
+                            <p style="height: 30px; margin: 0; padding: 0" v-for="item in NFA.mess">{{item}}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="contentCover"></div>
+                    <div class="content"></div>
+                  </el-col>
+                  <el-col :span="8">
+                    <div class="controller">
+                      <el-row class="buttonela">
+                        <el-button :disabled="isFirsttime" @click="startButton(NFA)" :type="NFA.startbuttonType">{{NFA.startbuttonText}}</el-button>
+                        <el-button :disabled="!NFA.hasbegin" @click="previous(NFA, 0)">上一步</el-button>
+                      </el-row>
+                      <el-row class="buttonelb">
+                        <el-button :disabled="!NFA.hasbegin" @click="autoControl(NFA, 0)" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                        <el-button :disabled="!NFA.hasbegin" @click="next(NFA, 0)">下一步</el-button>
+                      </el-row>
+                    </div>
+                  </el-col>
                 </el-row>
               </div>
             </el-tab-pane>
@@ -92,14 +109,14 @@
                   </div>
                 </el-row>
                 <div class="token">
-                <div v-if="DFA.hasbegin">
-                  <div class="scroll_bar">
-                    <div :id="DFA.TokenId" v-html="DFA.Token"></div>
+                  <div v-if="DFA.hasbegin">
+                    <div class="scroll_bar">
+                      <div :id="DFA.TokenId" v-html="DFA.Token"></div>
+                    </div>
                   </div>
-                </div>
-                <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA.TokenForm"></el-input>
-                </div>
+                  <div v-else>
+                    <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA.TokenForm"></el-input>
+                  </div>
                 </div>
                 <el-row>
                   <div class="controller">
@@ -129,14 +146,14 @@
                   </div>
                 </el-row>
                 <div class="token">
-                <div v-if="DFA_S.hasbegin">
-                  <div class="scroll_bar">
-                    <div :id="DFA_S.TokenId" v-html="DFA_S.Token"></div>
+                  <div v-if="DFA_S.hasbegin">
+                    <div class="scroll_bar">
+                      <div :id="DFA_S.TokenId" v-html="DFA_S.Token"></div>
+                    </div>
                   </div>
-                </div>
-                <div v-else>
-                  <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA_S.TokenForm"></el-input>
-                </div>
+                  <div v-else>
+                    <el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="DFA_S.TokenForm"></el-input>
+                  </div>
                 </div>
                 <el-row>
                   <div class="controller">
@@ -163,7 +180,6 @@
       </el-col>
     </el-row>
   </div>
-
 </template>
 
 <script>
@@ -172,7 +188,20 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
+import BScroll from 'better-scroll'  
+
 export default {
+  props: {
+    messBoxNFA: {
+      type: Object
+    },
+    messBoxDFA: {
+      type: Object
+    },
+    messBoxDFA_S: {
+      type: Object
+    }
+  },
   data () {
     // 验证表单输入是否合法
     var validateRe = (rule, value, callback) => {
@@ -246,7 +275,9 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         zoomicon: 'el-icon-zoom-in',
-        magnifier: false
+        magnifier: false,
+        mess: [],
+        messBoxScroll: null
       },
       DFA: {
         data: {
@@ -270,7 +301,9 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
-        zoomicon: 'el-icon-zoom-in'
+        zoomicon: 'el-icon-zoom-in',
+        mess: [],
+        messBoxScroll: null
       },
       DFA_S: {
         data: {
@@ -294,11 +327,18 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
-        zoomicon: 'el-icon-zoom-in'
+        zoomicon: 'el-icon-zoom-in',
+        mess: [],
+        messBoxScroll: null
       },
       RE_offset: 1,
-      isFirsttime: true
+      isFirsttime: true,
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      this._initScroll();
+    })
   },
   computed: {
     available () {
@@ -360,6 +400,7 @@ export default {
         }
       })
     },
+    //判断是不是需要重新构建状态机
     judgeGenerate () {
       if (this.available === false) { this.generateFA('REForm') }
     },
@@ -372,24 +413,34 @@ export default {
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
-      object.data.transitionTable = []
-      object.data.alphabet = []
-      object.data.acceptState = []
-      object.machine = null
-      object.nodes = null
-      object.edges = null
-      object.lastState = null
-      object.nextState = null
-      object.TokenForm = ''
-      object.Token = ''
-      object.hasbegin = false
-      object.startbuttonType = 'primary'
-      object.startbuttonText = '开始分词'
-      object.autobuttonType = 'primary'
-      object.autobuttonText = '自动展示'
-      object.isFull_screen = false
-      object.magnifier = false
-      object.vis = null
+      object = {
+        data: {
+          transitionTable: [
+          ],
+
+          alphabet: [],
+
+          acceptState: [
+          ]
+        },
+        machine: null,
+        nodes: null,
+        edges: null,
+        lastState: null,
+        nextState: null,
+        TokenForm: '',
+        Token: '',
+        hasbegin: false,
+        startbuttonType: 'primary',
+        startbuttonText: '开始分词',
+        autobuttonType: 'primary',
+        autobuttonText: '自动展示',
+        isFull_screen: false,
+        magnifier: false,
+        zoomicon: 'el-icon-zoom-in',
+        mess: [],
+        messBoxScroll: null
+      }
     },
     // 生成状态机图
     async fresh () {
@@ -553,6 +604,31 @@ export default {
       }
       return cssText
     },
+    // 初始化消息框滑块
+    _initScroll () {
+      console.log('do initScroll')
+      this.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+        click: true
+      });
+      this.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+        click: true
+      });
+      this.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+        click: true
+      });
+    },
+    // 将消息push到消息数组中并刷新显示框
+    pushMess (object, str) {
+      object.mess.push(str)
+      console.log(object.messBoxScroll.maxScrollY)
+      console.log(str)
+      object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
+      object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
+      // this.messBoxScroll.scrollTo(0, this.aa, 700, 'bounce')
+    },
     // 改变节点的颜色
     changeNode (object, _nodes, status) {
       let bgcolor
@@ -592,7 +668,7 @@ export default {
       object.vis.fit({ animation: options })
       object.magnifier = false
     },
-    // NFA下一步
+    // 下一步
     next (object, flag) {
       const self = this
       object.lastState = object.nextState
@@ -604,12 +680,14 @@ export default {
               type: 'success',
               message: 'Token提取完成'
             })
+            self.pushMess(object, 'Token提取完成')
             break
           case NFA_CODE.DOCLOSURE:
             self.$message({
               type: 'success',
               message: '闭包'
             })
+            self.pushMess(object, '闭包')
             self.changeWindow(object)
             self.changeGraph(object, 2)
             break
@@ -618,6 +696,7 @@ export default {
               type: 'success',
               message: '读取字符'
             })
+            self.pushMess(object, '读取字符')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -626,6 +705,7 @@ export default {
               type: 'success',
               message: '提取Token'
             })
+            self.pushMess(object, '提取Token')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -634,13 +714,15 @@ export default {
           //   type: 'error',
           //   message: '遇到了NFA拒绝的输入'
           // })
+            self.pushMess(object, '遇到了NFA拒绝的输入')
             alert('遇到了NFA拒绝的输入')
             break
           case NFA_CODE.UNKNOWN:
-          // self.$message({
-          //   type: 'error',
-          //   message: '遇到了NFA不认识的字符'
-          // })
+            // self.$message({
+            //   type: 'error',
+            //   message: '遇到了NFA不认识的字符'
+            // })
+            self.pushMess(object, '遇到了NFA不认识的字符')
             alert('遇到了NFA不认识的字符')
             break
           default:
@@ -703,7 +785,7 @@ export default {
         }
       }
     },
-    // NFA上一步
+    // 上一步
     previous (object, flag) {
       const self = this
       object.lastState = object.nextState
@@ -964,11 +1046,33 @@ export default {
   background-color: #bbbbbb;
   height: 100px;
 }
+.content {
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+}
+.box {
+  height: 100px;
+  width: 66.7%;
+  overflow: hidden;
+  position: absolute;
+}
+.contentCover {
+  height: 100px;
+  width: 66.7%;
+  overflow: hidden;
+  background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1) 85%);
+  position: absolute;
+}
+.wrapper {
+  height: 55px;
+  margin: 3%;
+  margin-left: 15%;
+}
 .controller {
-  width: 50%;
-  margin-right: 10%;
   text-align: right;
-  float: right;
+  margin: 10%;
+  margin-right: 15%
 }
 .buttonela{
   margin: 5%;
