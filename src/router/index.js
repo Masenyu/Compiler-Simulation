@@ -16,15 +16,23 @@ export default new Router({
       children: [
         {
           path: '/index/main-interface',
-          component: resolve => require(['../components/page/mainInterface.vue'], resolve),
+          component: resolve =>
+            require(['../components/page/mainInterface.vue'], resolve)
         },
         {
           path: '/index/lexical-analysis',
-          component: resolve => require(['../components/page/lexicalAnalysis.vue'], resolve),
+          component: resolve =>
+            require(['../components/page/lexicalAnalysis.vue'], resolve)
         },
         {
           path: '/index/lexical-analysis1',
-          component: resolve => require(['../components/page/lexicalAnalysis_beta.vue'], resolve),
+          component: resolve =>
+            require(['../components/page/lexicalAnalysis_beta.vue'], resolve)
+        },
+        {
+          path: '/index/Ilovecode',
+          component: resolve =>
+            require(['../components/page/codecodecode.vue'], resolve)
         }
       ]
     }
