@@ -1,5 +1,4 @@
 
-
 var stateTransition1=function(s,i,e){
   this.startState=s;
   this.inputChar=i;
@@ -62,15 +61,15 @@ var singalNFA =function(str){
   this.state=0;
   this.new_state=0
   this.generateNFA=generateNFA;
-  this.OperatorProrityTable=[
-    {operator:'(',priority:'0'},
-    {operator:'|',priority:'1'},
-    {operator:'.',priority:'2'},
-    {operator:'*',priority:'3'},
-    {operator:'+',priority:'3'},
-    {operator:'{',priority:'3'},
-    {operator:'?',priority:'3'},
-    {operator:')',priority:'4'}]
+  this.OperatorInformationTable=[
+    {operator:'(',priority:0,numOfParams:0},
+    {operator:'|',priority:1,numOfParams:2},
+    {operator:'.',priority:2,numOfParams:2},
+    {operator:'*',priority:3,numOfParams:1},
+    {operator:'+',priority:3,numOfParams:1},
+    {operator:'{',priority:3,numOfParams:1},
+    {operator:'?',priority:3,numOfParams:1},
+    {operator:')',priority:4,numOfParams:0}]
 
   // this.updateNFA1=updateNFA1;
   this.connectOperator=connectOperator;
