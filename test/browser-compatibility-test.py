@@ -30,7 +30,7 @@ def autoTest(driver):
 	Firefoxtime = f_end_time - f_start_time
 	print(str(Firefoxtime) + "s")
 
-'''driver1 = webdriver.Firefox()
+driver1 = webdriver.Firefox()
 print("Firefox: ",end="")
 autoTest(driver1)
 
@@ -41,8 +41,8 @@ autoTest(driver2)
 driver3 = webdriver.Edge()
 print("Edge: ",end="")
 autoTest(driver3)
-
-'''driver4 = webdriver.Ie()
+'''
+driver4 = webdriver.Ie()
 print("IE: ",end="")
 autoTest(driver4)
-'''
+
