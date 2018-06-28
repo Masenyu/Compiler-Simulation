@@ -62,6 +62,15 @@ var singalNFA =function(str){
   this.state=0;
   this.new_state=0
   this.generateNFA=generateNFA;
+  this.OperatorProrityTable=[
+    {operator:'(',priority:'0'},
+    {operator:'|',priority:'1'},
+    {operator:'.',priority:'2'},
+    {operator:'*',priority:'3'},
+    {operator:'+',priority:'3'},
+    {operator:'{',priority:'3'},
+    {operator:'?',priority:'3'},
+    {operator:')',priority:'4'}]
 
   // this.updateNFA1=updateNFA1;
   this.connectOperator=connectOperator;
@@ -73,8 +82,8 @@ var singalNFA =function(str){
   this.generateStateTable1=generateStateTable1
  // this.getOperatorStackTopPriority=getOperatorStackTopPriority
   //this.getOperatorPriority=getOperatorPriority
-
-
+  this.questionMarkOperator=questionMarkOperator
+  this.addOperator=addOperator
 }
 function generateNFA(){
   //初始化状态
@@ -116,6 +125,54 @@ function generateNFA(){
         //将|压入OperatorStack
         this.OperatorStack.push('|')
         break;
+      case"+":
+        this.addOperator();
+        if(i+1<length){
+          if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+              this.OperatorStack.push('.')
+            }
+          }
+        }
+        break;
+      case"[":
+
+        this.addOperator();
+        if(i+1<length){
+          if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+              this.OperatorStack.push('.')
+            }
+          }
+        }
+        break;
+      case"{":
+
+        this.questionMarkOperator();
+        if(i+1<length){
+          console.log(1111111111111111)
+          if(i+1<length){
+            if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+              if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+                this.OperatorStack.push('.')
+              }
+            }
+          }
+        }
+        break;
+      case"?":
+        this.questionMarkOperator();
+        if(i+1<length){
+          console.log(1111111111111111)
+          if(i+1<length){
+            if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+              if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
+                this.OperatorStack.push('.')
+              }
+            }
+          }
+        }
+        break;
       case'(':
         //将(压入OperatorStack
         this.OperatorStack.push('(')
@@ -145,7 +202,7 @@ function generateNFA(){
         //遇到( 停止
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
               this.OperatorStack.push('.')
             }
           }
@@ -156,20 +213,23 @@ function generateNFA(){
         this.clodureOperator();
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
               this.OperatorStack.push('.')
             }
           }
         }
         break;
       default:
+
         var regularChar=new NFA(this.state,this.state+1)
         regularChar.stateTransitionList[regularChar.stateTransitionList.length]=new stateTransition1(this.state,temp_char,this.state+1)
         this.state+=2
         this.NFAStack.push(regularChar)
+
+
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"&&str[i+1]!="?"&&str[i+1]!="+"){
               this.OperatorStack.push('.')
             }
           }
@@ -180,6 +240,10 @@ function generateNFA(){
   //console.log("遍历完成")
   //遍历完成
   //弹出所有操作符
+  console.log(this.OperatorStack.dataStore.length,"11111111111111111")
+  console.log(this.OperatorStack.dataStore[0])
+  console.log(this.OperatorStack.dataStore[1])
+
   while(!this.OperatorStack.nullOrNot()){
 
     var operator =this.OperatorStack.top();
@@ -271,6 +335,7 @@ function connectOperator(){
   op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList,op2.stateTransitionList)
   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op2.startState)
   this.NFAStack.push(op3);
+  op3.printNFA()
   this.OperatorStack.pop();
 }
 function selectOperator(){
@@ -304,27 +369,43 @@ function clodureOperator(){
   this.state=this.state+2
   this.NFAStack.push(op3);
 }
+function addOperator(){
+  var op1=new NFA(0,0);
+  op1.init(this.NFAStack.top());
+  this.NFAStack.pop();
+  var op3=new NFA(this.state,this.state+1)
+
+  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
+  //op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op3.endState)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
+  this.state=this.state+2
+  this.NFAStack.push(op3);
+}
+function questionMarkOperator(){
+  var op1=new NFA(0,0);
+  op1.init(this.NFAStack.top());
+  op1.printNFA()
+  this.NFAStack.pop();
+  var op3=new NFA(this.state,this.state+1)
+
+  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op3.endState)
+  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
+  //op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
+  this.state=this.state+2
+  this.NFAStack.push(op3);
+  op3.printNFA()
+}
+
 function printSingalNFA(){
   console.log(this.regularString)
   this.NFAStack.top().printNFA()
 }
-// function getOperatorStackTopPriority() {
-//   var operator = this.OperatorStack.top()
-//   for(var i=0;i<this.OperatorTable;i++){
-//     if(operator==this.OperatorTable[i].operator){
-//       return this.OperatorTable[i].priority;
-//     }
-//   }
-//   return -1;
-// }
-// function getOperatorPriority(operator) {
-//   for(var i=0;i<this.OperatorTable;i++){
-//     if(operator==this.OperatorTable[i].operator){
-//       return this.OperatorTable[i].priority;
-//     }
-//   }
-//   return -1;
-// }
+
+
 var finalNFA=function(strArray){
   this.strArray=strArray
   this.startState=0
