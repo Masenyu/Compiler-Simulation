@@ -1,6 +1,6 @@
 <template>
   <div class="setting">
-    <textarea id="editor" name="editor">
+    <textarea id="editor" name="editor" v-model="TokenForm">
     </textarea>
   </div>
 </template>
@@ -48,7 +48,8 @@ export default {
       modeArray: [],
       mapArray: [],
       CodeMirrorEditor: null,
-      something: ''
+      something: '',
+      TokenForm: ''
     }
    
   },
@@ -83,11 +84,12 @@ export default {
           // keymap:"defaule"
       });
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
-      // this.CodeMirrorEditor.on("keypress",() =>{
-      //     //编译器内容更改事件
-      //     console.log(this.CodeMirrorEditor)
-      //     this.CodeMirrorEditor.showHint();
-      // });
+      this.CodeMirrorEditor.on("change",() =>{
+          //编译器内容更改事件
+          console.log(this.CodeMirrorEditor)
+          console.log(this.CodeMirrorEditor.getValue())
+          sessionStorage.setItem('msg', this.CodeMirrorEditor.getValue())
+      });
       // this.CodeMirrorEditor.setValue("Hello Kitty\nHello Tony\nHow are you\nFine thank you and you \nI love you")
 
       // this.CodeMirrorEditor.setOption("lineNumbers","true")
@@ -95,11 +97,15 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true}); 
       // this.CodeMirrorEditor.setCursor(0)
-      this.CodeMirrorEditor.setSize(600,600)
+      // this.CodeMirrorEditor.setSize(100,100)
     }
   },
     
   watch: {
+    TokenForm: function() {
+      sessionStorage.setItem('msg', this.TokenForm)
+      console.log(this.TokenForm)
+    }
     // something: function () {
     //   var headElement=document.body;
     //   var element=document.createElement("script");
@@ -116,8 +122,8 @@ export default {
 <style scoped>
 .setting {
   margin: 0;
-  width: 1398px;
-  height: 600px;
+  width: auto;
+  height: auto;
   background-color: rgb(248, 248, 248);
   /*h1 {
     margin: 0;

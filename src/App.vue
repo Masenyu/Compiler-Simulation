@@ -5,16 +5,13 @@
 </template>
 
 <script>
+
 export default {
 }
 </script>
 
 <style>
-body,html,#app{
-  padding:0px;
-  margin:0px;
-  height:100%;
-}
+@import "./components/main.css"
   /*TODO：
 body{
   padding:0px;
