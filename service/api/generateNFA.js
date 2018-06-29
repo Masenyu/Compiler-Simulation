@@ -282,6 +282,7 @@ function OperatorInToStack() {
             }
             break;
           case'{':
+            console.log('i: ',i)
             var tempCount = i + 1
 
             for( ; tempCount < str.length; tempCount++){
@@ -290,17 +291,24 @@ function OperatorInToStack() {
               }
             }
 
-            if(tempCount - i === 1 ){
-              console.log("invalid input after '{'")
-              break
-            }
+            // if(tempCount - i === 1 ){
+            //   // console.log("invalid input after '{'")
+            //   // break
+            // }
             //大括号中只有一个数字
             if( str[tempCount] === '}'){
               var numStr = ""
-              for( var m = i+1 ; m < tempCount ; m++ ){
-                numStr += str[m]
+              var num
+              if(tempCount - i === 1){
+                num = 0
               }
-              var num = parseInt(numStr)
+              else{
+                for( var m = i+1 ; m < tempCount ; m++ ){
+                  numStr += str[m]
+                }
+                num = parseInt(numStr)
+              }
+              
               console.log('test generate {: num = ' + num)
               if( num === 0 ){
                 var op2=new NFA(0,0);
