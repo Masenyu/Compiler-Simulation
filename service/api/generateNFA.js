@@ -38,7 +38,42 @@ var NFA=function(s,e){
   this.endState=e;
   this.printNFA=printNFA
   this.init = init
+  this.deepInit = deepInit
+  this.getNumOfState = getNumOfState
 }
+
+function deepInit(op1) {
+  this.startState=op1.startState;
+  this.endState=op1.endState;
+  for (var i in op1.stateTransitionList) {
+    var tempStateTrans = op1.stateTransitionList[i]
+    var newStateTrans = new stateTransition1( tempStateTrans.startState, tempStateTrans.inputChar, tempStateTrans.endState)
+    this.stateTransitionList.push(newStateTrans)
+  }
+  // this.stateTransitionList.push.apply(this.stateTransitionList,op1.stateTransitionList)
+}
+function getNumOfState(){
+  var max = this.startState
+  var min = this.startState
+  for( var i = 0 ; i < this.stateTransitionList.length ; i++){
+    var temp = this.stateTransitionList[i]
+    if( temp.startState > max ){
+      max = temp.startState
+    }
+    if( temp.endState > max ){
+      max = temp.endState
+    }
+    if( temp.startState < min ){
+      min = temp.startState
+    }
+    if( temp.endState < min ){
+      min = temp.endState
+    }
+  }
+
+  return max - min + 1
+}
+
 function printNFA(){
   //正则表达式
   for(var i=0;i<this.stateTransitionList.length;i++){
@@ -145,7 +180,7 @@ function generateNFA(){
         //遇到( 停止
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="{"&&str[i+1]!="|"){
               this.OperatorStack.push('.')
             }
           }
@@ -156,7 +191,238 @@ function generateNFA(){
         this.clodureOperator();
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="{"&&str[i+1]!="|"){
+              this.OperatorStack.push('.')
+            }
+          }
+        }
+        break;
+      case'{':
+        var tempCount = i + 1
+
+        for( ; tempCount < str.length; tempCount++){
+          if( str[tempCount] === ',' || str[tempCount] === '}'){
+            break;
+          }
+        }
+
+        if(tempCount - i === 1 ){
+          console.log("invalid input after '{'")
+          break
+        }
+        //大括号中只有一个数字
+        if( str[tempCount] === '}'){
+          var numStr = ""
+          for( var m = i+1 ; m < tempCount ; m++ ){
+            numStr += str[m]
+          }
+          var num = parseInt(numStr)
+          console.log('test generate {: num = ' + num)
+          if( num === 0 ){
+            var op2=new NFA(0,0);
+            op2.deepInit(this.NFAStack.top());
+            this.NFAStack.pop();
+            console.log('op2: ')
+            op2.printNFA()
+            this.state -= op2.getNumOfState()
+            var op1 = new NFA( this.state , this.state + 1)
+            op1.stateTransitionList.push( new stateTransition1(op1.startState, 'ε', op1.endState))
+            this.state = this.state + 2
+            console.log('op1: ')
+            op1.printNFA()
+            this.NFAStack.push(op1)
+          }else{//num > 0
+            var op1=new NFA(0,0);
+            op1.init(this.NFAStack.top());
+            this.NFAStack.pop();
+            op1.printNFA()
+
+            var op3 = new NFA(0,0)
+            op3.deepInit(op1)
+
+            var res = new NFA(0,0)
+            res.startState = op3.startState
+            res.stateTransitionList = res.stateTransitionList.concat( op3.stateTransitionList)
+            var countState = op1.getNumOfState()
+
+            for( var m = 1; m < num; m++ ){
+              var op2 = new NFA(0,0)
+              for(var n = 0; n < op1.stateTransitionList.length ; n++ ){
+                var temp = op1.stateTransitionList[n]
+                temp.startState += countState
+                temp.endState += countState
+              }
+              op1.startState +=  countState
+              op1.endState += countState
+              op2.deepInit(op1)
+              // console.log('9999999')
+              // op1.printNFA()
+              res.stateTransitionList.push.apply(res.stateTransitionList,op2.stateTransitionList)
+              res.stateTransitionList.push(new stateTransition1(op2.endState-countState,'ε',op2.startState))
+              this.state += countState
+            }
+            res.endState = op1.endState
+            this.NFAStack.push(res)
+          }
+          i = tempCount
+        }else{//遇到','
+          var numOne
+          var numTwo
+
+          if(tempCount - i === 1){
+            numOne = 0
+          }else{
+            var numStr = ""//new Array()
+            for( var m = i + 1 ; m < tempCount ; m ++ ){
+              numStr += str[m]
+            }
+            // var numStr = numStrArray.join("")
+            numOne = parseInt(numStr)
+            if( numOne < 0){
+              console.log("numOne < 0 , invalid")
+              break;
+            }
+          }
+
+          //开始检查第二个数字
+          i = tempCount
+          tempCount = tempCount + 1
+
+          for( var m = tempCount ; m < str.length ; m ++){
+            if( str[m] === '}'){
+              i = m
+              break
+            }
+          }
+
+          //说明第二个数字为无穷，记为-1
+          if( i === tempCount ){
+            numTwo = -1
+          }else{
+            var numStr = ""//new Array()
+            for( var m = tempCount ; m < i ; m ++ ){
+              numStr += str[m]
+            }
+            // var numStr = numStrArray.join("")
+            numTwo = parseInt(numStr)
+            if( numTwo < numOne){
+              console.log("numTwo < numOne , invalid")
+              break;
+            }
+          }
+          console.log('numOne : ', numOne)
+          console.log('numTwo :', numTwo)
+          if( numOne === 0 ){
+            if(numTwo === 0 ){//相当于 {0}
+              var op2=new NFA(0,0);
+              op2.deepInit(this.NFAStack.top());
+              this.NFAStack.pop();
+              this.state -= op2.getNumOfState()
+              var op1 = new NFA( this.state , this.state + 1)
+              op1.stateTransitionList.push( new stateTransition1(op1.startState, 'ε', op1.endState))
+              this.state = this.state + 2
+              // console.log('op1: ')
+              // op1.printNFA()
+              this.NFAStack.push(op1)
+            }else{
+              var op1=new NFA(0,0);
+              op1.init(this.NFAStack.top());
+              op1.stateTransitionList.push(new stateTransition1(op1.startState,'ε',op1.endState))
+              this.NFAStack.pop();
+
+              console.log('op1: ' )
+              op1.printNFA()
+
+              var op3 = new NFA(0,0)
+              op3.deepInit(op1)
+
+              var res = new NFA(0,0)
+              res.startState = op3.startState
+              res.stateTransitionList = res.stateTransitionList.concat( op3.stateTransitionList)
+              var countState = op1.getNumOfState()
+            
+              for( var m = 1; m < numTwo - numOne; m++ ){
+                var op2 = new NFA(0,0)
+                for(var n = 0; n < op1.stateTransitionList.length ; n++ ){
+                  var temp = op1.stateTransitionList[n]
+                  temp.startState += countState
+                  temp.endState += countState
+                }
+                op1.startState +=  countState
+                op1.endState += countState
+                op2.deepInit(op1)
+                // console.log('9999999')
+                // op1.printNFA()
+                res.stateTransitionList.push.apply(res.stateTransitionList,op2.stateTransitionList)
+                res.stateTransitionList.push(new stateTransition1(op2.endState-countState,'ε',op2.startState))
+                this.state += countState
+              }
+              res.endState = op1.endState
+              this.NFAStack.push(res)
+            }
+          }
+          else{//numOne > 0
+            var op1=new NFA(0,0);
+            op1.init(this.NFAStack.top());
+            this.NFAStack.pop();
+            op1.printNFA()
+
+            var op3 = new NFA(0,0)
+            op3.deepInit(op1)
+
+            var res = new NFA(0,0)
+            res.startState = op3.startState
+            res.stateTransitionList = res.stateTransitionList.concat( op3.stateTransitionList)
+            var countState = op1.getNumOfState()
+
+            for( var m = 1; m < numOne; m++ ){
+              var op2 = new NFA(0,0)
+              for(var n = 0; n < op1.stateTransitionList.length ; n++ ){
+                var temp = op1.stateTransitionList[n]
+                temp.startState += countState
+                temp.endState += countState
+              }
+              op1.startState +=  countState
+              op1.endState += countState
+              op2.deepInit(op1)
+              // console.log('9999999')
+              // op1.printNFA()
+              res.stateTransitionList.push.apply(res.stateTransitionList,op2.stateTransitionList)
+              res.stateTransitionList.push(new stateTransition1(op2.endState-countState,'ε',op2.startState))
+              this.state += countState
+            }
+            res.endState = op1.endState
+         
+
+            if( numTwo === numOne ){
+              this.NFAStack.push(res)
+            }else{//
+              op1.stateTransitionList.push(new stateTransition1(op1.startState,'ε',op1.endState))
+              // res
+              for( var m = 0; m < numTwo - numOne; m++ ){
+                var op4 = new NFA(0,0)
+                for(var n = 0; n < op1.stateTransitionList.length ; n++ ){
+                  var temp = op1.stateTransitionList[n]
+                  temp.startState += countState
+                  temp.endState += countState
+                }
+                op1.startState +=  countState
+                op1.endState += countState
+                op4.deepInit(op1)
+                // console.log('9999999')
+                // op1.printNFA()
+                res.stateTransitionList.push.apply(res.stateTransitionList,op4.stateTransitionList)
+                res.stateTransitionList.push(new stateTransition1(op4.endState-countState,'ε',op4.startState))
+                this.state += countState
+              }
+              res.endState = op1.endState
+              this.NFAStack.push(res)
+            }
+          }
+        }
+        if(i+1<length){
+          if(str[i+1]=='('){this.OperatorStack.push('.')}else{
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="{"&&str[i+1]!="|"){
               this.OperatorStack.push('.')
             }
           }
@@ -169,7 +435,7 @@ function generateNFA(){
         this.NFAStack.push(regularChar)
         if(i+1<length){
           if(str[i+1]=='('){this.OperatorStack.push('.')}else{
-            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="|"){
+            if(str[i+1]!="*"&&str[i+1]!=")"&&str[i+1]!="{"&&str[i+1]!="|"){
               this.OperatorStack.push('.')
             }
           }
@@ -204,7 +470,8 @@ function generateNFA(){
 
   this.updateNFA()
   //更新状态完毕
-  //this.printSingalNFA()
+  this.printSingalNFA()
+  console.log("最终生成NFA")
   //生成字母表
 
   //打印字母表
