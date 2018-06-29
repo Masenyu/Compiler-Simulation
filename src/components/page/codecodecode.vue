@@ -1,8 +1,5 @@
 <template>
   <div class="setting">
-    <select id="theme" v-model="something">
-      <option v-for="name in mapArray" :value='name.mode2'>{{name.name}}</option>
-    </select>
     <textarea id="editor" name="editor">
     </textarea>
   </div>
@@ -10,15 +7,9 @@
 
 <script>
 import * as CodeMirror from 'codemirror/lib/codemirror'
-import 'codemirror/theme/monokai.css'
-import 'codemirror/theme/3024-night.css'
-import 'codemirror/theme/3024-day.css'
-import 'codemirror/theme/mdn-like.css'
-import 'codemirror/theme/eclipse.css'
-import 'codemirror/theme/duotone-light.css'
-import 'codemirror/theme/idea.css'
-import 'codemirror/theme/base16-light.css'
-import 'codemirror/theme/ambiance.css'
+import 'codemirror/theme/liquibyte.css'//白色高亮
+import 'codemirror/theme/cobalt.css'//黑色朴素
+import 'codemirror/theme/neat.css'//白色朴素
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
@@ -80,7 +71,7 @@ export default {
     setmirror(){
       let myTextarea = document.getElementById('editor');
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-          theme:'mdn-like', 
+          theme:'neat', 
           styleActiveLine: true,
           mode: "text/x-c++src",
           extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
