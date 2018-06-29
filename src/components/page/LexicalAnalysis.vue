@@ -188,7 +188,7 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
-import BScroll from 'better-scroll'  
+import BScroll from 'better-scroll'
 
 export default {
   props: {
@@ -332,12 +332,12 @@ export default {
         messBoxScroll: null
       },
       RE_offset: 1,
-      isFirsttime: true,
+      isFirsttime: true
     }
   },
   created () {
     this.$nextTick(() => {
-      this._initScroll();
+      this._initScroll()
     })
   },
   computed: {
@@ -400,7 +400,7 @@ export default {
         }
       })
     },
-    //判断是不是需要重新构建状态机
+    // 判断是不是需要重新构建状态机
     judgeGenerate () {
       if (this.available === false) { this.generateFA('REForm') }
     },
@@ -450,7 +450,7 @@ export default {
         createEdges(self.NFA.data.transitionTable, self.NFA.data.alphabet)
       )
       self.NFA.nodes = new DataSet(
-        createNodes(self.NFA.data.transitionTable, self.NFA.data.acceptState)
+        createNodes(self.NFA.data.transitionTable, self.NFA.data.acceptState, self.NFA.data.alphabet)
       )
       var NFAdata = {
         nodes: self.NFA.nodes,
@@ -462,7 +462,7 @@ export default {
         createEdges(self.DFA.data.transitionTable, self.DFA.data.alphabet)
       )
       self.DFA.nodes = new DataSet(
-        createNodes(self.DFA.data.transitionTable, self.DFA.data.acceptState)
+        createNodes(self.DFA.data.transitionTable, self.DFA.data.acceptState, self.DFA.data.alphabet)
       )
       var DFAdata = {
         nodes: self.DFA.nodes,
@@ -474,10 +474,7 @@ export default {
         createEdges(self.DFA_S.data.transitionTable, self.DFA_S.data.alphabet)
       )
       self.DFA_S.nodes = new DataSet(
-        createNodes(
-          self.DFA_S.data.transitionTable,
-          self.DFA_S.data.acceptState
-        )
+        createNodes(self.DFA_S.data.transitionTable, self.DFA_S.data.acceptState, self.DFA_S.data.alphabet)
       )
       var DFA_Sdata = {
         nodes: self.DFA_S.nodes,
@@ -508,6 +505,11 @@ export default {
           font: {
             size: 35,
             align: 'top'
+          },
+          smooth: {
+            type: 'continuous',
+            roundness: 0.5,
+            forceDirection: 'none'
           }
         },
         autoResize: true,
@@ -516,13 +518,15 @@ export default {
         clickToUse: true,
         layout: {
           hierarchical: {
+            // enabled: true,
+            // direction: 'LR', // UD, DU, LR, RL
+            // sortMethod: 'directed' // hubsize, directed
             enabled: true,
-            direction: 'LR', // UD, DU, LR, RL
-            sortMethod: 'directed' // hubsize, directed
+            direction: 'LR'
           }
         },
         physics: {
-          enabled: true
+          enabled: false
         }
       }
 
@@ -610,15 +614,15 @@ export default {
       this.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
         // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
         click: true
-      });
+      })
       this.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
         // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
         click: true
-      });
+      })
       this.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
         // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
         click: true
-      });
+      })
     },
     // 将消息push到消息数组中并刷新显示框
     pushMess (object, str) {
@@ -969,7 +973,7 @@ export default {
       object.nodes.clear()
       object.edges.clear()
       object.nodes.add(
-        createNodes(object.data.transitionTable, object.data.acceptState)
+        createNodes(object.data.transitionTable, object.data.acceptState, object.data.alphabet)
       )
       object.edges.add(
         createEdges(object.data.transitionTable, object.data.alphabet)

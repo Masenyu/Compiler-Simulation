@@ -161,8 +161,12 @@ function NFALayout(TB, A) {
 		}
 	}
 
-	// var graph = [];
-	// var l = 0;
-	// while (l < level) graph.push(_indexsOf(levels, l++));
-	return transitionTable;
+	var graph = [];
+	var l = 0;
+	while (l < level) graph.push(_indexsOf(levels, l++));
+
+	let nodesLevelInfo = new Map();
+	graph.forEach((arr, level) => arr.forEach(node => nodesLevelInfo.set(node, level + 1)));
+
+	return [transitionTable, nodesLevelInfo];
 }
