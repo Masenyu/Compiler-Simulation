@@ -375,6 +375,7 @@ export default {
     },
     judgeGenerateSure () {
       this.visible2 = false
+      this.hasbegin = false
       this.clearData(this.NFA)
       this.clearData(this.DFA)
       this.clearData(this.DFA_S)
@@ -384,6 +385,9 @@ export default {
     clearData (object) {
       this.startbuttonType = 'primary',
       this.startbuttonText = '开始分词',
+      this.NFA.Token = ''
+      this.DFA.Token = ''
+      this.DFA_S.Token = ''
       object = { 
         data: {
           transitionTable: [
@@ -401,7 +405,6 @@ export default {
         nextState: null,
         TokenForm: '',
         Token: '',
-        hasbegin: false,
         autobuttonType: 'primary',
         autobuttonText: '自动展示',
         isFull_screen: false,
@@ -410,6 +413,7 @@ export default {
         mess: [],
         messBoxScroll: null
       }
+      console.log(object.Token)
     },
     // 生成状态机图
     async fresh () {
@@ -1096,7 +1100,7 @@ export default {
   /*margin-top: 40px;*/
   min-width: 1200px;
   height: 100%;
-  background-color: #dddddd
+  background-color: #fff;
 }
 .tab{
   height: auto;
