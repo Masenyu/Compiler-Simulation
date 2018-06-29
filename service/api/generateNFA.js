@@ -404,6 +404,19 @@ function OperatorInToStack() {
                   op1.stateTransitionList.push( new stateTransition1(op1.startState, 'ε', op1.endState))
                   this.state = this.state + 2
                   this.NFAStack.push(op1)
+                }else if(numTwo === -1){
+                  var op1=new NFA(0,0);
+                  op1.init(this.NFAStack.top());
+                  this.NFAStack.pop();
+                  var op3=new NFA(this.state,this.state+1)
+
+                  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op3.endState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
+                  this.state=this.state+2
+                  this.NFAStack.push(op3);
                 }else{
                   var op1=new NFA(0,0);
                   op1.init(this.NFAStack.top());
@@ -468,10 +481,47 @@ function OperatorInToStack() {
                   this.state += countState
                 }
                 res.endState = op1.endState
-
+                console.log('countState :',countState)
+                console.log('res before:')
+                res.printNFA()
+                console.log('op1 before:')
+                op1.printNFA()
+                console.log('this.state befor:' , this.state)
 
                 if( numTwo === numOne ){
                   this.NFAStack.push(res)
+                }else if(numTwo === -1){
+                  for(var n = 0; n < op1.stateTransitionList.length ; n++ ){
+                    var temp = op1.stateTransitionList[n]
+                    temp.startState += countState
+                    temp.endState += countState
+                  }
+                  op1.startState +=  countState
+                  op1.endState += countState
+                  this.state += countState
+                  
+                  console.log('op1 after:')
+                  op1.printNFA()
+                  console
+                  var op3=new NFA(this.state,this.state+1)
+                  op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op3.endState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op3.endState)
+                  op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
+                  this.state=this.state+2
+
+                  console.log('op3 after:')
+                  op3.printNFA()
+
+                  res.stateTransitionList.push.apply(res.stateTransitionList,op3.stateTransitionList)
+                  res.stateTransitionList.push(new stateTransition1(res.endState,'ε',op3.startState))
+                  res.endState = op1.endState
+                  this.NFAStack.push(res)
+
+                  console.log('res after:')
+                  res.printNFA()
+
                 }else{//
                   op1.stateTransitionList.push(new stateTransition1(op1.startState,'ε',op1.endState))
                   // res
