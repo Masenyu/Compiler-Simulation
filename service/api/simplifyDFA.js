@@ -59,28 +59,52 @@ function judge_next( res , stPoint , edge , stateTransitions ){
       }
     }
   }
-
   return -1;
 }
+function findRE(state,acceptStates) {
+  for( var i = 0 ; i < acceptStates.length ; i++ ){
+    if(state === acceptStates[i].state){
+      return acceptStates[i].REId;
+    }
+  }
+  return -1;
+}
+// 判断state和endStates里面的元素是否有属于相同RE的接受状态，有就返回该元素的index值，没有就返回-1
+function belongToSameRE (state, endStates, acceptStates) {
+  for (var i = 0; i < endStates.length; i++) {
+    var numOfRE1 = findRE(state,acceptStates)
+    var numOfRE2 = findRE(endStates[i][0], acceptStates)
+    if (numOfRE1 === numOfRE2) {
+      return i
+    }
+  }
+  return -1
+}
+
 module.exports =function simplifyDFA( DFA){
-  //该函数返回的结果是resStateTrans，alphabets , acceptStateList
-  //console.log(DFA)
+  // 该函数返回的结果是resStateTrans，alphabets , acceptStateList
+  // console.log(DFA)
   var stateTransitions=DFA.stateTransition
   var alphabets=DFA.alphabet
   var acceptStates=DFA.acceptStateList
 
+  // console.log('acceptState:')
+  // for( var i = 0 ; i < acceptStates.length ; i ++ ){
+  //   console.log( 'state:' + acceptStates[i].state + ' id:' + acceptStates[i].REId);
+  // }
+
   var resStateTrans = new Array();
   var resAcceptStateList = new Array();
 
-  //找出所有接受状态
+  // 找出所有接受状态数组
   var endStates = new Array();
   for ( var i = 0 ; i < acceptStates.length ; i++ ){
     endStates.push( acceptStates[i].state );
   }
 
-  //找出所有非接受状态
+  // 找出所有非接受状态
   var nonEndStates = new Array();
-  for( var i = 0 ; i < stateTransitions.length ; i ++ ){
+  for( var i = 0 ; i < stateTransitions.length ; i ++ ) {
     if (endStates.indexOf(stateTransitions[i].startState) ===  -1 && nonEndStates.indexOf(stateTransitions[i].startState) === -1 )
     {
       nonEndStates.push(stateTransitions[i].startState)
@@ -90,9 +114,26 @@ module.exports =function simplifyDFA( DFA){
     }
   }
 
+  // 对接受状态进行进一步划分（多条正则表达式时每条正则表达式的接受状态相互分开）
+  endStates.splice(0,endStates.length);
+  for (var i = 0 ; i < acceptStates.length ; i++){
+    var index = belongToSameRE(acceptStates[i].state , endStates , acceptStates);
+    if ( index === -1) {
+      var termArray = new Array();
+      termArray.push(acceptStates[i].state);
+      endStates.push(termArray)
+    } else {
+      endStates[index].push(acceptStates[i].state);
+    }
+  }
+
   var res = new Array();
-  res.push( nonEndStates );
-  res.push( endStates );
+  res.push(nonEndStates);
+  for (var i = 0; i < endStates.length; i++ ) {
+    res.push(endStates[i]);
+  }
+  console.log('res2222')
+  console.log(res)
 
   //对状态进行划分
   var i = 0 ;
@@ -117,7 +158,7 @@ module.exports =function simplifyDFA( DFA){
             }
           }
           //完全匹配，标记为归到同一组
-          if( m === eachJumpNext.length ){
+          if (m === eachJumpNext.length) {
             belongTo.push(l);
             break;
           }
@@ -130,8 +171,8 @@ module.exports =function simplifyDFA( DFA){
         }
       }
 
-      //大于1，说明有不同的分组，要进行拆分、删除、添加
-      if( jumpNext.length > 1 ){
+      //  大于1，说明有不同的分组，要进行拆分、删除、添加
+      if (jumpNext.length > 1) {
         var toBeRemove = new Array();
 
         for( var j = 1 ; j < jumpNext.length ; j ++ ){
@@ -165,11 +206,17 @@ module.exports =function simplifyDFA( DFA){
   for( var i = 0 ; i < res.length ; i ++ ){
     var startStateIndex = res[i].indexOf(0)
     if(startStateIndex != -1 ){
-      if( startStateIndex != 0 ){
-        var startStateArray = res.splice(startStateIndex,1);
+      if( i != 0 ){
+        var startStateArray = res.splice(i,1);
         res.unshift( startStateArray[0] );
       }
       break;
+    }
+  }
+  // 去掉可能出现为空的状态集合
+  for( var i = 0 ; i < res.length ; i++ ){
+    if (res[i].length===0){
+      res.splice(i,1);
     }
   }
 
@@ -203,7 +250,13 @@ module.exports =function simplifyDFA( DFA){
       }
     }
   }
-
+  // for( var i = 0 ; i < resStateTrans.length ; i ++ ){
+  //   console.log( resStateTrans[i].startState + " " + resStateTrans[i].inputChar + " " + resStateTrans[i].endState );
+  // }
+  //
+  // for( var i = 0 ; i < resAcceptStateList.length ; i ++ ){
+  //   console.log( resAcceptStateList[i].state );
+  // }
   return { stateTransition:resStateTrans , alphabet:alphabets , acceptStateList:resAcceptStateList};
 }
 // module.exports = router;
