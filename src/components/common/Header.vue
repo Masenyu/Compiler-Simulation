@@ -51,31 +51,34 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  height: 40px;
-  color: #49505b;
-  font-size: 16px;
+  height: 4rem;
+  color: #ffffff;
+  background-color: #161616;
+  font-size: 1.6rem;
   font-weight: 400;
   /* line-height: 1.5em; */
-  padding:15px 0px;
-  box-shadow: 0px 1px 1px #ece9e9;
+  padding:1.5rem 0rem;
+  box-shadow: 0rem 1px 1px #ece9e9;
+  position: absolute;
+  font-family:"Microsoft YaHei",Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
 }
 .navigation{
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  min-width: 800px;
+  min-width: 80rem;
   margin:0px auto;
   width:65%;
 }
 .logo {
-  font-size: 32px;
+  font-size: 3.2rem;
   cursor: pointer;
   -webkit-text-size-adjust:100%;
-  min-width: 270px;
+  min-width: 27rem;
   float: left;
 }
 .nav-menu {
-  height: 40px;
+  height: 4rem;
   float: right;
 }
 ul{
@@ -86,15 +89,15 @@ ul{
 }
 ul li
 {
-  padding:0px 10px;
+  padding:0px 1rem;
   float:left; /* 向左漂移，将竖排变为横排 */
 }
 ul li a, ul li a:visited
 {
   cursor: pointer;
-  color:#49505b;
+  color:#eeeeee;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 10px; /* 内部填充的距离 */
+  padding: 1rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }
@@ -112,9 +115,9 @@ ul li a:active
   cursor: pointer;
   border: 1px solid #00aeee;
   color: #00aeee;
-  border-radius: 3px;
+  border-radius: 0.3rem;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 8px 20px; /* 内部填充的距离 */
+  padding: 0.8rem 2rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }

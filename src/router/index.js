@@ -32,7 +32,7 @@ export default new Router({
         {
           path: '/index/Ilovecode',
           component: resolve =>
-            require(['../components/page/codecodecode.vue'], resolve)
+            require(['../components/page/code.vue'], resolve)
         }
       ]
     }

@@ -28,6 +28,8 @@ export default {
   position: relative;
 }
 .content{
+  margin-top: 7rem;
   padding-bottom: 40px;
+  background-color: #bbbbbb
 }
 </style>
