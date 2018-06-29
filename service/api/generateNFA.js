@@ -153,17 +153,6 @@ var singalNFA =function(str){
   this.OperatorPerform=OperatorPerform;  //运算符弹出并执行
   this.OperatorInToStack=OperatorInToStack;//运算符入栈
 
-  // this.OperatorInformationTable=[
-  //     {operator:'(',priority:0,numOfParams:0},
-  //     {operator:'|',priority:1,numOfParams:2},
-  //     {operator:'.',priority:2,numOfParams:2},
-  //     {operator:'*',priority:3,numOfParams:1},
-  //     {operator:'+',priority:3,numOfParams:1},
-  //     {operator:'{',priority:3,numOfParams:1},
-  //     {operator:'?',priority:3,numOfParams:1},
-  //     {operator:')',priority:4,numOfParams:0}]
-
-  // this.updateNFA1=updateNFA1;
   this.connectOperator=connectOperator;
   this.selectOperator=selectOperator;
   this.clodureOperator=clodureOperator;
@@ -179,13 +168,14 @@ var singalNFA =function(str){
 function generateNFA(){
   this.OperatorInToStack()//运算符入栈
   this.OperatorPerform();//运算符出栈并执行
- this.printSingalNFA()
+  this.printSingalNFA()
   //弹出完毕
   //更新状态
   this.generateStateTable()
   this.updateNFA()
   //更新状态完毕
   this.printSingalNFA()
+
   //生成字母表
   //打印字母表
   //打印更新状态后的结果
@@ -197,7 +187,6 @@ function generateStateTable(){
   }
   var temp_NFA=this.NFAStack.top().stateTransitionList
   this.stateTable[this.NFAStack.top().startState]=this.new_state;
-  //this.stateTable[this.NFAStack.top().endState]=this.state-1;
   this.new_state++;
   var start=this.NFAStack.top().startState;
   for (var i=0;i<this.NFAStack.top().stateTransitionList.length;i++){
@@ -398,13 +387,15 @@ function OperatorInToStack()
               var numStr = ""
               var num
               if(tempCount - i === 1){
-                num = 1
-              }else{
+                num = 0
+              }
+              else{
                 for( var m = i+1 ; m < tempCount ; m++ ){
                   numStr += str[m]
                 }
                 num = parseInt(numStr)
               }
+
               console.log('test generate {: num = ' + num)
               if( num === 0 ){
                 var op2=new NFA(0,0);
@@ -603,7 +594,6 @@ function OperatorInToStack()
                   op1.startState +=  countState
                   op1.endState += countState
                   this.state += countState
-
                   console.log('op1 after:')
                   op1.printNFA()
                   console
