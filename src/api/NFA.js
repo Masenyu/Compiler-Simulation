@@ -4,13 +4,13 @@ export { create_NFA, NFA_CODE }
 var NFA_CODE = {
   INIT: 0,
   DONE: 1,
-  DOCLOSURE: 2,
-  READCHAR: 3,
-  ACCEPT: 4,
-  REJECT: 5,
-  UNKNOWN: 6,
-  PRESTEP: 7,
-  NOPRESTEP: 8
+  ACCEPT: 2,
+  REJECT: 3,
+  UNKNOWN: 4,
+  PRESTEP: 5,
+  NOPRESTEP: 6,
+  DOCLOSURE: 7,
+  READCHAR: 8
 };
 
 function create_NFA(TB, A, state2pattern) {

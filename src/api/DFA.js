@@ -3,12 +3,12 @@ export { DFA_CODE, create_DFA }
 var DFA_CODE = {
 	INIT: 0,
 	DONE: 1,
-	NEXTSTEP: 2,
-	ACCEPT: 3,
-	REJECT: 4,
-	UNKNOWN: 5,
-	PRESTEP: 6,
-	NOPRESTEP: 7
+	ACCEPT: 2,
+	REJECT: 3,
+	UNKNOWN: 4,
+	PRESTEP: 5,
+	NOPRESTEP: 6,
+	NEXTSTEP: 7
 };
 
 function create_DFA(TB, A, state2pattern) {
