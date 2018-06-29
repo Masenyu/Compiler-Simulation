@@ -17,9 +17,9 @@ module.exports = function(nfa) {
       acceptState: nfa.acceptStateList
     }
 
-    console.log("nfa_tran_table",nfa_tran_t.nfa_tran_table);
-  console.log("acceptState",nfa_tran_t.acceptState);
-    console.log("nfa.stateTransition:",nfa.stateTransition);
+  //   console.log("nfa_tran_table",nfa_tran_t.nfa_tran_table);
+  // console.log("acceptState",nfa_tran_t.acceptState);
+  //   console.log("nfa.stateTransition:",nfa.stateTransition);
   function AcceptState(s, id) {
     this.state = s;
     this.REId = id;
@@ -72,7 +72,7 @@ module.exports = function(nfa) {
 //console.log(EClosure[0]);
   function getEClosure(nfatran, eclosure, state_num) {
 
-    for (k = 0; k < state_num; k++) {
+    for (var k = 0; k < state_num; k++) {
       Etemp = [];
       // console.log(eclosure)
       for (i = 0; Etemp[i] != undefined; i++) {
@@ -86,7 +86,7 @@ module.exports = function(nfa) {
         {
           if (nfatran[i].startState == Etemp[j] && nfatran[i].inputChar == 'ε') {
             //判断是否将新状态放入Etemp
-            for (n = 0; Etemp[n] != undefined; n++) {
+            for (var n = 0; Etemp[n] != undefined; n++) {
               if (Etemp[n] == nfatran[i].endState) {
                 break;
               }
@@ -101,8 +101,8 @@ module.exports = function(nfa) {
       }
       //排列闭包
       for (i = 0; Etemp[i] != undefined; i++) {
-        min = i;
-        for (j = i; Etemp[j] != undefined; j++) {
+        var min = i;
+        for (var j = i; Etemp[j] != undefined; j++) {
           if (Etemp[j] < Etemp[min]) {
             min = j;
           }
@@ -120,7 +120,7 @@ module.exports = function(nfa) {
     return eclosure
   }
 state_num+=1;
-  console.log("state_num",state_num)
+   console.log("state_num",state_num)
   EClosure = getEClosure(nfa_tran, EClosure, state_num);
 console.log("EClosure",EClosure);
 
@@ -131,27 +131,35 @@ console.log("EClosure",EClosure);
     var Eadd = new Array();
     var EaddN = 0;
     var dfa_tran_num = 0;
-
     dfa_mid[dfa_tran_num] = new dfa_mid_StateTransition(eclosure[0], undefined, undefined)//dfa初始状态为0的闭包
     var dfa_start_state = new Array();
     dfa_start_state.push(eclosure[0]);
     //console.log("dfa_start_state[0]");
     //console.log(dfa_mid);
 
-    for (num = 0;dfa_start_state[num]!=undefined; num++)//开始计算move（A，a），move（A,b）......dfa_start_state[num]!=undefined
+    for (var num = 0;dfa_start_state[num]!=undefined; num++)//开始计算move（A，a），move（A,b）......dfa_start_state[num]!=undefined
     {
-      //console.log("dfa_start_state[num]",dfa_start_state[num]);
-      for (c = 0; alphabet[c] != 'ε'&&alphabet[c] != undefined; c++)//每个转换条件都计算一遍
+      // console.log("dfa_start_state[num]",dfa_start_state[num]);
+      for (var c = 0; alphabet[c] != 'ε'&&alphabet[c] != undefined; c++)//每个转换条件都计算一遍
       {
 
-
         var newEState = new Array();
-        for (i = 0; dfa_start_state[num][i] != undefined; i++)//从dfa一个新集合开始（0的闭包开始）
+        for (var i = 0; dfa_start_state[num][i] != undefined; i++)//从dfa一个新集合开始（0的闭包开始）
         {
-          for (j = 0; nfa_tran[j] != undefined; j++)//循环每条nfa转换
+          for (var j = 0; nfa_tran[j] != undefined; j++)//循环每条nfa转换
           {
             if (nfa_tran[j].startState == dfa_start_state[num][i] && nfa_tran[j].inputChar == alphabet[c]) {
-              newEState.push(nfa_tran[j].endState);
+              ////
+              if(newEState.length==0){newEState.push(nfa_tran[j].endState);}
+              for (var k = 0; k < newEState.length; k++) {
+                if (newEState[k] == nfa_tran[j].endState) {
+                  break;
+                }
+                else if (k == newEState.length - 1) {
+                  newEState.push(nfa_tran[j].endState);
+                }//没出现过的新单状态
+              }
+              ////
             }
           }
         }
@@ -166,6 +174,23 @@ console.log("EClosure",EClosure);
             tempEadd.push(eclosure[state][j]);
           }
         }
+
+        //闭包相加后对闭包进行排序
+        for(var k=0;k<tempEadd.length;k++)
+        {
+          var min=k
+          for(var q=k+1;q<tempEadd.length;q++)
+          {
+            if(tempEadd[min]>tempEadd[q])
+            {
+              min=q;
+            }
+          }
+          var temp= tempEadd[k]
+          tempEadd[k]=tempEadd[min]
+          tempEadd[min]=temp
+        }
+
         Eadd.push(tempEadd);
         //console.log("tempEadd", tempEadd);
         EaddN++;
@@ -186,10 +211,10 @@ console.log("EClosure",EClosure);
           //console.log("dfa_start_state[num]",dfa_start_state[num]);
           if (isadd == 1) {
             dfa_start_state.push(tempEadd);
-            console.log("dfa_start_state[num]",dfa_start_state[num]);
-            console.log("下一个",dfa_start_state[num+1]);
+            //console.log("dfa_start_state[num]",dfa_start_state[num]);
+            // console.log("下一个",dfa_start_state[num+1]);
           }
-          console.log("isadd:", isadd);
+          // console.log("isadd:", isadd);
           dfa_tran_num++;
         }
 
@@ -198,8 +223,8 @@ console.log("EClosure",EClosure);
     return dfa_mid;
   }
   dfa_mid = getDFA(EClosure, dfa_mid, nfa_tran, nfa_tran_t.alphabet);
-console.log("test");
-console.log("dfa_mid",dfa_mid);
+ console.log("test");
+ console.log("dfa_mid",dfa_mid);
 
 
   var dfa_tran = new Array();
@@ -258,7 +283,7 @@ console.log("dfa_mid",dfa_mid);
 
 
 
-    console.log("state",state);
+    //console.log("state",state);
     for (i = 0; dfa_mid[i] != undefined; i++) {
       var start = -1;
       var end = -1;

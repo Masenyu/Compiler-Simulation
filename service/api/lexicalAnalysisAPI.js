@@ -26,8 +26,11 @@ router.post('/regularExpression', (req, res) => {
 
   console.log(expressions)
   var NFA =new generateNFA(expressions)
+  console.log(11111111)
   var DFA =new generateDFA(NFA)
+  console.log(22222222)
   var s_DFA=new simplifyDFA(DFA)
+  console.log(33333333)
   var NFAdata={
     transitionTable:tool(NFA),
     alphabet:NFA.alphabet,
