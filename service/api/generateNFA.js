@@ -12,7 +12,8 @@ var OperatorInformationTable=[
   {operator:'{',priority:3,numOfParams:1},
   {operator:'?',priority:3,numOfParams:1},
   {operator:')',priority:4,numOfParams:0},
-  {operator:']',priority:4,numOfParams:0}
+  {operator:']',priority:4,numOfParams:0},
+  {operator:'\\',priority:0,numOfParams:1}
   ]
 
 var MiddlePackageAlphabet=[
@@ -291,8 +292,6 @@ function OperatorInToStack()
             }
             break;
           case '[':
-
-
             i++
             var str_content = ""
             for (; str[i] != ']'; i++) {
@@ -355,6 +354,32 @@ function OperatorInToStack()
         break;
       case 1://单目运算符不入栈* + ? { }
         switch (temp_char) {
+          case '\\':
+            if(Priority(str[i+1]) >= 0 ){
+              var regularChar=new NFA(this.state,this.state+1)
+              regularChar.stateTransitionList[regularChar.stateTransitionList.length]=new stateTransition1(this.state,str[i+1],this.state+1)
+              this.state+=2
+              i ++;
+              this.NFAStack.push(regularChar)
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              break;
+            }
+            else if( str[i+1] == 'd' ){
+              var currentState = this.state
+
+              var tempNFA = new NFA(this.state,this.state+1)
+              this.state += 2
+              for( var m = 0 ; m < 10 ; m++ ){
+                tempNFA.stateTransitionList.push(new stateTransition1(this.state,MiddlePackageAlphabet[m],this.state+1))
+                tempNFA.stateTransitionList.push(new stateTransition1(tempNFA.startState,'ε',this.state))
+                tempNFA.stateTransitionList.push(new stateTransition1(this.state+1,'ε',tempNFA.endState))
+                this.state+=2
+              }
+              i++
+              this.NFAStack.push(tempNFA)
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              break;
+            }
           case '*':
             this.clodureOperator();
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
