@@ -144,11 +144,18 @@ function NFALayout(TB, A) {
 								// 把所有受影响的 node 的 levels 改正确
 								// 注意后面的节点的排序目前认为是正确的，故只需要遍历一下改正 level 就 ok 
 								resetLevelsOf(nextNode);
-								let t = nodesInfo.get(nextNode).prenNodes.pop();
-								if (t === node) t = nodesInfo.get(nextNode).prenNodes.pop()
-								let i = transitionTable[t][alphabet.indexOf('ε')].indexOf(nextNode);
-								if (i != -1) transitionTable[t][alphabet.indexOf('ε')].splice(i, 1)
-								//
+
+								// 从 transitionTable 中删除捷径
+								// nextNode 的 “前一个” 节点集合里面有两个点， 其中一个是我们想要的前继节点（也就是现在的 node），
+								// 另外一个是走了捷径才到的，这条捷径（这个点到 nextNode的边）应该标记删除。
+								let nexts = nodesInfo.get(nextNode).prenNodes;
+								let index;
+								let preNode;
+								nexts.forEach(e => {
+									if (e != node) preNode = e;
+								})
+								index = transitionTable[preNode][alphabet.indexOf('ε')].indexOf(nextNode);
+								if (index != -1) transitionTable[preNode][alphabet.indexOf('ε')].splice(index, 1);
 							} else {
 								// nextNode 是一个并点
 								stems[nextNode].push(node);
