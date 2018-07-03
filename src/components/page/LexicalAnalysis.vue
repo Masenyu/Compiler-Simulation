@@ -162,7 +162,7 @@
               <code-area  @tokenchange="updatetoken"></code-area>
               <el-row style="margin-top: 10px;text-align:right">
               <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-              <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+              <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
               <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
               <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button>
               </el-row>
@@ -263,6 +263,9 @@ export default {
       },
       startbuttonType: 'primary',
       startbuttonText: '开始分词',
+      autobuttonType: 'primary',
+      autoicon: 'static/img/play_24.png',
+      autobuttonText: '自动展示',
       TokenForm: '',
       hasbegin: false,
       NFA: {
@@ -617,10 +620,12 @@ export default {
           self.changeNode(self.DFA, self.DFA.nextState.graphInfo.highlightNodes, 1)
           self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
 
+
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
           self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
+
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -647,13 +652,13 @@ export default {
         self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
 
         if (self.NFA.autobuttonText === '停止') {
-          self.autoControl(self.NFA)
+          self.autoControl()
         }
         if (self.DFA.autobuttonText === '停止') {
-          self.autoControl(self.DFA)
+          self.autoControl()
         }
         if (self.DFA_S.autobuttonText === '停止') {
-          self.autoControl(self.DFA_S)
+          self.autoControl()
         }
       }
     },
@@ -687,14 +692,7 @@ export default {
         // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
         click: true
       })
-      this.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
-        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-        click: true
-      })
-      this.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
-        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-        click: true
-      })
+    
     },
     // 将消息push到消息数组中并刷新显示框
     // pushMess (object, str) {
@@ -760,6 +758,7 @@ export default {
           break
         case 'DFAGeneration':
           this.next1(this.DFA)
+          console.log('222222222222222222222222222222222222222222222222')
           break
         case 'DFASimplification':
           this.next1(this.DFA_S)
@@ -1033,12 +1032,18 @@ export default {
       switch (this.TabActiveName) {
         case 'NFAGeneration':
           this.autoControl1(this.NFA, 0)
+          this.autobuttonText = this.NFA.autobuttonText
+          this.autobuttonType = this.NFA.autobuttonType
           break
         case 'DFAGeneration':
           this.autoControl1(this.DFA, 1)
+          this.autobuttonText = this.DFA.autobuttonText
+          this.autobuttonType = this.DFA.autobuttonType
           break
         case 'DFASimplification':
           this.autoControl1(this.DFA_S, 2)
+          this.autobuttonText = this.DFA_S.autobuttonText
+          this.autobuttonType = this.DFA_S.autobuttonType
           break
         default:
           break
@@ -1056,6 +1061,8 @@ export default {
             object.autobuttonText = '自动展示'
             object.autobuttonType = 'primary'
             object.autoicon = 'static/img/play_24.png'
+            self.autobuttonText = object.autobuttonText
+            self.autobuttonType = object.autobuttonType
             clearInterval(object.timer)
           }
         }, 1000)
@@ -1123,6 +1130,24 @@ export default {
     // 切换Tab菜单时自动鹰眼
     handleClick (tab, event) {
       const self = this
+      if (self.NFA.autobuttonText === '停止') {
+        self.NFA.autobuttonText = '自动展示'
+        self.NFA.autobuttonType = 'primary'
+        self.NFA.autoicon = "static/img/play_24.png"
+        clearInterval(self.NFA.timer)
+      }
+      if (self.DFA.autobuttonText === '停止') {
+        self.DFA.autobuttonText = '自动展示'
+        self.DFA.autobuttonType = 'primary'
+        self.NFA.autoicon = "static/img/play_24.png"
+        clearInterval(self.DFA.timer)
+      }
+      if (self.DFA_S.autobuttonText === '停止') {
+        self.DFA_S.autobuttonText = '自动展示'
+        self.DFA_S.autobuttonType = 'primary'
+        self.NFA.autoicon = "static/img/play_24.png"
+        clearInterval(self.DFA_S.timer)
+      }
       if (self.TabActiveName === 'DFAGeneration') {
         if(self.DFA.first === true){
           self.$nextTick(() => {
@@ -1136,6 +1161,8 @@ export default {
         self.$nextTick(() => {
           self.fitAnimatedNow(self.DFA)
         })
+        self.autobuttonText = self.DFA.autobuttonText
+        self.autobuttonType = self.DFA.autobuttonType
       } else if (self.TabActiveName === 'NFAGeneration') {
          if(self.NFA.first === true){
           self.$nextTick(() => {
@@ -1149,6 +1176,8 @@ export default {
         self.$nextTick(() => {
           self.fitAnimatedNow(self.NFA)
         })
+        self.autobuttonText = self.NFA.autobuttonText
+        self.autobuttonType = self.NFA.autobuttonType
       } else if (self.TabActiveName === 'DFASimplification') {
          if(self.DFA_S.first === true){
           self.$nextTick(() => {
@@ -1162,6 +1191,8 @@ export default {
         self.$nextTick(() => {
           self.fitAnimatedNow(self.DFA_S)
         })
+        self.autobuttonText = self.DFA_S.autobuttonText
+        self.autobuttonType = self.DFA_S.autobuttonType
       }
       self.$nextTick(() => {
         if(self.hasbegin)
@@ -1179,21 +1210,8 @@ export default {
       })
      
 
-      if (self.NFA.autobuttonText === '停止') {
-        self.NFA.autobuttonText = '自动展示'
-        self.NFA.autobuttonType = 'primary'
-        clearInterval(self.NFA.timer)
-      }
-      if (self.DFA.autobuttonText === '停止') {
-        self.DFA.autobuttonText = '自动展示'
-        self.DFA.autobuttonType = 'primary'
-        clearInterval(self.DFA.timer)
-      }
-      if (self.DFA_S.autobuttonText === '停止') {
-        self.DFA_S.autobuttonText = '自动展示'
-        self.DFA_S.autobuttonType = 'primary'
-        clearInterval(self.DFA_S.timer)
-      }
+      
+
     },
     doubleClick (object) {
       const self = this
@@ -1320,6 +1338,7 @@ div.graph div.vis {
   margin: 0;
   display: inline-block;
   position: relative;
+  z-index: 5;
   /*background-image: url("../../assets/fullscreen.png")*/
 }
 .buttonInGraph:hover{
