@@ -348,20 +348,28 @@ export default {
           self.$axios
             .post(url, Params)
             .then(function (response) {
-              self.NFA.data.transitionTable = response.data[0].transitionTable
-              self.NFA.data.alphabet = response.data[0].alphabet
-              self.NFA.data.acceptState = response.data[0].acceptStateList
-              self.DFA.data.transitionTable = response.data[1].transitionTable
-              self.DFA.data.alphabet = response.data[1].alphabet
-              self.DFA.data.acceptState = response.data[1].acceptStateList
-              self.DFA_S.data.transitionTable =
-                response.data[2].transitionTable
-              self.DFA_S.data.alphabet = response.data[2].alphabet
-              self.DFA_S.data.acceptState = response.data[2].acceptStateList
-              sessionStorage.setItem('regulation', regulation)
-              self.addCSS(self.getCsstext())
-              self.isFirsttime = false
-              self.fresh()
+              if (response.data.state === 1) {
+                self.NFA.data.transitionTable = response.data.result[0].transitionTable
+                self.NFA.data.alphabet = response.data.result[0].alphabet
+                self.NFA.data.acceptState = response.data.result[0].acceptStateList
+                self.DFA.data.transitionTable = response.data.result[1].transitionTable
+                self.DFA.data.alphabet = response.data.result[1].alphabet
+                self.DFA.data.acceptState = response.data.result[1].acceptStateList
+                self.DFA_S.data.transitionTable = response.data.result[2].transitionTable
+                self.DFA_S.data.alphabet = response.data.result[2].alphabet
+                self.DFA_S.data.acceptState = response.data.result[2].acceptStateList
+                sessionStorage.setItem('regulation', regulation)
+                self.addCSS(self.getCsstext())
+                self.isFirsttime = false
+                self.fresh()
+              } else { // 报错
+                console.log('error: ' + response.data.message)
+                Message({
+                  message: response.data.message,
+                  type: 'error',
+                  center: true
+                })
+              }
             })
             .catch(function (error) {
               self.loading = false
@@ -396,8 +404,8 @@ export default {
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
-      this.startbuttonType = 'primary',
-      this.startbuttonText = '开始分词',
+      this.startbuttonType = 'primary'
+      this.startbuttonText = '开始分词'
       this.NFA.Token = ''
       this.DFA.Token = ''
       this.DFA_S.Token = ''
