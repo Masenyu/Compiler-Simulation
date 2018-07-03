@@ -2,6 +2,7 @@
   <div class="setting">
     <textarea id="editor" name="editor" v-model="TokenForm">
     </textarea>
+    
   </div>
 </template>
 
@@ -72,7 +73,7 @@ export default {
     setmirror(){
       let myTextarea = document.getElementById('editor');
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-          theme:'neat', 
+          theme:'cobalt', 
           styleActiveLine: true,
           mode: "text/x-c++src",
           extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
@@ -129,4 +130,5 @@ export default {
     margin: 0;
   }*/
 }
+
 </style>

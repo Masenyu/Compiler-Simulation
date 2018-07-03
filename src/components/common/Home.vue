@@ -29,7 +29,8 @@ export default {
 }
 .content{
   margin-top: 7rem;
-  padding-bottom: 40px;
+  padding-bottom: 0px;
+  height: 100%;
   background-color: #bbbbbb
 }
 </style>
