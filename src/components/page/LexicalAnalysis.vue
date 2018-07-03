@@ -12,7 +12,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':NFA.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="NFAvis"></div>
                       <div style="position: absolute;  bottom: 1%; left:40%; width: 20%">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
@@ -27,7 +27,7 @@
                       </div>
                       <div style="position: absolute;  bottom: 1%; right:1%;">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                        
+
                         <button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                       </div>
                     </div>
@@ -48,7 +48,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFAvis"></div>
                       <div style="float: right; position: absolute; top: 0">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
@@ -73,7 +73,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA_S.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFA_Svis"></div>
                       <div style="float: right; position: absolute; top: 0">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
@@ -128,7 +128,7 @@
                 </el-form-item>
                 <code-area></code-area>
                 <!--el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input-->
-                <el-row style="margin-top: 5px">                  
+                <el-row style="margin-top: 5px">
                     <div class="box">
                       <div class="wrapper" ref="messBoxNFA">
                         <div>
@@ -168,12 +168,12 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
-import BScroll from 'better-scroll'  
+import BScroll from 'better-scroll'
 import codeArea from './code'
 
 export default {
   components: {
-   codeArea
+    codeArea
   },
   props: {
     messBoxNFA: {
@@ -251,11 +251,11 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',      
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'NFAToken',
-        ScanId: 'NFAScan',        
+        ScanId: 'NFAScan',
         autobuttonType: 'primary',
         autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
@@ -275,8 +275,8 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFAToken',
         ScanId: 'DFAScan',
@@ -299,8 +299,8 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFA_SToken',
         ScanId: 'DFA_SScan',
@@ -401,7 +401,7 @@ export default {
       this.NFA.Token = ''
       this.DFA.Token = ''
       this.DFA_S.Token = ''
-      object = { 
+      object = {
         data: {
           transitionTable: [
           ],
@@ -547,21 +547,21 @@ export default {
           self.NFA.TokenForm = self.TokenForm
           self.DFA.TokenForm = self.TokenForm
           self.DFA_S.TokenForm = self.TokenForm
-            self.NFA.machine = create_NFA(
-              self.NFA.data.transitionTable,
-              self.NFA.data.alphabet,
-              self.NFA.data.acceptState
-            )
-            self.DFA.machine = create_DFA(
-              self.DFA.data.transitionTable,
-              self.DFA.data.alphabet,
-              self.DFA.data.acceptState
-            )
-            self.DFA_S.machine = create_DFA(
-              self.DFA_S.data.transitionTable,
-              self.DFA_S.data.alphabet,
-              self.DFA_S.data.acceptState
-            )
+          self.NFA.machine = create_NFA(
+            self.NFA.data.transitionTable,
+            self.NFA.data.alphabet,
+            self.NFA.data.acceptState
+          )
+          self.DFA.machine = create_DFA(
+            self.DFA.data.transitionTable,
+            self.DFA.data.alphabet,
+            self.DFA.data.acceptState
+          )
+          self.DFA_S.machine = create_DFA(
+            self.DFA_S.data.transitionTable,
+            self.DFA_S.data.alphabet,
+            self.DFA_S.data.acceptState
+          )
 
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
@@ -574,7 +574,6 @@ export default {
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
-
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -702,14 +701,14 @@ export default {
     },
     // 下一步
     next () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.next1(this.NFA)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.next1(this.DFA)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.next1(this.DFA_S)
           break
         default:
@@ -836,14 +835,14 @@ export default {
     },
     // 上一步
     previous () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.previous1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.previous1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.previous1(this.DFA_S, 2)
           break
         default:
@@ -978,14 +977,14 @@ export default {
       return str1
     },
     autoControl () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.autoControl1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.autoControl1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.autoControl1(this.DFA_S, 2)
           break
         default:
