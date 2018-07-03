@@ -873,7 +873,7 @@ function generateFinalNFAStateTransition() {
       return {state:0,message:"第1条正则表达式出错，"+tempJudgeState.message}
     }else
       {
-      temp_NFA1.generateNFA()
+      //temp_NFA1.generateNFA()
       var temp_NFA = temp_NFA1.NFAStack.top()
       this.state=temp_NFA1.state;
       for (var j = 0; j < temp_NFA.stateTransitionList.length; j++) {
