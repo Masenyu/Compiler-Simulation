@@ -315,19 +315,23 @@ export default {
           let Params = {RE: re}
           self.$axios.post(url, Params).then(function (response) {
             console.log(response)
-            self.NFA.data.transitionTable = response.data[0].transitionTable
-            self.NFA.data.alphabet = response.data[0].alphabet
-            self.NFA.data.acceptState = response.data[0].acceptStateList
-            self.DFA.data.transitionTable = response.data[1].transitionTable
-            self.DFA.data.alphabet = response.data[1].alphabet
-            self.DFA.data.acceptState = response.data[1].acceptStateList
-            self.DFA_S.data.transitionTable = response.data[2].transitionTable
-            self.DFA_S.data.alphabet = response.data[2].alphabet
-            self.DFA_S.data.acceptState = response.data[2].acceptStateList
-            sessionStorage.setItem('input', self.REForm.RE)
-            self.addCSS(self.getCsstext())
-            self.isFirsttime = false
-            self.fresh()
+            if( response.data.state === 1){
+              self.NFA.data.transitionTable = response.data.result[0].transitionTable
+              self.NFA.data.alphabet = response.data.result[0].alphabet
+              self.NFA.data.acceptState = response.data.result[0].acceptStateList
+              self.DFA.data.transitionTable = response.data.result[1].transitionTable
+              self.DFA.data.alphabet = response.data.result[1].alphabet
+              self.DFA.data.acceptState = response.data.result[1].acceptStateList
+              self.DFA_S.data.transitionTable = response.data.result[2].transitionTable
+              self.DFA_S.data.alphabet = response.data.result[2].alphabet
+              self.DFA_S.data.acceptState = response.data.result[2].acceptStateList
+              sessionStorage.setItem('input', self.REForm.RE)
+              self.addCSS(self.getCsstext())
+              self.isFirsttime = false
+              self.fresh()
+            }else{//报错
+              console.log('error: ' + response.data.message)
+            }
           }).catch(function (error) {
             self.loading = false
             console.log(error)
