@@ -5,16 +5,14 @@
 </template>
 
 <script>
+
 export default {
 }
 </script>
 
 <style>
-body,html,#app{
-  padding:0px;
-  margin:0px;
-  height:100%;
-}
+@import "./components/main.css";
+@import 'http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css';
   /*TODO：
 body{
   padding:0px;
