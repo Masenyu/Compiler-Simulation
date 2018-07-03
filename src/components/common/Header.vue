@@ -8,10 +8,10 @@
             </div>
             <div class="nav-menu">
               <ul class="menu-ul">
-                <li><a :class="{'active':active.a}" @click="gotoUrl('/index/main-interface',active.a)">首页</a></li>
-                <li><a :class="{'active':active.b}" @click="gotoUrl('/index/lexical-analysis',active.b)">词法分析</a></li>
-                <li><a :class="{'active':active.c}" @click="gotoUrl('/index/main-interface',active.c)">语法分析</a></li>
-                <li><a :class="{'active':active.d}" @click="gotoUrl('/index/main-interface',active.d)">语义分析</a></li>
+                <li><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
+                <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
+                <li><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
+                <li><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
               </ul>
             </div>
             <div class="nav-login">
@@ -28,33 +28,43 @@
 export default {
   data () {
     return {
-      active: {
-        a: false,
-        b: false,
-        c: false,
-        d: false
-      }
+      active1: false,
+      active2: false,
+      active3: false,
+      active4: false
     }
   },
   methods: {
-    gotoUrl (url, highlight) {
+    gotoUrl (url, highlightindex) {
       const self = this
-      self.active.a = false
-      self.active.b = false
-      self.active.c = false
-      self.active.d = false
-      console.log(self.active)
-      highlight = true
+      self.active1 = false
+      self.active2 = false
+      self.active3 = false
+      self.active4 = false
+      switch (highlightindex) {
+        case 1:
+          self.active1 = true
+          break
+        case 2:
+          self.active2 = true
+          break
+        case 3:
+          self.active3 = true
+          break
+        case 4:
+          self.active4 = true
+          break
+      }
       self.$router.push(url)
     }
   },
   mounted () {
     switch (window.location.href) {
       case 'http://localhost:8088/#/index/main-interface':
-        this.active.a = true
+        this.active1 = true
         break
       case 'http://localhost:8088/#/index/lexical-analysis':
-        this.active.b = true
+        this.active2 = true
         break
     }
   }
