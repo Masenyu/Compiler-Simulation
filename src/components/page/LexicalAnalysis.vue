@@ -12,12 +12,23 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':NFA.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="NFAvis"></div>
-                      <div style="float: right; position: absolute; top: 0">
+                      <div style="position: absolute;  bottom: 1%; left:40%; width: 20%">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                        <el-button type="info" :icon="NFA.zoomicon" circle @click="full_screen(NFA)"></el-button>
-                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button>
+                        <!-- button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
+                        <button class="buttonInGraph" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button -->
+                        <button class="buttonInGraph" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                        --><button class="buttonInGraph" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
+                        --><button class="buttonInGraph" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                        --><button class="buttonInGraph" @click="fitAnimatedN(NFA)"><img src="static/img/visibility_24.png" /></button>
+                        <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
+                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
+                      </div>
+                      <div style="position: absolute;  bottom: 1%; right:1%;">
+                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
+
+                        <button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                       </div>
                     </div>
                   </el-row>
@@ -30,7 +41,6 @@
                     </div>
                   </div>
                 </div>
-                
               </div>
             </el-tab-pane>
             <el-tab-pane label="DFA生成" name="DFAGeneration">
@@ -38,7 +48,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFAvis"></div>
                       <div style="float: right; position: absolute; top: 0">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
@@ -63,7 +73,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA_S.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFA_Svis"></div>
                       <div style="float: right; position: absolute; top: 0">
                         <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
@@ -118,7 +128,7 @@
                 </el-form-item>
                 <code-area></code-area>
                 <!--el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input-->
-                <el-row style="margin-top: 5px">                  
+                <el-row style="margin-top: 5px">
                     <div class="box">
                       <div class="wrapper" ref="messBoxNFA">
                         <div>
@@ -158,12 +168,12 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
-import BScroll from 'better-scroll'  
+import BScroll from 'better-scroll'
 import codeArea from './code'
 
 export default {
   components: {
-   codeArea
+    codeArea
   },
   props: {
     messBoxNFA: {
@@ -241,15 +251,16 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',      
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'NFAToken',
-        ScanId: 'NFAScan',        
+        ScanId: 'NFAScan',
         autobuttonType: 'primary',
+        autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
         isFull_screen: false,
-        zoomicon: 'el-icon-zoom-in',
+        zoomicon: 'static/img/fullscreen_24.png',
         magnifier: false,
         mess: [],
         messBoxScroll: null
@@ -264,12 +275,13 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFAToken',
         ScanId: 'DFAScan',
         autobuttonType: 'primary',
+        autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
@@ -287,12 +299,13 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFA_SToken',
         ScanId: 'DFA_SScan',
         autobuttonType: 'primary',
+        autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
@@ -335,20 +348,28 @@ export default {
           self.$axios
             .post(url, Params)
             .then(function (response) {
-              self.NFA.data.transitionTable = response.data[0].transitionTable
-              self.NFA.data.alphabet = response.data[0].alphabet
-              self.NFA.data.acceptState = response.data[0].acceptStateList
-              self.DFA.data.transitionTable = response.data[1].transitionTable
-              self.DFA.data.alphabet = response.data[1].alphabet
-              self.DFA.data.acceptState = response.data[1].acceptStateList
-              self.DFA_S.data.transitionTable =
-                response.data[2].transitionTable
-              self.DFA_S.data.alphabet = response.data[2].alphabet
-              self.DFA_S.data.acceptState = response.data[2].acceptStateList
-              sessionStorage.setItem('regulation', regulation)
-              self.addCSS(self.getCsstext())
-              self.isFirsttime = false
-              self.fresh()
+              if (response.data.state === 1) {
+                self.NFA.data.transitionTable = response.data.result[0].transitionTable
+                self.NFA.data.alphabet = response.data.result[0].alphabet
+                self.NFA.data.acceptState = response.data.result[0].acceptStateList
+                self.DFA.data.transitionTable = response.data.result[1].transitionTable
+                self.DFA.data.alphabet = response.data.result[1].alphabet
+                self.DFA.data.acceptState = response.data.result[1].acceptStateList
+                self.DFA_S.data.transitionTable = response.data.result[2].transitionTable
+                self.DFA_S.data.alphabet = response.data.result[2].alphabet
+                self.DFA_S.data.acceptState = response.data.result[2].acceptStateList
+                sessionStorage.setItem('regulation', regulation)
+                self.addCSS(self.getCsstext())
+                self.isFirsttime = false
+                self.fresh()
+              } else { // 报错
+                console.log('error: ' + response.data.message)
+                Message({
+                  message: response.data.message,
+                  type: 'error',
+                  center: true
+                })
+              }
             })
             .catch(function (error) {
               self.loading = false
@@ -383,12 +404,12 @@ export default {
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
-      this.startbuttonType = 'primary',
-      this.startbuttonText = '开始分词',
+      this.startbuttonType = 'primary'
+      this.startbuttonText = '开始分词'
       this.NFA.Token = ''
       this.DFA.Token = ''
       this.DFA_S.Token = ''
-      object = { 
+      object = {
         data: {
           transitionTable: [
           ],
@@ -534,21 +555,21 @@ export default {
           self.NFA.TokenForm = self.TokenForm
           self.DFA.TokenForm = self.TokenForm
           self.DFA_S.TokenForm = self.TokenForm
-            self.NFA.machine = create_NFA(
-              self.NFA.data.transitionTable,
-              self.NFA.data.alphabet,
-              self.NFA.data.acceptState
-            )
-            self.DFA.machine = create_DFA(
-              self.DFA.data.transitionTable,
-              self.DFA.data.alphabet,
-              self.DFA.data.acceptState
-            )
-            self.DFA_S.machine = create_DFA(
-              self.DFA_S.data.transitionTable,
-              self.DFA_S.data.alphabet,
-              self.DFA_S.data.acceptState
-            )
+          self.NFA.machine = create_NFA(
+            self.NFA.data.transitionTable,
+            self.NFA.data.alphabet,
+            self.NFA.data.acceptState
+          )
+          self.DFA.machine = create_DFA(
+            self.DFA.data.transitionTable,
+            self.DFA.data.alphabet,
+            self.DFA.data.acceptState
+          )
+          self.DFA_S.machine = create_DFA(
+            self.DFA_S.data.transitionTable,
+            self.DFA_S.data.alphabet,
+            self.DFA_S.data.acceptState
+          )
 
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
@@ -561,7 +582,6 @@ export default {
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
-
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -646,9 +666,9 @@ export default {
       if (status === 0) {
         bgcolor = '#fff'
       } else if (status === 1) {
-        bgcolor = '#ffD2E5'
+        bgcolor = '#fd4747'
       } else {
-        bgcolor = '#ffE5D2'
+        bgcolor = '#2b7ce9'
       }
       for (let i = 0; i < _nodes.length; i++) {
         object.nodes.update([
@@ -662,9 +682,9 @@ export default {
       if (status === 0) {
         border = '#2b7ce9'
       } else if (status === 1) {
-        border = '#e92b7c'
+        border = '#fd4747'
       } else {
-        border = '#e97c2b'
+        border = '#2b7ce9'
       }
       for (let i = 0; i < edges.length; i++) {
         object.edges.update([{ id: edges[i], color: { color: border } }])
@@ -679,16 +699,24 @@ export default {
       object.vis.fit({ animation: options })
       object.magnifier = false
     },
+    fitAnimatedNow (object) {
+      var options = {
+        duration: 0,
+        easingFunction: 'easeInOutQuad'
+      }
+      object.vis.fit({ animation: options })
+      object.magnifier = false
+    },
     // 下一步
     next () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.next1(this.NFA)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.next1(this.DFA)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.next1(this.DFA_S)
           break
         default:
@@ -771,7 +799,7 @@ export default {
               message: '读取字符'
             })
             self.changeWindow(object)
-            self.changeGraph(object, 2)
+            self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
             break
           case DFA_CODE.READCHAR:
@@ -815,14 +843,14 @@ export default {
     },
     // 上一步
     previous () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.previous1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.previous1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.previous1(this.DFA_S, 2)
           break
         default:
@@ -957,14 +985,14 @@ export default {
       return str1
     },
     autoControl () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.autoControl1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.autoControl1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.autoControl1(this.DFA_S, 2)
           break
         default:
@@ -976,17 +1004,20 @@ export default {
       if (object.autobuttonText === '自动展示') {
         object.autobuttonText = '停止'
         object.autobuttonType = 'danger'
+        object.autoicon = 'static/img/pause_24.png'
         object.timer = setInterval(() => {
           self.next(object, flag)
           if (object.nextState.code === NFA_CODE.DONE || object.nextState.code === NFA_CODE.REJECT || object.nextState.code === NFA_CODE.UNKNOWN) {
             object.autobuttonText = '自动展示'
             object.autobuttonType = 'primary'
+            object.autoicon = 'static/img/play_24.png'
             clearInterval(object.timer)
           }
         }, 1000)
       } else {
         object.autobuttonText = '自动展示'
         object.autobuttonType = 'primary'
+        object.autoicon = 'static/img/play_24.png'
         clearInterval(object.timer)
       }
     },
@@ -1018,8 +1049,8 @@ export default {
     // 全屏化/还原
     full_screen (object) {
       object.zoomicon = object.isFull_screen
-        ? 'el-icon-zoom-in'
-        : 'el-icon-zoom-out'
+        ? 'static/img/fullscreen_24.png'
+        : 'static/img/fullscreen_exit_24.png'
       object.isFull_screen = !object.isFull_screen
     },
     // 刷新图
@@ -1039,11 +1070,11 @@ export default {
       const self = this
       if (self.TabActiveName === 'DFAGeneration') {
         self.$nextTick(() => {
-          self.fitAnimated(self.DFA)
+          self.fitAnimatedNow(self.DFA)
         })
       } else if (self.TabActiveName === 'NFAGeneration') {
         self.$nextTick(() => {
-          self.fitAnimated(self.NFA)
+          self.fitAnimatedNow(self.NFA)
         })
       } else if (self.TabActiveName === 'DFASimplification') {
         self.$nextTick(() => {
@@ -1108,7 +1139,7 @@ export default {
   margin-top: 4%
 }
 .token {
-  background-color: #bbbbbb;
+  background-color: #cccccc;
   height: 100px;
 }
 .content {
@@ -1179,6 +1210,24 @@ div.graph.active div.vis {
 }
 div.graph div.vis {
   height: 48rem;
+}
+.buttonInGraph{
+  /*background: transparent;*/
+  /*opacity: 0.4;*/
+  background: rgba(0, 0, 0, 0.3);
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  outline: none;
+  margin: 0;
+  /*background-image: url("../../assets/fullscreen.png")*/
+}
+.buttonInGraph:hover{
+  background: rgba(80, 80, 80, 0.3);
+}
+.buttonInGraph:disabled{
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.3);
 }
 </style>
 

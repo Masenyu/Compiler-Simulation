@@ -11,7 +11,8 @@ export default {
 </script>
 
 <style>
-@import "./components/main.css"
+@import "./components/main.css";
+@import 'http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css';
   /*TODO：
 body{
   padding:0px;
