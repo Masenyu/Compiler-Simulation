@@ -729,14 +729,14 @@ export default {
               type: 'success',
               message: 'Token提取完成'
             })
-            self.pushMess(object, 'Token提取完成')
+            // self.pushMess(object, 'Token提取完成')
             break
           case NFA_CODE.DOCLOSURE:
             self.$message({
               type: 'success',
               message: '闭包'
             })
-            self.pushMess(object, '闭包')
+            // self.pushMess(object, '闭包')
             self.changeWindow(object)
             self.changeGraph(object, 2)
             break
@@ -745,7 +745,7 @@ export default {
               type: 'success',
               message: '读取字符'
             })
-            self.pushMess(object, '读取字符')
+            // self.pushMess(object, '读取字符')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -754,7 +754,7 @@ export default {
               type: 'success',
               message: '提取Token'
             })
-            self.pushMess(object, '提取Token')
+            // self.pushMess(object, '提取Token')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -763,7 +763,7 @@ export default {
           //   type: 'error',
           //   message: '遇到了NFA拒绝的输入'
           // })
-            self.pushMess(object, '遇到了NFA拒绝的输入')
+            // self.pushMess(object, '遇到了NFA拒绝的输入')
             alert('遇到了NFA拒绝的输入')
             break
           case NFA_CODE.UNKNOWN:
@@ -771,7 +771,7 @@ export default {
             //   type: 'error',
             //   message: '遇到了NFA不认识的字符'
             // })
-            self.pushMess(object, '遇到了NFA不认识的字符')
+            // self.pushMess(object, '遇到了NFA不认识的字符')
             alert('遇到了NFA不认识的字符')
             break
           default:
