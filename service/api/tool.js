@@ -3,8 +3,8 @@ var DFA= function(test){
   this.alphabet=test.alphabet
   this.acceptStateList=test.acceptStateList
   this.state=0
-  this.start=0
-  this.new_state=1
+  // this.start=0
+  this.new_state=0
   this.set_state=set_state
   this.stateTable=[]
   this.StateTransitionTable=[]
@@ -89,52 +89,49 @@ function generateTransitionTable(){
 module.exports=function(test){
   console.log(test)
   var temp=new  DFA(test)
+
+  temp.generateStateTable()
+  temp.updateStateTransition()
+
   temp.generateTransitionTable()
   return temp.StateTransitionTable
 }
-// function generateStateTable(){
-//   for(var i=0;i<this.state;i++){
-//     this.stateTable[i]=-1;
-//   }
-//   var temp_NFA=this.NFAStack.top().stateTransitionList
-//   this.stateTable[this.NFAStack.top().startState]=this.new_state;
-//   //this.stateTable[this.NFAStack.top().endState]=this.state-1;
-//   this.new_state++;
-//   var start=this.NFAStack.top().startState;
-//   for (var i=0;i<this.NFAStack.top().stateTransitionList.length;i++){
-//     if(this.NFAStack.top().stateTransitionList[i].startState==start&&this.stateTable[this.NFAStack.top().stateTransitionList[i].endState]==-1){
-//
-//       if(this.NFAStack.top().stateTransitionList[i].endState!=this.NFAStack.top().endState){
-//         this.stateTable[this.NFAStack.top().stateTransitionList[i].endState]=this.new_state;
-//         this.new_state++;
-//         this.generateStateTable1(this,this.NFAStack.top().stateTransitionList[i].endState)
-//       }
-//     }
-//
-//   }
-//   this.stateTable[this.NFAStack.top().endState]=this.state-1;
-// }
-// function generateStateTable1(self,start){
-//   for (var i=0;i<self.NFAStack.top().stateTransitionList.length;i++){
-//     if(self.NFAStack.top().stateTransitionList[i].startState==start&&self.stateTable[self.NFAStack.top().stateTransitionList[i].endState]==-1){
-//       //console.log(self.NFAStack.top().stateTransitionList[i].endState)
-//
-//       if(self.NFAStack.top().stateTransitionList[i].endState!=self.NFAStack.top().endState){
-//         self.stateTable[self.NFAStack.top().stateTransitionList[i].endState]=self.new_state;
-//         self.new_state++;
-//         self.generateStateTable1(self,self.NFAStack.top().stateTransitionList[i].endState)}
-//     }
-//
-//   }
-//
-// }
-// function updateNFA(){
-//   var result = this.NFAStack.top();
-//   result.startState=this.stateTable[result.startState]
-//   result.endState=this.stateTable[result.endState]
-//   for(var i=0;i<result.stateTransitionList.length;i++){
-//     result.stateTransitionList[i].startState=this.stateTable[result.stateTransitionList[i].startState]
-//     result.stateTransitionList[i].endState=this.stateTable[result.stateTransitionList[i].endState]
-//   }
-//
-// }
+
+function generateStateTable(){
+  this.set_state()
+  for(var i=0;i<this.state;i++){
+    this.stateTable[i]=-1;
+  }
+  this.stateTable[0]=this.new_state;
+  this.new_state++;
+  var start=0;
+  for (var i=0;i<this.StateTransition.length;i++){
+    if(this.StateTransition[i].startState==start&&this.stateTable[this.StateTransition[i].endState]==-1){
+      this.stateTable[this.StateTransition[i].endState]=this.new_state;
+      this.new_state++;
+      this.generateStateTable1(this,this.StateTransition[i].endState)
+    }
+  }
+
+}
+function generateStateTable1(self,start){
+  for (var i=0;i<self.StateTransition.length;i++){
+    if(self.StateTransition[i].startState==start&&self.stateTable[self.StateTransition[i].endState]==-1){
+      //console.log(self.StateTransition[i].endState)
+      self.stateTable[self.StateTransition[i].endState]=self.new_state;
+      self.new_state++;
+      self.generateStateTable1(self,self.StateTransition[i].endState)
+    }
+
+  }
+
+}
+function updateStateTransition(){
+  for(var i=0;i<this.StateTransition.length;i++){
+    this.StateTransition[i].startState=this.stateTable[this.StateTransition[i].startState]
+    this.StateTransition[i].endState=this.stateTable[this.StateTransition[i].endState]
+  }
+  for(var i=0;i<this.acceptStateList.length;i++){
+    this.acceptStateList[i].state=this.stateTable[this.acceptStateList[i].state]
+  }
+}
