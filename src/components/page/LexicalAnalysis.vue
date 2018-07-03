@@ -347,9 +347,9 @@ export default {
     }
   },
   created () {
-    this.$nextTick(() => {
-      this._initScroll()
-    })
+    // this.$nextTick(() => {
+    //   this._initScroll()
+    // })
   },
   computed: {
     available () {
@@ -613,18 +613,85 @@ export default {
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
           self.changeNode(self.NFA, self.NFA.nextState.graphInfo.highlightNodes, 1)
-          self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
+        
 
           self.DFA.machine.feedText(self.TokenForm)
           self.DFA.nextState = self.DFA.machine.init()
           self.changeNode(self.DFA, self.DFA.nextState.graphInfo.highlightNodes, 1)
-          self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
+
+          
 
 
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
-          self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
+         
+
+
+
+
+
+        if (self.TabActiveName === 'DFAGeneration') {
+          if(self.DFA.first === true){
+            self.$nextTick(() => {
+              self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                click: true
+              })
+            })
+            self.DFA.first = false
+          }
+          self.$nextTick(() => {
+            if(self.hasbegin)
+              self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
+            else
+              self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
+          })
+        } else if (self.TabActiveName === 'NFAGeneration') {
+          if(self.NFA.first === true){
+            self.$nextTick(() => {
+              self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                click: true
+              })
+            })
+            self.NFA.first = false
+          }
+          self.$nextTick(() => {
+            if(self.hasbegin)
+              self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
+            else
+              self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
+          })
+        } else if (self.TabActiveName === 'DFASimplification') {
+          if(self.DFA_S.first === true){
+            self.$nextTick(() => {
+              self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                click: true
+              })
+            })
+            self.DFA_S.first = false
+          }
+          self.$nextTick(() => {
+            if(self.hasbegin)
+              self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
+            else
+              self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
+          })
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
           self.hasbegin = true
@@ -692,7 +759,14 @@ export default {
         // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
         click: true
       })
-    
+      this.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+        click: true
+      })
+      this.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+        // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+        click: true
+      })
     },
     // 将消息push到消息数组中并刷新显示框
     // pushMess (object, str) {
@@ -1151,7 +1225,7 @@ export default {
       if (self.TabActiveName === 'DFAGeneration') {
         if(self.DFA.first === true){
           self.$nextTick(() => {
-            this.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+            self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: true
             })
@@ -1163,10 +1237,16 @@ export default {
         })
         self.autobuttonText = self.DFA.autobuttonText
         self.autobuttonType = self.DFA.autobuttonType
+        self.$nextTick(() => {
+          if(self.hasbegin)
+            self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
+          else
+            self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
+        })
       } else if (self.TabActiveName === 'NFAGeneration') {
          if(self.NFA.first === true){
           self.$nextTick(() => {
-            this.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+            self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: true
             })
@@ -1178,10 +1258,16 @@ export default {
         })
         self.autobuttonText = self.NFA.autobuttonText
         self.autobuttonType = self.NFA.autobuttonType
+        self.$nextTick(() => {
+          if(self.hasbegin)
+            self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
+          else
+            self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
+        })
       } else if (self.TabActiveName === 'DFASimplification') {
          if(self.DFA_S.first === true){
           self.$nextTick(() => {
-            this.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+            self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: true
             })
@@ -1193,24 +1279,13 @@ export default {
         })
         self.autobuttonText = self.DFA_S.autobuttonText
         self.autobuttonType = self.DFA_S.autobuttonType
+        self.$nextTick(() => {
+          if(self.hasbegin)
+            self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
+          else
+            self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
+        })
       }
-      self.$nextTick(() => {
-        if(self.hasbegin)
-        {
-          self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
-          self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
-          self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
-        }
-        else
-        {
-          self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
-          self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
-          self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
-        }
-      })
-     
-
-      
 
     },
     doubleClick (object) {
