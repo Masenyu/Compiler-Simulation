@@ -56,7 +56,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFAvis"></div>
                       <div class="content">
                         <div class="wrapper" id="messBoxDFA" ref="messBoxDFA">
@@ -97,7 +97,7 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':DFA_S.isFull_screen,'graph':true}">
-                      
+
                       <div class="vis" id="DFA_Svis"></div>
                       <div class="content">
                         <div class="wrapper" ref="messBoxDFA_S">
@@ -137,59 +137,45 @@
         </div>
 
       </el-col>
-      <el-col :span="7" :offset="RE_offset">
+      <el-col :span="7" :offset="1">
         <div>
           <el-row>
-            <el-col :span="24" style="margin-top:50px;">
+            <el-col :span="24" style="margin-top:65px;position:relative">
+              <code-area1 @reformchange="updatere"></code-area1>
               <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
                 <el-form-item prop="RE">
-                  <el-input style="font-size:20px;" placeholder="请输入词法规则：" type="textarea" :autosize="{ minRows: 8, maxRows: 8}" v-model="REForm.RE"></el-input>
+                  <el-input style="font-size:20px;" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
                 </el-form-item>
-                <el-form-item>
-                  <el-popover
-                    placement="top"
-                    width="160"
-                    :disabled="!available"
-                    v-model="visible2">
-                    <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
-                    <div style="text-align: right; margin: 0">
-                      <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                      <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
-                    </div>
-                    <el-button slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
-                  </el-popover>
-                  <!--el-button :disabled="available" type="primary" @click="generateFA('REForm')">构建状态机</el-button-->
-                  <el-button @click="resetForm('REForm')" icon="el-icon-circle-close-outline" circle></el-button>
-                  <el-button icon="el-icon-star-off" circle></el-button>
-                </el-form-item>
-                <code-area></code-area>
-                <!--el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input-->
-                <el-row style="margin-top: 5px">                  
-                    <!-- div class="box">
-                      <div class="wrapper" ref="messBoxNFA">
-                        <div>
-                          <div>
-                            <p style="height: 30px; margin: 0; padding: 0" v-for="item in NFA.mess">{{item}}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="contentCover"></div>
-                    <div class="content"></div --> 
-                  <el-col :span="24">
-                    <div class="controller">
-                      <el-row class="buttonela">
-                        <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-                        <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
-                      </el-row>
-                      <el-row class="buttonelb">
-                        <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
-                        <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
-                      </el-row>
-                    </div>
-                  </el-col>
-                </el-row>
               </el-form>
+              <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
+                <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
+                <div style="text-align: right; margin: 0">
+                  <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
+                </div>
+                <el-button class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
+              </el-popover>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 30px">
+            <el-col :span="24">
+              <code-area  @tokenchange="updatetoken"></code-area>
+              <el-row style="margin-top: 10px;text-align:right">
+              <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+              <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+              <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
+              <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button>
+              </el-row>
+              <!-- <div class="controller">
+              <el-row class="buttonela">
+                <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+                <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
+              </el-row>
+              <el-row class="buttonelb">
+                <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
+
+              </div> -->
             </el-col>
           </el-row>
         </div>
@@ -204,12 +190,14 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
-import BScroll from 'better-scroll'  
+import BScroll from 'better-scroll'
 import codeArea from './code'
+import codeArea1 from './code1'
 
 export default {
   components: {
-   codeArea
+    codeArea,
+    codeArea1
   },
   props: {
     messBoxNFA: {
@@ -265,8 +253,8 @@ export default {
       },
       rulesRE: {
         RE: [
-          { max: 1200, message: '不能超过1200个字符', tirgger: 'blur' },
-          { validator: validateRe, trigger: 'blur' }
+          { max: 1200, message: '不能超过1200个字符', tirgger: 'change' },
+          { validator: validateRe, trigger: 'change' }
         ]
       },
       TabActiveName: 'NFAGeneration',
@@ -287,11 +275,11 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',      
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'NFAToken',
-        ScanId: 'NFAScan',        
+        ScanId: 'NFAScan',
         autobuttonType: 'primary',
         autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
@@ -312,8 +300,8 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFAToken',
         ScanId: 'DFAScan',
@@ -337,8 +325,8 @@ export default {
         nodes: null,
         edges: null,
         lastState: null,
-        nextState: null, 
-        TokenForm: '',   
+        nextState: null,
+        TokenForm: '',
         Token: '',
         TokenId: 'DFA_SToken',
         ScanId: 'DFA_SScan',
@@ -352,7 +340,6 @@ export default {
         messBoxScroll: null,
         first: true
       },
-      RE_offset: 1,
       isFirsttime: true
     }
   },
@@ -367,7 +354,14 @@ export default {
     }
   },
   methods: {
-    
+    updatere (data) {
+      const self = this
+      self.REForm.RE = data
+    },
+    updatetoken (data) {
+      const self = this
+      self.TokenForm = data
+    },
     // 构建状态机
     generateFA (formName) {
       const self = this
@@ -388,20 +382,28 @@ export default {
           self.$axios
             .post(url, Params)
             .then(function (response) {
-              self.NFA.data.transitionTable = response.data[0].transitionTable
-              self.NFA.data.alphabet = response.data[0].alphabet
-              self.NFA.data.acceptState = response.data[0].acceptStateList
-              self.DFA.data.transitionTable = response.data[1].transitionTable
-              self.DFA.data.alphabet = response.data[1].alphabet
-              self.DFA.data.acceptState = response.data[1].acceptStateList
-              self.DFA_S.data.transitionTable =
-                response.data[2].transitionTable
-              self.DFA_S.data.alphabet = response.data[2].alphabet
-              self.DFA_S.data.acceptState = response.data[2].acceptStateList
-              sessionStorage.setItem('regulation', regulation)
-              self.addCSS(self.getCsstext())
-              self.isFirsttime = false
-              self.fresh()
+              if (response.data.state === 1) {
+                self.NFA.data.transitionTable = response.data.result[0].transitionTable
+                self.NFA.data.alphabet = response.data.result[0].alphabet
+                self.NFA.data.acceptState = response.data.result[0].acceptStateList
+                self.DFA.data.transitionTable = response.data.result[1].transitionTable
+                self.DFA.data.alphabet = response.data.result[1].alphabet
+                self.DFA.data.acceptState = response.data.result[1].acceptStateList
+                self.DFA_S.data.transitionTable = response.data.result[2].transitionTable
+                self.DFA_S.data.alphabet = response.data.result[2].alphabet
+                self.DFA_S.data.acceptState = response.data.result[2].acceptStateList
+                sessionStorage.setItem('regulation', regulation)
+                self.addCSS(self.getCsstext())
+                self.isFirsttime = false
+                self.fresh()
+              } else { // 报错
+                console.log('error: ' + response.data.message)
+                Message({
+                  message: response.data.message,
+                  type: 'error',
+                  center: true
+                })
+              }
             })
             .catch(function (error) {
               self.loading = false
@@ -436,12 +438,12 @@ export default {
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
-      this.startbuttonType = 'primary',
-      this.startbuttonText = '开始分词',
+      this.startbuttonType = 'primary'
+      this.startbuttonText = '开始分词'
       this.NFA.Token = ''
       this.DFA.Token = ''
       this.DFA_S.Token = ''
-      object = { 
+      object = {
         data: {
           transitionTable: [
           ],
@@ -566,15 +568,15 @@ export default {
       self.doubleClick(self.DFA_S)
     },
     // 重置表单
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    },
+    // resetForm (formName) {
+    //   this.$refs[formName].resetFields()
+    // },
     // 开始分词
     startButton () {
       const self = this
       
       // self.TokenForm = 'dododouble'
-      self.TokenForm = sessionStorage.getItem('msg')
+      // self.TokenForm = sessionStorage.getItem('msg')
       if (self.hasbegin === false) {
         if (self.TokenForm === '') {
           Message({
@@ -589,21 +591,21 @@ export default {
           self.NFA.TokenForm = self.TokenForm
           self.DFA.TokenForm = self.TokenForm
           self.DFA_S.TokenForm = self.TokenForm
-            self.NFA.machine = create_NFA(
-              self.NFA.data.transitionTable,
-              self.NFA.data.alphabet,
-              self.NFA.data.acceptState
-            )
-            self.DFA.machine = create_DFA(
-              self.DFA.data.transitionTable,
-              self.DFA.data.alphabet,
-              self.DFA.data.acceptState
-            )
-            self.DFA_S.machine = create_DFA(
-              self.DFA_S.data.transitionTable,
-              self.DFA_S.data.alphabet,
-              self.DFA_S.data.acceptState
-            )
+          self.NFA.machine = create_NFA(
+            self.NFA.data.transitionTable,
+            self.NFA.data.alphabet,
+            self.NFA.data.acceptState
+          )
+          self.DFA.machine = create_DFA(
+            self.DFA.data.transitionTable,
+            self.DFA.data.alphabet,
+            self.DFA.data.acceptState
+          )
+          self.DFA_S.machine = create_DFA(
+            self.DFA_S.data.transitionTable,
+            self.DFA_S.data.alphabet,
+            self.DFA_S.data.acceptState
+          )
 
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
@@ -619,7 +621,6 @@ export default {
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
           self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
-
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -753,14 +754,14 @@ export default {
     },
     // 下一步
     next () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.next1(this.NFA)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.next1(this.DFA)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.next1(this.DFA_S)
           break
         default:
@@ -780,14 +781,14 @@ export default {
               type: 'success',
               message: 'Token提取完成'
             })
-            //self.pushMess(object, 'Token提取完成')
+            // self.pushMess(object, 'Token提取完成')
             break
           case NFA_CODE.DOCLOSURE:
             self.$message({
               type: 'success',
               message: '闭包'
             })
-            //self.pushMess(object, '闭包')
+            // self.pushMess(object, '闭包')
             self.changeWindow(object)
             self.changeGraph(object, 2)
             break
@@ -796,7 +797,7 @@ export default {
               type: 'success',
               message: '读取字符'
             })
-            //self.pushMess(object, '读取字符')
+            // self.pushMess(object, '读取字符')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -805,7 +806,7 @@ export default {
               type: 'success',
               message: '提取Token'
             })
-            //self.pushMess(object, '提取Token')
+            // self.pushMess(object, '提取Token')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -814,7 +815,7 @@ export default {
           //   type: 'error',
           //   message: '遇到了NFA拒绝的输入'
           // })
-            //self.pushMess(object, '遇到了NFA拒绝的输入')
+            // self.pushMess(object, '遇到了NFA拒绝的输入')
             alert('遇到了NFA拒绝的输入')
             break
           case NFA_CODE.UNKNOWN:
@@ -822,7 +823,7 @@ export default {
             //   type: 'error',
             //   message: '遇到了NFA不认识的字符'
             // })
-            //self.pushMess(object, '遇到了NFA不认识的字符')
+            // self.pushMess(object, '遇到了NFA不认识的字符')
             alert('遇到了NFA不认识的字符')
             break
           default:
@@ -887,14 +888,14 @@ export default {
     },
     // 上一步
     previous () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.previous1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.previous1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.previous1(this.DFA_S, 2)
           break
         default:
@@ -1029,14 +1030,14 @@ export default {
       return str1
     },
     autoControl () {
-      switch(this.TabActiveName){
-        case "NFAGeneration":
+      switch (this.TabActiveName) {
+        case 'NFAGeneration':
           this.autoControl1(this.NFA, 0)
           break
-        case "DFAGeneration":
+        case 'DFAGeneration':
           this.autoControl1(this.DFA, 1)
           break
-        case "DFASimplification":
+        case 'DFASimplification':
           this.autoControl1(this.DFA_S, 2)
           break
         default:
@@ -1227,7 +1228,7 @@ export default {
   margin-right: auto;
   /*margin-top: 40px;*/
   min-width: 1200px;
-  height: 100%;
+  min-height: 100%;
   background-color: #fff;
 }
 .tab{
@@ -1382,11 +1383,27 @@ div.graph div.vis {
 .buttonInGraph-top:hover:after {
   margin-bottom: 6px;
 }
+.generateFA{
+  position: absolute;
+  right:0px;
+  top:310px;
+}
+.autobutton{
+  width:80px;
+  margin-right:10px
+}
 </style>
 
 <style>
 span.mode999 {
   background-color: red;
+}
+.el-textarea{
+  opacity: 0;
+  z-index:-1;
+}
+.el-form{
+  margin-top:-3rem;
 }
 .el-tabs__item {
   font-size: 2rem

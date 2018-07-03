@@ -3,31 +3,22 @@
         <div class="header">
           <div class="navigation">
             <div class="logo">
-              <img style="float:left" src="../../assets/_logo.png" width="40px" height="40px"/>
+              <img src="../../assets/_logo.png"/>
               <a style="float:left">文法分析模拟器</a>
             </div>
             <div class="nav-menu">
+              <ul class="menu-ul">
+                <li><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
+                <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
+                <li><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
+                <li><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
+              </ul>
+            </div>
+            <div class="nav-login">
               <ul>
-                <li><a @click="gotoUrl('/index/main-interface')">首页</a></li>
-                <li><a @click="gotoUrl('/index/lexical-analysis')">词法分析</a></li>
-                <li><a @click="gotoUrl('/index/main-interface')">语法分析</a></li>
-                <li><a @click="gotoUrl('/index/main-interface')">语义分析</a></li>
                 <li><a class='login-btn'>登录</a></li>
               </ul>
             </div>
-            <!-- <div class="user-info">
-                <el-button style="display:none;">登陆</el-button>
-                <el-dropdown>
-                    <span class="el-dropdown-link">
-                        {{name}}
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>我的收藏</el-dropdown-item>
-                        <el-dropdown-item>修改密码</el-dropdown-item>
-                        <el-dropdown-item divided>注销</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div> -->
           </div>
         </div>
     </el-row>
@@ -37,12 +28,44 @@
 export default {
   data () {
     return {
-      name: '账号'
+      active1: false,
+      active2: false,
+      active3: false,
+      active4: false
     }
   },
   methods: {
-    gotoUrl (url) {
-      this.$router.push(url)
+    gotoUrl (url, highlightindex) {
+      const self = this
+      self.active1 = false
+      self.active2 = false
+      self.active3 = false
+      self.active4 = false
+      switch (highlightindex) {
+        case 1:
+          self.active1 = true
+          break
+        case 2:
+          self.active2 = true
+          break
+        case 3:
+          self.active3 = true
+          break
+        case 4:
+          self.active4 = true
+          break
+      }
+      self.$router.push(url)
+    }
+  },
+  mounted () {
+    switch (window.location.href) {
+      case 'http://localhost:8088/#/index/main-interface':
+        this.active1 = true
+        break
+      case 'http://localhost:8088/#/index/lexical-analysis':
+        this.active2 = true
+        break
     }
   }
 }
@@ -56,7 +79,6 @@ export default {
   background-color: #161616;
   font-size: 1.6rem;
   font-weight: 400;
-  /* line-height: 1.5em; */
   padding:1.5rem 0rem;
   box-shadow: 0rem 1px 1px #ece9e9;
   position: absolute;
@@ -69,18 +91,30 @@ export default {
   min-width: 80rem;
   margin:0px auto;
   width:65%;
+  height:4.2rem;
 }
 .logo {
-  font-size: 3.2rem;
+  font-size: 3rem;
   cursor: pointer;
   -webkit-text-size-adjust:100%;
-  min-width: 27rem;
   float: left;
+}
+img{
+  float:left ;
+  width:40px ;
+  height:40px;
 }
 .nav-menu {
   height: 4rem;
+  padding-bottom: 0.2rem;
+  float: left;
+  margin-left: 10%
+}
+.nav-login{
+  height: 4rem;
   float: right;
 }
+
 ul{
   list-style:none; /* 去掉ul前面的符号 */
   margin: 0px; /* 与外界元素的距离为0 */
@@ -111,13 +145,17 @@ ul li a:active
   color:#49505b;/* 文字颜色 */
   text-decoration: none; /* 不显示超链接下划线 */
 }
+ul li a.active{
+  color: #409eff; /* 文字颜色 */
+  border-bottom: 0.2rem solid #409eff;
+}
+
 .login-btn{
   cursor: pointer;
-  border: 1px solid #00aeee;
-  color: #00aeee;
-  border-radius: 0.3rem;
+  font-size:1.5rem;
+  color: #ffffff;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 0.8rem 2rem; /* 内部填充的距离 */
+  padding: 1.2rem 2rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }

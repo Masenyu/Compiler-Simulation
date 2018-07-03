@@ -19,6 +19,7 @@ var jsonWrite = function(res, ret) {
 
 // 生成NFA接口
 router.post('/regularExpression', (req, res) => {
+  var state = 1
   var params=req.body;
   console.log(params.RE)
   var expressions=params.RE
@@ -26,83 +27,40 @@ router.post('/regularExpression', (req, res) => {
 
   console.log(expressions)
   var NFA =new generateNFA(expressions)
-  console.log(11111111)
-  var DFA =new generateDFA(NFA)
-  console.log(22222222)
-  var s_DFA=new simplifyDFA(DFA)
-  console.log(33333333)
-  var NFAdata={
-    transitionTable:tool(NFA),
-    alphabet:NFA.alphabet,
-    acceptStateList:NFA.acceptStateList};
-  var DFAdata={
-    transitionTable:tool(DFA),
-    alphabet:DFA.alphabet,
-    acceptStateList:DFA.acceptStateList};
-  var S_DFAdata={
-    transitionTable:tool(s_DFA),
-    alphabet:s_DFA.alphabet,
-    acceptStateList:s_DFA.acceptStateList};
+  if(NFA.state === 0 ){
+    state = 0
+    jsonWrite( res ,{state:state , message:NFA.message})
+  }else{
+    if( NFA.result.alphabet.length === 1 && NFA.result.alphabet[0] === 'ε'){
+      state = 0;
+      jsonWrite(res, {state:state , message: "NFA is null."});
+    }else{
+      console.log(11111111)
+      var DFA =new generateDFA(NFA.result)
+      console.log(22222222)
+      var s_DFA=new simplifyDFA(DFA)
+      console.log(33333333)
+      var NFAdata={
+        transitionTable:tool(NFA.result),
+        alphabet:NFA.result.alphabet,
+        acceptStateList:NFA.result.acceptStateList};
+      var DFAdata={
+        transitionTable:tool(DFA),
+        alphabet:DFA.alphabet,
+        acceptStateList:DFA.acceptStateList};
+      var S_DFAdata={
+        transitionTable:tool(s_DFA),
+        alphabet:s_DFA.alphabet,
+        acceptStateList:s_DFA.acceptStateList
+      };
+
+      console.log(s_DFA)
+      result=[NFAdata,DFAdata,S_DFAdata]
+      jsonWrite(res, {state:state,result:result});
+    }
+  }
 
 
-  console.log(s_DFA)
-  // var DFA=new generateDFA
-  // var DFA = new generateDFA(NFA)
-  //
-  // var S_DFA=new simplifyDFA(DFA)
-  //
-  // console.log("简化过后的DFA")
-  // console.log(S_DFA)
-  result=[NFAdata,DFAdata,S_DFAdata]
-  jsonWrite(res, result);
 });
-
-
-
-// var test={
-//
-//   transitionTable: [
-//     [[1, 4], [], [], [], [], [], []], // 0
-//     [[], [], [2], [], [], [], []],    // 1
-//     [[], [], [], [], [], [3], []],    // 2
-//     [[], [], [], [], [], [], []],     // 3
-//     [[], [], [5], [], [], [], []],    // 4
-//     [[], [], [], [], [], [6], []], // 5
-//     [[], [], [], [], [], [], [7]], // 6
-//     [[], [8], [], [], [], [], []], // 7
-//     [[], [], [], [], [9], [], []], // 8
-//     [[], [], [], [10], [], [], []], // 9
-//     [[], [], [], [], [], [], []] // 10
-//   ],
-//   alphabet: ['ε', 'b', 'd', 'e', 'l', 'o', 'u'],
-//   acceptState: [
-//     {
-//       state: 3,
-//       REId: 0
-//     }, {
-//       state: 10,
-//       REId: 1
-//     }
-//   ]
-// }
-
-// var ffi = require("ffi")
-// console.log("111")
-//
-// var DLL = ffi.Library('./NFA.dll', {
-//   'generateNFA' : ['string', ['string']]
-// });
-//
-// var DLL = new ffi.Library('./test.dll' ,{
-//   'GetMaxNumber':
-//     [
-//       'int64', ['int64','int64']
-//
-//     ]
-// });
-// var n = DLL.generateNFA("a");
-// console.log(n)
-//
-//
 
 module.exports = router;

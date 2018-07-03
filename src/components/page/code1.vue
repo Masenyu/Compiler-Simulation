@@ -1,10 +1,10 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor" name="editor" v-model="TokenForm">
+      <textarea id="editor1" name="editor1" v-model="TokenForm">
       </textarea>
     </div>
-    <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
+    <el-tooltip effect="dark" content="清空" placement="top">
       <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
     </el-tooltip>
   </div>
@@ -75,24 +75,24 @@ export default {
       return 'assets/codemirror/mode/' + name + '/' + name + '.js'
     },
     setmirror () {
-      let myTextarea = document.getElementById('editor')
+      let myTextarea = document.getElementById('editor1')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-          theme:'cobalt', 
-          styleActiveLine: true,
-          mode: "text/x-c++src",
-          extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
-          lineNumbers: true,
-          tabSize:10,
-          // readOnly:"nocursor",
-          smartIndent:true,
-          scrollbarStyle:"overlay"
-          // keymap:"defaule"
-      });
+        theme: 'neat',
+        styleActiveLine: true,
+        mode: 'text/x-c++src',
+        extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
+        lineNumbers: true,
+        tabSize: 10,
+        // readOnly:"nocursor",
+        smartIndent: true,
+        scrollbarStyle: 'overlay'
+        // keymap:"defaule"
+      })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
         // 编译器内容更改事件
         // sessionStorage.setItem('msg', this.CodeMirrorEditor.getValue())
-        this.$emit('tokenchange', this.CodeMirrorEditor.getValue())
+        this.$emit('reformchange', this.CodeMirrorEditor.getValue())
         if (this.CodeMirrorEditor.getValue() !== '') {
           this.hasinput = true
         } else {
@@ -164,5 +164,4 @@ export default {
   font-size:20px;
   font-family:Arial;
 }
-.CodeMirror-line{}
 </style>

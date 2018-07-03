@@ -12,7 +12,9 @@ var OperatorInformationTable=[
   {operator:'{',priority:3,numOfParams:1},
   {operator:'?',priority:3,numOfParams:1},
   {operator:')',priority:4,numOfParams:0},
-  {operator:']',priority:4,numOfParams:0}
+  {operator:']',priority:4,numOfParams:0},
+  {operator:'}',priority:4,numOfParams:1},
+  {operator:'\\',priority:0,numOfParams:1}
   ]
 
 var MiddlePackageAlphabet=[
@@ -126,7 +128,6 @@ function getNumOfState(){
 
   return max - min + 1
 }
-
 function printNFA(){
   //正则表达式
   for(var i=0;i<this.stateTransitionList.length;i++){
@@ -166,20 +167,20 @@ var singalNFA =function(str){
   this.addOperator=addOperator
 }
 function generateNFA(){
-  this.OperatorInToStack()//运算符入栈
-  this.OperatorPerform();//运算符出栈并执行
-  this.printSingalNFA()
-  //弹出完毕
-  //更新状态
-  this.generateStateTable()
-  this.updateNFA()
-  //更新状态完毕
-  this.printSingalNFA()
+  var stateReturn = this.OperatorInToStack()//运算符入栈
+  if( stateReturn.state === 0 ){
+  }else{
+    this.OperatorPerform();//运算符出栈并执行
+    this.printSingalNFA()
+    //弹出完毕
+    //更新状态
+    this.generateStateTable()
+    this.updateNFA()
+    //更新状态完毕
+    this.printSingalNFA()
 
-  //生成字母表
-  //打印字母表
-  //打印更新状态后的结果
-
+  }
+  return stateReturn
 }
 function generateStateTable(){
   for(var i=0;i<this.state;i++){
@@ -291,13 +292,15 @@ function OperatorInToStack()
             }
             break;
           case '[':
-
-
             i++
             var str_content = ""
             for (; str[i] != ']'; i++) {
               str_content += str[i]
             }//将[]中的内容拷贝到str_content中
+
+            if( i === str.length && str[i] !== ']'){
+              return {state:0,message:"single \'\[\'"}
+            }
             console.log("str_content",str_content)
             var res=new NFA(this.state,this.state+1)
             this.state+=2
@@ -351,10 +354,43 @@ function OperatorInToStack()
             }
             res.printNFA()
             if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.')}
+            break;
+          case ']':
+            return {state:0,message:"single \'\]\'."}
+            break;
         }
         break;
       case 1://单目运算符不入栈* + ? { }
         switch (temp_char) {
+          case '\\':
+            if(Priority(str[i+1]) >= 0 ){
+              var regularChar=new NFA(this.state,this.state+1)
+              regularChar.stateTransitionList[regularChar.stateTransitionList.length]=new stateTransition1(this.state,str[i+1],this.state+1)
+              this.state+=2
+              i ++;
+              this.NFAStack.push(regularChar)
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              break;
+            }
+            else if( str[i+1] == 'd' ){
+              var currentState = this.state
+
+              var tempNFA = new NFA(this.state,this.state+1)
+              this.state += 2
+              for( var m = 0 ; m < 10 ; m++ ){
+                tempNFA.stateTransitionList.push(new stateTransition1(this.state,MiddlePackageAlphabet[m],this.state+1))
+                tempNFA.stateTransitionList.push(new stateTransition1(tempNFA.startState,'ε',this.state))
+                tempNFA.stateTransitionList.push(new stateTransition1(this.state+1,'ε',tempNFA.endState))
+                this.state+=2
+              }
+              i++
+              this.NFAStack.push(tempNFA)
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              break;
+            }
+            else {
+              return {state:0,message:"invalid char after \'\\\'"}
+            }
           case '*':
             this.clodureOperator();
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
@@ -374,6 +410,9 @@ function OperatorInToStack()
             }
             break;
           case'{':
+            if(this.NFAStack.nullOrNot()){
+              return{state:0,message:"no RE before \'\{\'"}
+            }
             var tempCount = i + 1
 
             for( ; tempCount < str.length; tempCount++){
@@ -382,6 +421,9 @@ function OperatorInToStack()
               }
             }
 
+            if( tempCount == str.length && str[tempCount] !== '}'){
+              return{state:0,message:"single \'\{\'"}
+            }
             //大括号中只有一个数字
             if( str[tempCount] === '}'){
               var numStr = ""
@@ -640,6 +682,9 @@ function OperatorInToStack()
             }
             if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
             break;
+          case'}':
+            return {state:0,message:"single \'\}\'."}
+            break;
         }
         break;
       case 2:
@@ -665,6 +710,8 @@ function OperatorInToStack()
     }
 
   }
+
+  return {state:1,message:""}
 }
 //运算符弹出并执行
 function OperatorPerform() {
@@ -678,6 +725,12 @@ function OperatorPerform() {
       break;
     case '|':
       this.selectOperator()
+      break;
+    case '(':
+      // this.selectOperator()
+      //报错
+      console.log('single \'\(\' ')
+
       break;
   }
 }
@@ -786,6 +839,8 @@ var finalNFA=function(strArray){
   this.StateTransitionTable=[]
   this.generateStateTransitionTable=generateStateTransitionTable
   this.setTheResult=setTheResult
+  // this.judgeState = 1 // 判断NFA生成过程是否出错，默认为没有错误
+  // this.errorMessage = ''
   this.result={
     stateTransition:this.StateTransition,
     alphabet:this.alphabet,
@@ -797,34 +852,40 @@ function generateFinalNFAStateTransition() {
     for (var i = 0; i < this.strArray.length; i++) {
 
       var temp_NFA1 = new singalNFA(this.strArray[i])
-      temp_NFA1.generateNFA()
-      var temp_NFA = temp_NFA1.NFAStack.top()
-      this.StateTransition[this.StateTransition.length] = new stateTransition1(this.startState, 'ε', temp_NFA.startState + this.state)
-      for (var j = 0; j < temp_NFA.stateTransitionList.length; j++) {
-        this.StateTransition[this.StateTransition.length] = new stateTransition1(temp_NFA.stateTransitionList[j].startState + this.state, temp_NFA.stateTransitionList[j].inputChar, temp_NFA.stateTransitionList[j].endState + this.state)
+      var tempJudgeState = temp_NFA1.generateNFA()
+      if(tempJudgeState.state === 0 ){
+        ii=i+1
+        return {state:0,message:"第"+ii+"条正则表达式出错，"+tempJudgeState.message}
+      }else{
+        var temp_NFA = temp_NFA1.NFAStack.top()
+        this.StateTransition[this.StateTransition.length] = new stateTransition1(this.startState, 'ε', temp_NFA.startState + this.state)
+        for (var j = 0; j < temp_NFA.stateTransitionList.length; j++) {
+          this.StateTransition[this.StateTransition.length] = new stateTransition1(temp_NFA.stateTransitionList[j].startState + this.state, temp_NFA.stateTransitionList[j].inputChar, temp_NFA.stateTransitionList[j].endState + this.state)
+        }
+        this.acceptStateList[this.acceptStateList.length] = {state: temp_NFA.endState + this.state, REId: i}
+        this.state += temp_NFA1.state
       }
-      this.acceptStateList[this.acceptStateList.length] = {state: temp_NFA.endState + this.state, REId: i}
-      this.state += temp_NFA1.state
     }
   }else{
-
     var temp_NFA1 = new singalNFA(this.strArray[0])
-    temp_NFA1.generateNFA()
-    var temp_NFA = temp_NFA1.NFAStack.top()
-    this.state=temp_NFA1.state;
-    for (var j = 0; j < temp_NFA.stateTransitionList.length; j++) {
-      this.StateTransition[this.StateTransition.length] = temp_NFA.stateTransitionList[j]
+    var tempJudgeState = temp_NFA1.generateNFA()
+    if(tempJudgeState.state === 0 ){
+      return {state:0,message:"第1条正则表达式出错，"+tempJudgeState.message}
+    }else
+      {
+      //temp_NFA1.generateNFA()
+      var temp_NFA = temp_NFA1.NFAStack.top()
+      this.state=temp_NFA1.state;
+      for (var j = 0; j < temp_NFA.stateTransitionList.length; j++) {
+        this.StateTransition[this.StateTransition.length] = temp_NFA.stateTransitionList[j]
+      }
+      this.acceptStateList[this.acceptStateList.length]={state: temp_NFA.endState , REId: 0}
     }
-    this.acceptStateList[this.acceptStateList.length]={state: temp_NFA.endState , REId: 0}
   }
   //console.log(this.StateTransition)
   this.generatealphabet()
   this.generateStateTransitionTable()
- // console.log(this.StateTransition)
- // console.log(this.alphabet)
- // console.log(this.acceptStateList)
- // console.log(this.StateTransitionTable)
-
+  return { state:1 , message:""}
 }
 function generatealphabet(){
   for (var i=0;i<this.StateTransition.length;i++){
@@ -867,28 +928,17 @@ function setTheResult() {
     acceptStateList:this.acceptStateList//元素state
   }
 }
-// var output =function(strArray){
-//   var result={
-//     stateTransition:[],
-//     alphabet:[],
-//     acceptStateList:[]//元素state
-//   }
-//
-//   return result;
-// }
-// var acceptStateElement={
-//   acceptState:0,
-//   REID:1
-// }
-//
-
 
 module.exports = function(strArray) {
   var test = new finalNFA(strArray)
-  test.generateFinalNFAStateTransition()
-  test.generatealphabet()
-  test.setTheResult()
-  //console.log(test.result);
-  return test.result;
+  var stateReturn = test.generateFinalNFAStateTransition()
+  if( stateReturn.state === 0 ){
+    return stateReturn
+  }else{
+    test.generatealphabet()
+    test.setTheResult()
+    //console.log(test.result);
+    return {state:stateReturn.state,message:stateReturn.message,result:test.result};
+  }
 }
 module.exports.zz = function(){console.log(1111111111)}
