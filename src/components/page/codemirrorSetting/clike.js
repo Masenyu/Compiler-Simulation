@@ -1,19 +1,18 @@
-/*使用时将本文件覆盖到node_modules/codemirror/mode/clike/clike.js
+/* 使用时将本文件覆盖到node_modules/codemirror/mode/clike/clike.js
   为c\c++\c#\java提供高亮
 */
-
-
-
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 ;(function (mod) {
-  if (typeof exports === 'object' && typeof module === 'object')
-  // CommonJS
-  { mod(require('../../lib/codemirror')) } else if (typeof define === 'function' && define.amd)
-  // AMD
-  { define(['../../lib/codemirror'], mod) }
+  if (typeof exports === 'object' && typeof module === 'object') {
+    // CommonJS
+    mod(require('../../lib/codemirror'))
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['../../lib/codemirror'], mod)
+  }
   // Plain browser env
   else mod(CodeMirror)
 })(function (CodeMirror) {
@@ -33,7 +32,9 @@
       state.context &&
       state.context.type == 'statement' &&
       type != 'statement'
-    ) { indent = state.context.indented }
+    ) {
+      indent = state.context.indented
+    }
     return (state.context = new Context(
       indent,
       col,
@@ -45,14 +46,20 @@
   }
   function popContext (state) {
     var t = state.context.type
-    if (t == ')' || t == ']' || t == '}') { state.indented = state.context.indented }
+    if (t == ')' || t == ']' || t == '}') {
+      state.indented = state.context.indented
+    }
     return (state.context = state.context.prev)
   }
 
   function typeBefore (stream, state, pos) {
     if (state.prevToken == 'variable' || state.prevToken == 'type') return true
-    if (/\S(?:[^- ]>|[*\]])\s*$|\*$/.test(stream.string.slice(0, pos))) { return true }
-    if (state.typeAtEndOfLine && stream.column() == stream.indentation()) { return true }
+    if (/\S(?:[^- ]>|[*\]])\s*$|\*$/.test(stream.string.slice(0, pos))) {
+      return true
+    }
+    if (state.typeAtEndOfLine && stream.column() == stream.indentation()) {
+      return true
+    }
   }
 
   function isTopScope (context) {
@@ -127,7 +134,9 @@
       }
       stream.eatWhile(isIdentifierChar)
       if (namespaceSeparator) {
-        while (stream.match(namespaceSeparator)) { stream.eatWhile(isIdentifierChar) }
+        while (stream.match(namespaceSeparator)) {
+          stream.eatWhile(isIdentifierChar)
+        }
       }
 
       var cur = stream.current()
@@ -180,7 +189,9 @@
         parserConfig.typeFirstDefinitions &&
         stream.eol() &&
         isTopScope(state.context)
-      ) { state.typeAtEndOfLine = typeBefore(stream, state, stream.pos) }
+      ) {
+        state.typeAtEndOfLine = typeBefore(stream, state, stream.pos)
+      }
     }
 
     // Interface
@@ -222,7 +233,9 @@
           curPunc == ';' ||
           curPunc == ':' ||
           (curPunc == ',' && stream.match(/^\s*(?:\/\/.*)?$/, false))
-        ) { while (state.context.type == 'statement') popContext(state) } else if (curPunc == '{') pushContext(state, stream.column(), '}')
+        ) {
+          while (state.context.type == 'statement') popContext(state)
+        } else if (curPunc == '{') pushContext(state, stream.column(), '}')
         else if (curPunc == '[') pushContext(state, stream.column(), ']')
         else if (curPunc == '(') pushContext(state, stream.column(), ')')
         else if (curPunc == '}') {
@@ -245,14 +258,18 @@
               typeBefore(stream, state, stream.start) &&
               isTopScope(state.context) &&
               stream.match(/^\s*\(/, false)))
-        ) { style = 'def' }
+        ) {
+          style = 'def'
+        }
 
         if (hooks.token) {
           var result = hooks.token(stream, state, style)
           if (result !== undefined) style = result
         }
 
-        if (style == 'def' && parserConfig.styleDefs === false) { style = 'variable' }
+        if (style == 'def' && parserConfig.styleDefs === false) {
+          style = 'variable'
+        }
 
         state.startOfLine = false
         state.prevToken = isDefKeyword ? 'def' : style || curPunc
@@ -264,7 +281,9 @@
         if (
           (state.tokenize != tokenBase && state.tokenize != null) ||
           state.typeAtEndOfLine
-        ) { return CodeMirror.Pass }
+        ) {
+          return CodeMirror.Pass
+        }
         var ctx = state.context,
           firstChar = textAfter && textAfter.charAt(0)
         if (ctx.type == 'statement' && firstChar == '}') ctx = ctx.prev
@@ -272,7 +291,9 @@
           while (
             ctx.type == 'statement' &&
             parserConfig.dontIndentStatements.test(ctx.info)
-          ) { ctx = ctx.prev }
+          ) {
+            ctx = ctx.prev
+          }
         }
         if (hooks.indent) {
           var hook = hooks.indent(state, ctx, textAfter)
@@ -284,9 +305,15 @@
           while (ctx.type != 'top' && ctx.type != '}') ctx = ctx.prev
           return ctx.indented
         }
-        if (ctx.type == 'statement') { return ctx.indented + (firstChar == '{' ? 0 : statementIndentUnit) }
-        if (ctx.align && (!dontAlignCalls || ctx.type != ')')) { return ctx.column + (closing ? 0 : 1) }
-        if (ctx.type == ')' && !closing) { return ctx.indented + statementIndentUnit }
+        if (ctx.type == 'statement') {
+          return ctx.indented + (firstChar == '{' ? 0 : statementIndentUnit)
+        }
+        if (ctx.align && (!dontAlignCalls || ctx.type != ')')) {
+          return ctx.column + (closing ? 0 : 1)
+        }
+        if (ctx.type == ')' && !closing) {
+          return ctx.indented + statementIndentUnit
+        }
 
         return (
           ctx.indented +
@@ -408,7 +435,9 @@
     if (typeof mimes === 'string') mimes = [mimes]
     var words = []
     function add (obj) {
-      if (obj) { for (var prop in obj) if (obj.hasOwnProperty(prop)) words.push(prop) }
+      if (obj) {
+        for (var prop in obj) if (obj.hasOwnProperty(prop)) words.push(prop)
+      }
     }
     add(mode.keywords)
     add(mode.types)
@@ -439,48 +468,107 @@
     modeProps: { fold: ['brace', 'include'] }
   })
 
-  // 超富c++
+  // // 超富c++
+  // def(['text/x-c++src', 'text/x-c++hdr'], {
+  //   name: 'clike',
+  //   keywords: words(
+  //     cKeywords +
+  //       ' asm dynamic_cast namespace reinterpret_cast try explicit new ' +
+  //       'static_cast typeid catch operator template float typename class friend private ' +
+  //       'this using const_cast inline public throw virtual delete mutable protected ' +
+  //       'alignas alignof constexpr decltype nullptr noexcept thread_local final ' +
+  //       'static_assert override' +
+  //       'abstract assert break case const continue default ' +
+  //       'do else enum extends finally for goto if implements import ' +
+  //       'instanceof interface native package ' +
+  //       'return static strictfp super switch synchronized throws transient ' +
+  //       'volatile while @interface' +
+  //       'as async await base checked' +
+  //       'delegate event extern fixed' +
+  //       'foreach implicit in internal is lock' +
+  //       'out params readonly ref sealed' +
+  //       'sizeof stackalloc struct typeof unchecked' +
+  //       'unsafe add alias ascending descending dynamic from get' +
+  //       'global group into join let orderby partial remove select set value var yield function'
+  //   ),
+  //   types: words(
+  //     cTypes +
+  //       ' bool wchar_t' +
+  //       'byte short int long float double boolean char void Boolean Byte Character Double Float ' +
+  //       'Integer Long Number Object Short String StringBuffer StringBuilder Void' +
+  //       '_Complex _Bool float_t double_t intptr_t intmax_t ' +
+  //       'int8_t int16_t int32_t int64_t uintptr_t uintmax_t uint8_t uint16_t ' +
+  //       'uint32_t uint64_t' +
+  //       'Action Char DateTime DateTimeOffset Decimal Func' +
+  //       ' Guid Int16 Int32 Int64 SByte Single Task TimeSpan UInt16 UInt32' +
+  //       ' UInt64 decimal object' +
+  //       ' sbyte string ushort uint ulong'
+  //   ),
+  //   blockKeywords: words(
+  //     'catch class do else finally for foreach if struct switch try while'
+  //   ),
+  //   defKeywords: words(
+  //     'class interface namespace struct enum var union @interface function'
+  //   ),
+  //   typeFirstDefinitions: true,
+  //   atoms: words('true false NULL'),
+  //   dontIndentStatements: /^template$/,
+  //   isIdentifierChar: /[\w\$_~\xa1-\uffff]/,
+  //   hooks: {
+  //     '#': cppHook,
+  //     '*': pointerHook,
+  //     u: cpp11StringHook,
+  //     U: cpp11StringHook,
+  //     L: cpp11StringHook,
+  //     R: cpp11StringHook,
+  //     '0': cpp14Literal,
+  //     '1': cpp14Literal,
+  //     '2': cpp14Literal,
+  //     '3': cpp14Literal,
+  //     '4': cpp14Literal,
+  //     '5': cpp14Literal,
+  //     '6': cpp14Literal,
+  //     '7': cpp14Literal,
+  //     '8': cpp14Literal,
+  //     '9': cpp14Literal,
+  //     '@': function (stream, state) {
+  //       if (stream.eat('"')) {
+  //         state.tokenize = tokenAtString
+  //         return tokenAtString(stream, state)
+  //       }
+  //       stream.eatWhile(/[\w\$_]/)
+  //       return 'meta'
+  //     },
+  //     token: function (stream, state, style) {
+  //       if (
+  //         style == 'variable' &&
+  //         stream.peek() == '(' &&
+  //         (state.prevToken == ';' ||
+  //           state.prevToken == null ||
+  //           state.prevToken == '}') &&
+  //         cppLooksLikeConstructor(stream.current())
+  //       ) { return 'def' }
+  //     }
+  //   },
+  //   namespaceSeparator: '::',
+  //   modeProps: { fold: ['brace', 'include'] }
+  // })
+
   def(['text/x-c++src', 'text/x-c++hdr'], {
     name: 'clike',
     keywords: words(
       cKeywords +
         ' asm dynamic_cast namespace reinterpret_cast try explicit new ' +
-        'static_cast typeid catch operator template float typename class friend private ' +
+        'static_cast typeid catch operator template typename class friend private ' +
         'this using const_cast inline public throw virtual delete mutable protected ' +
         'alignas alignof constexpr decltype nullptr noexcept thread_local final ' +
-        'static_assert override' +
-        'abstract assert break case const continue default ' +
-        'do else enum extends finally for goto if implements import ' +
-        'instanceof interface native package ' +
-        'return static strictfp super switch synchronized throws transient ' +
-        'volatile while @interface' +
-        'as async await base checked' +
-        'delegate event extern fixed' +
-        'foreach implicit in internal is lock' +
-        'out params readonly ref sealed' +
-        'sizeof stackalloc struct typeof unchecked' +
-        'unsafe add alias ascending descending dynamic from get' +
-        'global group into join let orderby partial remove select set value var yield function'
+        'static_assert override'
     ),
-    types: words(
-      cTypes +
-        ' bool wchar_t' +
-        'byte short int long float double boolean char void Boolean Byte Character Double Float ' +
-        'Integer Long Number Object Short String StringBuffer StringBuilder Void' +
-        '_Complex _Bool float_t double_t intptr_t intmax_t ' +
-        'int8_t int16_t int32_t int64_t uintptr_t uintmax_t uint8_t uint16_t ' +
-        'uint32_t uint64_t' +
-        'Action Char DateTime DateTimeOffset Decimal Func' +
-        ' Guid Int16 Int32 Int64 SByte Single Task TimeSpan UInt16 UInt32' +
-        ' UInt64 decimal object' +
-        ' sbyte string ushort uint ulong'
-    ),
+    types: words(cTypes + ' bool wchar_t'),
     blockKeywords: words(
-      'catch class do else finally for foreach if struct switch try while'
+      'catch class do else finally for if struct switch try while'
     ),
-    defKeywords: words(
-      'class interface namespace struct enum var union @interface function'
-    ),
+    defKeywords: words('class namespace struct enum union'),
     typeFirstDefinitions: true,
     atoms: words('true false NULL'),
     dontIndentStatements: /^template$/,
@@ -502,14 +590,6 @@
       '7': cpp14Literal,
       '8': cpp14Literal,
       '9': cpp14Literal,
-      '@': function (stream, state) {
-        if (stream.eat('"')) {
-          state.tokenize = tokenAtString
-          return tokenAtString(stream, state)
-        }
-        stream.eatWhile(/[\w\$_]/)
-        return 'meta'
-      },
       token: function (stream, state, style) {
         if (
           style == 'variable' &&
@@ -525,50 +605,6 @@
     modeProps: { fold: ['brace', 'include'] }
   })
 
-  /*
-  // def(["text/x-c++src", "text/x-c++hdr"], {
-  //   name: "clike",
-  //   keywords: words(cKeywords + " asm dynamic_cast namespace reinterpret_cast try explicit new " +
-  //                   "static_cast typeid catch operator template typename class friend private " +
-  //                   "this using const_cast inline public throw virtual delete mutable protected " +
-  //                   "alignas alignof constexpr decltype nullptr noexcept thread_local final " +
-  //                   "static_assert override"),
-  //   types: words(cTypes + " bool wchar_t"),
-  //   blockKeywords: words("catch class do else finally for if struct switch try while"),
-  //   defKeywords: words("class namespace struct enum union"),
-  //   typeFirstDefinitions: true,
-  //   atoms: words("true false NULL"),
-  //   dontIndentStatements: /^template$/,
-  //   isIdentifierChar: /[\w\$_~\xa1-\uffff]/,
-  //   hooks: {
-  //     "#": cppHook,
-  //     "*": pointerHook,
-  //     "u": cpp11StringHook,
-  //     "U": cpp11StringHook,
-  //     "L": cpp11StringHook,
-  //     "R": cpp11StringHook,
-  //     "0": cpp14Literal,
-  //     "1": cpp14Literal,
-  //     "2": cpp14Literal,
-  //     "3": cpp14Literal,
-  //     "4": cpp14Literal,
-  //     "5": cpp14Literal,
-  //     "6": cpp14Literal,
-  //     "7": cpp14Literal,
-  //     "8": cpp14Literal,
-  //     "9": cpp14Literal,
-  //     token: function(stream, state, style) {
-  //       if (style == "variable" && stream.peek() == "(" &&
-  //           (state.prevToken == ";" || state.prevToken == null ||
-  //            state.prevToken == "}") &&
-  //           cppLooksLikeConstructor(stream.current()))
-  //         return "def";
-  //     }
-  //   },
-  //   namespaceSeparator: "::",
-  //   modeProps: {fold: ["brace", "include"]}
-  // });
-*/
   def('text/x-java', {
     name: 'clike',
     keywords: words(
@@ -904,7 +940,9 @@
       },
       '#': cppHook,
       indent: function (_state, ctx, textAfter) {
-        if (ctx.type == 'statement' && /^@\w/.test(textAfter)) { return ctx.indented }
+        if (ctx.type == 'statement' && /^@\w/.test(textAfter)) {
+          return ctx.indented
+        }
       }
     },
     modeProps: { fold: 'brace' }

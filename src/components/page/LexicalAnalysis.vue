@@ -36,7 +36,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA)"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA, 'javascript')"><img src="static/img/description_24.png" /></button>
                                   <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
@@ -78,7 +78,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA)"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button><!--
@@ -119,7 +119,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S)"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
@@ -378,10 +378,10 @@ export default {
     }
   },
   methods: {
-    code (object) {
+    code (object, lan) {
       this.dialogVisible = true
       this.$nextTick(() => {
-        this.$refs.codearea2.showcode(object.code)
+        this.$refs.codearea2.showcode(object.code, lan)
       })
     },
     updatere (data) {
