@@ -74,17 +74,18 @@ export default {
     setmirror () {
       let myTextarea = document.getElementById('editor2')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-          theme:'liquibyte', 
-          styleActiveLine: true,
-          mode: "text/x-c++src",
-          extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
-          lineNumbers: true,
-          tabSize:10,
-          // readOnly:"nocursor",
-          smartIndent:true,
-          scrollbarStyle:"overlay"
-          // keymap:"defaule"
-      });
+        // theme: 'liquibyte',
+        styleActiveLine: true,
+        // mode: 'text/x-c++src',
+        mode: 'javascript',
+        extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
+        lineNumbers: true,
+        tabSize: 10,
+        // readOnly:"nocursor",
+        smartIndent: true,
+        scrollbarStyle: 'overlay'
+        // keymap:"defaule"
+      })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       // this.CodeMirrorEditor.on('change', () => {
       //   // 编译器内容更改事件
@@ -103,10 +104,15 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)
-      this.CodeMirrorEditor.setSize(800, 680)
+      this.CodeMirrorEditor.setSize(850, 680)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
+    },
+    showcode (str) {
+      this.$nextTick(() => {
+        this.CodeMirrorEditor.setValue(str)
+      })
     }
   },
 

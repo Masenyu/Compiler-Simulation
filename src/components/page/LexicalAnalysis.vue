@@ -36,7 +36,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="dialogVisible = true"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA)"><img src="static/img/description_24.png" /></button>
                                   <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
@@ -78,7 +78,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA)"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button><!--
@@ -119,7 +119,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S)"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
@@ -147,7 +147,7 @@
         </div>
         <el-dialog title="代码" :visible.sync="dialogVisible" width="900px" style="height: 950px; margin-top: -5%" :before-close="handleClose">
           <div>
-            <code-area2></code-area2>
+            <code-area2 ref="codearea2"></code-area2>
           </div>
         </el-dialog>
 
@@ -309,7 +309,8 @@ export default {
         fullscreenText: '全屏',
         magnifier: false,
         messBoxScroll: null,
-        first: true
+        first: true,
+        code: ''
       },
       DFA: {
         data: {
@@ -334,7 +335,8 @@ export default {
         zoomicon: 'static/img/fullscreen_24.png',
         fullscreenText: '全屏',
         messBoxScroll: null,
-        first: true
+        first: true,
+        code: ''
       },
       DFA_S: {
         data: {
@@ -359,7 +361,8 @@ export default {
         zoomicon: 'static/img/fullscreen_24.png',
         fullscreenText: '全屏',
         messBoxScroll: null,
-        first: true
+        first: true,
+        code: ''
       },
       isFirsttime: true
     }
@@ -375,6 +378,12 @@ export default {
     }
   },
   methods: {
+    code (object) {
+      this.dialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.codearea2.showcode(object.code)
+      })
+    },
     updatere (data) {
       const self = this
       self.REForm.RE = data
@@ -405,6 +414,9 @@ export default {
             .then(function (response) {
               if (response.data.state === 1) {
                 // self.$refs.codearea.resetForm('REForm')
+                self.NFA.code = response.data.code[0]
+                self.DFA.code = response.data.code[1]
+                self.DFA_S.code = response.data.code[2]
                 self.NFA.data.transitionTable = response.data.result[0].transitionTable
                 self.NFA.data.alphabet = response.data.result[0].alphabet
                 self.NFA.data.acceptState = response.data.result[0].acceptStateList
