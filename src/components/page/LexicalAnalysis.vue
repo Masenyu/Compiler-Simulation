@@ -129,7 +129,7 @@
                       </div>
                     </div>
                   </el-row>
-                 
+
                 </div>
               </div>
             </el-tab-pane>
@@ -140,11 +140,11 @@
       <el-col :span="7" :offset="1">
         <div>
           <el-row>
-            <el-col :span="24" style="margin-top:65px;position:relative">
+            <el-col :span="24" style="margin-top:75px;position:relative">
               <code-area1 @reformchange="updatere"></code-area1>
               <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
                 <el-form-item prop="RE">
-                  <el-input style="font-size:20px;" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
+                  <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
                 </el-form-item>
               </el-form>
               <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
@@ -157,10 +157,10 @@
               </el-popover>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 30px">
+          <el-row style="margin-top: 35px">
             <el-col :span="24">
               <code-area  @tokenchange="updatetoken"></code-area>
-              <el-row style="margin-top: 10px;text-align:right">
+              <el-row style="margin-top: 15px;text-align:right">
               <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
               <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
               <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
@@ -577,7 +577,7 @@ export default {
     // 开始分词
     startButton () {
       const self = this
-      
+
       // self.TokenForm = 'dododouble'
       // self.TokenForm = sessionStorage.getItem('msg')
       if (self.hasbegin === false) {
@@ -613,86 +613,55 @@ export default {
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
           self.changeNode(self.NFA, self.NFA.nextState.graphInfo.highlightNodes, 1)
-        
 
           self.DFA.machine.feedText(self.TokenForm)
           self.DFA.nextState = self.DFA.machine.init()
           self.changeNode(self.DFA, self.DFA.nextState.graphInfo.highlightNodes, 1)
 
-          
-
-
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
-         
 
-
-
-
-
-        if (self.TabActiveName === 'DFAGeneration') {
-          if(self.DFA.first === true){
-            self.$nextTick(() => {
-              self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+          if (self.TabActiveName === 'DFAGeneration') {
+            if (self.DFA.first === true) {
+              self.$nextTick(() => {
+                self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: true
+                  click: true
+                })
               })
-            })
-            self.DFA.first = false
-          }
-          self.$nextTick(() => {
-            if(self.hasbegin)
-              self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
-            else
-              self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
-          })
-        } else if (self.TabActiveName === 'NFAGeneration') {
-          if(self.NFA.first === true){
+              self.DFA.first = false
+            }
             self.$nextTick(() => {
-              self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
-                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: true
-              })
+              if (self.hasbegin) { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce') }
             })
-            self.NFA.first = false
-          }
-          self.$nextTick(() => {
-            if(self.hasbegin)
-              self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
-            else
-              self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
-          })
-        } else if (self.TabActiveName === 'DFASimplification') {
-          if(self.DFA_S.first === true){
+          } else if (self.TabActiveName === 'NFAGeneration') {
+            if (self.NFA.first === true) {
+              self.$nextTick(() => {
+                self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                  click: true
+                })
+              })
+              self.NFA.first = false
+            }
             self.$nextTick(() => {
-              self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
-                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: true
-              })
+              if (self.hasbegin) { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce') }
             })
-            self.DFA_S.first = false
+          } else if (self.TabActiveName === 'DFASimplification') {
+            if (self.DFA_S.first === true) {
+              self.$nextTick(() => {
+                self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                  click: true
+                })
+              })
+              self.DFA_S.first = false
+            }
+            self.$nextTick(() => {
+              if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
+            })
           }
-          self.$nextTick(() => {
-            if(self.hasbegin)
-              self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
-            else
-              self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
-          })
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -1174,13 +1143,10 @@ export default {
     },
     // 全屏化/还原
     full_screen (object) {
-      if(object.isFull_screen === false)
-      {
+      if (object.isFull_screen === false) {
         object.zoomicon = 'static/img/fullscreen_exit_24.png'
         object.fullscreenText = '取消全屏'
-      }
-      else
-      {
+      } else {
         object.zoomicon = 'static/img/fullscreen_24.png'
         object.fullscreenText = '全屏'
       }
@@ -1207,23 +1173,23 @@ export default {
       if (self.NFA.autobuttonText === '停止') {
         self.NFA.autobuttonText = '自动展示'
         self.NFA.autobuttonType = 'primary'
-        self.NFA.autoicon = "static/img/play_24.png"
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.NFA.timer)
       }
       if (self.DFA.autobuttonText === '停止') {
         self.DFA.autobuttonText = '自动展示'
         self.DFA.autobuttonType = 'primary'
-        self.NFA.autoicon = "static/img/play_24.png"
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.DFA.timer)
       }
       if (self.DFA_S.autobuttonText === '停止') {
         self.DFA_S.autobuttonText = '自动展示'
         self.DFA_S.autobuttonType = 'primary'
-        self.NFA.autoicon = "static/img/play_24.png"
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.DFA_S.timer)
       }
       if (self.TabActiveName === 'DFAGeneration') {
-        if(self.DFA.first === true){
+        if (self.DFA.first === true) {
           self.$nextTick(() => {
             self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
@@ -1238,13 +1204,10 @@ export default {
         self.autobuttonText = self.DFA.autobuttonText
         self.autobuttonType = self.DFA.autobuttonType
         self.$nextTick(() => {
-          if(self.hasbegin)
-            self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce')
-          else
-            self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
+          if (self.hasbegin) { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce') }
         })
       } else if (self.TabActiveName === 'NFAGeneration') {
-         if(self.NFA.first === true){
+        if (self.NFA.first === true) {
           self.$nextTick(() => {
             self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
@@ -1259,13 +1222,10 @@ export default {
         self.autobuttonText = self.NFA.autobuttonText
         self.autobuttonType = self.NFA.autobuttonType
         self.$nextTick(() => {
-          if(self.hasbegin)
-            self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce')
-          else
-            self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
+          if (self.hasbegin) { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce') }
         })
       } else if (self.TabActiveName === 'DFASimplification') {
-         if(self.DFA_S.first === true){
+        if (self.DFA_S.first === true) {
           self.$nextTick(() => {
             self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
@@ -1280,13 +1240,9 @@ export default {
         self.autobuttonText = self.DFA_S.autobuttonText
         self.autobuttonType = self.DFA_S.autobuttonType
         self.$nextTick(() => {
-          if(self.hasbegin)
-            self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce')
-          else
-            self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
+          if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
         })
       }
-
     },
     doubleClick (object) {
       const self = this
@@ -1327,7 +1283,7 @@ export default {
 .tab{
   height: auto;
   width: 100%;
-  margin-top: 4%
+  margin-top: 20px;
 }
 .token {
   background-color: #cccccc;
@@ -1381,6 +1337,9 @@ export default {
   height:80px;
   overflow: hidden;
 }
+div.graph{
+  background: #eef0f1;
+}
 div.graph.active {
   position: fixed;
   bottom: 0;
@@ -1390,7 +1349,7 @@ div.graph.active {
   width: 100%;
   height: 100%;
   z-index: 10;
-  background-color: rgba(221, 221, 221, 1);
+  background: #eef0f1;
 }
 div.graph.active div.vis{
   height: 95%;
@@ -1480,7 +1439,7 @@ div.graph div.vis {
 .generateFA{
   position: absolute;
   right:0px;
-  top:310px;
+  top:315px;
 }
 .autobutton{
   width:80px;
@@ -1497,7 +1456,7 @@ span.mode999 {
   z-index:-1;
 }
 .el-form{
-  margin-top:-3rem;
+  margin-top:1rem;
 }
 .el-tabs__item {
   font-size: 2rem

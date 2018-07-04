@@ -28,7 +28,7 @@ export default {
   position: relative;
 }
 .content{
-  background-color: #bbbbbb;
+  background-color: #ffffff;
   padding-top:7rem;
   min-height:100%;
   height: auto !important;

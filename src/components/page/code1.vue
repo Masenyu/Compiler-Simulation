@@ -78,13 +78,13 @@ export default {
       let myTextarea = document.getElementById('editor1')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
         theme: 'neat',
-        styleActiveLine: true,
+        // styleActiveLine: true,
         mode: 'text/x-c++src',
         extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
         lineNumbers: true,
         tabSize: 10,
         // readOnly:"nocursor",
-        smartIndent: true,
+        smartIndent: false,
         scrollbarStyle: 'overlay'
         // keymap:"defaule"
       })
@@ -137,7 +137,8 @@ export default {
   margin: 0;
   width: auto;
   height: auto;
-  background-color: rgb(248, 248, 248);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(210, 210, 210);
   /*h1 {
     margin: 0;
   }*/
