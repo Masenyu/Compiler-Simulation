@@ -4,7 +4,7 @@
       <textarea id="editor1" name="editor1" v-model="TokenForm">
       </textarea>
     </div>
-    <el-tooltip effect="dark" content="清空" placement="top">
+    <el-tooltip class="item" effect="dark" content="清空" placement="top">
       <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
     </el-tooltip>
   </div>
@@ -55,7 +55,7 @@ export default {
       CodeMirrorEditor: null,
       something: '',
       TokenForm: '',
-      hasinput: false
+      hasinput: true
     }
   },
 
@@ -87,6 +87,13 @@ export default {
         smartIndent: false,
         scrollbarStyle: 'overlay'
         // keymap:"defaule"
+      })
+      let str1 = '词法规则定义规范：\n（规则名=规则）\n\n例如：\nT_DOUBLE=double\nT_DO=do'
+      this.CodeMirrorEditor.setValue(str1)
+      this.CodeMirrorEditor.on('focus', () => {
+        if (this.CodeMirrorEditor.getValue() === str1) {
+          this.CodeMirrorEditor.setValue('')
+        }
       })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
