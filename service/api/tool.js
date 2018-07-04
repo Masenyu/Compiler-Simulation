@@ -36,7 +36,7 @@ function generateStateTable() {
   for(var i=0;i<this.state;i++){
     this.stateTable[this.stateTable.length]=-1
   }
-  console.log(this.stateTable)
+  //console.log(this.stateTable)
   this.stateTable[0]=0
   var start=this.start
   for(var i=0;i<this.stateTransition.length;i++){
@@ -46,7 +46,7 @@ function generateStateTable() {
       this.generateStateTable1(this,this.stateTransition[i].endState)
     }
   }
-  console.log(this.stateTable)
+ // console.log(this.stateTable)
 }
 function generateStateTable1(self,start) {
   for(var i=0;i<self.stateTransition.length;i++){
@@ -87,7 +87,7 @@ function generateTransitionTable(){
   }
 }
 module.exports=function(test){
-  console.log(test)
+  //console.log(test)
   var temp=new  DFA(test)
 
   temp.generateStateTable()

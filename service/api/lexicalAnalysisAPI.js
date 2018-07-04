@@ -2,6 +2,8 @@ var express = require('express');
 var generateNFA =require("./generateNFA");
 var generateDFA =require("./generateDFA");
 var simplifyDFA =require("./simplifyDFA");
+var generateCode =require("./generate_nfa_code");
+
 var router = express.Router();
 var tool =require("./tool");
 
@@ -55,8 +57,16 @@ router.post('/regularExpression', (req, res) => {
       };
 
       console.log(s_DFA)
-      result=[NFAdata,DFAdata,S_DFAdata]
-      jsonWrite(res, {state:state,result:result});
+      var NFAcode=generateCode(NFAdata)
+      var DFAcode=generateCode(DFAdata)
+      var S_DFAcode=generateCode(S_DFAdata)
+
+      var code=[NFAcode,DFAcode,S_DFAcode]
+      var result=[NFAdata,DFAdata,S_DFAdata]
+      console.log(code[0])
+      console.log(code[1])
+      console.log(code[2])
+      jsonWrite(res, {state:state,result:result,code:code});
     }
   }
 

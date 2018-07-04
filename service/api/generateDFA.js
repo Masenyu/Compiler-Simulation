@@ -9,7 +9,7 @@ module.exports = function(nfa) {
       break;
     }
   }
-  console.log("1111111",nfa.alphabet)
+  //console.log("1111111",nfa.alphabet)
   var nfa_tran_t =
     {
       nfa_tran_table: nfa.stateTransition,
@@ -49,7 +49,7 @@ module.exports = function(nfa) {
   for (i = 0; nfa_tran_t.nfa_tran_table[i] != undefined; i++) {
     nfa_tran[nfa_tran.length] = new StateTransition(nfa_tran_t.nfa_tran_table[i].startState, nfa_tran_t.nfa_tran_table[i].inputChar, nfa_tran_t.nfa_tran_table[i].endState);
   }
-  console.log("nfa_tran",nfa_tran);
+  //console.log("nfa_tran",nfa_tran);
   var state_num = 0;
   for (i = 0; nfa_tran[i] != undefined; i++) {
     if (nfa_tran[i].endState > state_num) {
@@ -120,9 +120,9 @@ module.exports = function(nfa) {
     return eclosure
   }
 state_num+=1;
-   console.log("state_num",state_num)
+   //console.log("state_num",state_num)
   EClosure = getEClosure(nfa_tran, EClosure, state_num);
-console.log("EClosure",EClosure);
+//console.log("EClosure",EClosure);
 
   var dfa_mid = new Array();
 
@@ -223,8 +223,8 @@ console.log("EClosure",EClosure);
     return dfa_mid;
   }
   dfa_mid = getDFA(EClosure, dfa_mid, nfa_tran, nfa_tran_t.alphabet);
- console.log("test");
- console.log("dfa_mid",dfa_mid);
+ //console.log("test");
+ //console.log("dfa_mid",dfa_mid);
 
 
   var dfa_tran = new Array();
@@ -329,8 +329,8 @@ console.log("EClosure",EClosure);
     alphabet: nfaAlphabet,
     acceptStateList: nfaAcceptState
   }
-  console.log("00000000000000000000000000000");
-  console.log(result);
+  //console.log("00000000000000000000000000000");
+  //console.log(result);
   return result;
 }
 
