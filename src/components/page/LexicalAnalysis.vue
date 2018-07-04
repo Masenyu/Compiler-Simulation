@@ -250,7 +250,7 @@ export default {
           } catch (e) {
             callback(
               new Error(
-                '第' + (i + 1).toString() + '条规则不合法，请重新输入'
+                '第' + (i + 1).toString() + '条正则表达式不合法，请重新输入'
               )
             )
           }
@@ -637,7 +637,6 @@ export default {
           self.DFA.nextState = self.DFA.machine.init()
           self.changeNode(self.DFA, self.DFA.nextState.graphInfo.highlightNodes, 1)
 
-          
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
@@ -647,8 +646,8 @@ export default {
               self.$nextTick(() => {
                 self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: false,
-                bounce: false,
+                  click: false,
+                  bounce: false
                 // disableMouse: true
                 })
               })
@@ -662,8 +661,8 @@ export default {
               self.$nextTick(() => {
                 self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: false,
-                bounce: false,
+                  click: false,
+                  bounce: false
                 // disableMouse: true
                 })
               })
@@ -677,8 +676,8 @@ export default {
               self.$nextTick(() => {
                 self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                click: true,
-                bounce: false,
+                  click: true,
+                  bounce: false
                 })
               })
               self.DFA_S.first = false
@@ -687,13 +686,6 @@ export default {
               if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
             })
           }
-        
-
-
-
-
-
-
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -1225,7 +1217,7 @@ export default {
             self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: false,
-              bounce: false,
+              bounce: false
             })
           })
           self.DFA.first = false
@@ -1244,7 +1236,7 @@ export default {
             self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: false,
-              bounce: false,
+              bounce: false
             })
           })
           self.NFA.first = false
@@ -1263,7 +1255,7 @@ export default {
             self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
               click: false,
-              bounce: false,
+              bounce: false
             })
           })
           self.DFA_S.first = false
