@@ -77,17 +77,17 @@ export default {
     setmirror () {
       let myTextarea = document.getElementById('editor')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-          theme:'cobalt', 
-          styleActiveLine: true,
-          mode: "text/x-c++src",
-          extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
-          lineNumbers: true,
-          tabSize:10,
-          // readOnly:"nocursor",
-          smartIndent:true,
-          scrollbarStyle:"overlay"
-          // keymap:"defaule"
-      });
+        theme: 'neat',
+        // styleActiveLine: true,
+        mode: 'text/x-c++src',
+        extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
+        lineNumbers: true,
+        tabSize: 10,
+        // readOnly:"nocursor",
+        smartIndent: true,
+        scrollbarStyle: 'overlay'
+        // keymap:"defaule"
+      })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
         // 编译器内容更改事件
@@ -137,7 +137,8 @@ export default {
   margin: 0;
   width: auto;
   height: auto;
-  background-color: rgb(248, 248, 248);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(210, 210, 210);
   /*h1 {
     margin: 0;
   }*/

@@ -137,7 +137,8 @@ export default {
   margin: 0;
   width: auto;
   height: auto;
-  background-color: rgb(248, 248, 248);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(210, 210, 210);
   /*h1 {
     margin: 0;
   }*/

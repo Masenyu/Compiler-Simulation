@@ -31,7 +31,7 @@ export default {
   min-height:100%;
   height: auto !important;
   position: relative;
-  background-color: rgba(233, 233, 233, 0.3)
+  background-color: rgba(233, 233, 233, 0.2)
 }
 .content{
   /*background-color: #bbbbbb;*/

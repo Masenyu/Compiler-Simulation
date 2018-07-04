@@ -17,11 +17,11 @@ export default {}
   width: 100%;
   height: 30px;
   line-height: 30px;
-  background-color: #dee2e6;
+  background-color: #323a45;
 }
 
 .info {
-  color: #040404;
+  color:#ffffff;
   font-size: 16px;
   text-align: center;
 }
