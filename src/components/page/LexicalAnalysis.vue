@@ -159,7 +159,7 @@
           </el-row>
           <el-row style="margin-top: 35px">
             <el-col :span="24">
-              <code-area  @tokenchange="updatetoken"></code-area>
+              <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
               <el-row style="margin-top: 15px;text-align:right">
               <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
               <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
@@ -386,6 +386,7 @@ export default {
             .post(url, Params)
             .then(function (response) {
               if (response.data.state === 1) {
+                // self.$refs.codearea.resetForm('REForm')
                 self.NFA.data.transitionTable = response.data.result[0].transitionTable
                 self.NFA.data.alphabet = response.data.result[0].alphabet
                 self.NFA.data.acceptState = response.data.result[0].acceptStateList

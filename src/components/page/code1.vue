@@ -95,6 +95,11 @@ export default {
           this.CodeMirrorEditor.setValue('')
         }
       })
+      // this.CodeMirrorEditor.on('blur', () => {
+      //   if (this.CodeMirrorEditor.getValue() === '') {
+      //     this.CodeMirrorEditor.setValue(str1)
+      //   }
+      // })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
         // 编译器内容更改事件
