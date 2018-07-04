@@ -139,23 +139,24 @@ function NFALayout(TB, A) {
 							trace_newone.push(nextNode);
 							///
 							if (isTraceCover(trace_newone, trace_existone)) {
+								// 从 transitionTable 中删除捷径
+								// nextNode 的 “前一个” 节点集合里面有两个点， 其中一个是我们想要的前继节点（也就是现在的 node），
+								// 另外一个是走了捷径才到的，这条捷径（这个点到 nextNode的边）应该标记删除。
+								let pres = nodesInfo.get(nextNode).prenNodes;
+								let index;
+								let preNode;
+								pres.forEach(e => {
+									if (stems[nextNode].indexOf(e) != -1) preNode = e;
+								})
+								index = transitionTable[preNode][alphabet.indexOf('ε')].indexOf(nextNode);
+								if (index != -1) transitionTable[preNode][alphabet.indexOf('ε')].splice(index, 1);
+
+
 								// nextNode 存在，但是之前设置的 stem 是错的，正解为 node
 								stems[nextNode] = [node];
 								// 把所有受影响的 node 的 levels 改正确
 								// 注意后面的节点的排序目前认为是正确的，故只需要遍历一下改正 level 就 ok 
 								resetLevelsOf(nextNode);
-
-								// 从 transitionTable 中删除捷径
-								// nextNode 的 “前一个” 节点集合里面有两个点， 其中一个是我们想要的前继节点（也就是现在的 node），
-								// 另外一个是走了捷径才到的，这条捷径（这个点到 nextNode的边）应该标记删除。
-								let nexts = nodesInfo.get(nextNode).prenNodes;
-								let index;
-								let preNode;
-								nexts.forEach(e => {
-									if (e != node) preNode = e;
-								})
-								index = transitionTable[preNode][alphabet.indexOf('ε')].indexOf(nextNode);
-								if (index != -1) transitionTable[preNode][alphabet.indexOf('ε')].splice(index, 1);
 							} else {
 								// nextNode 是一个并点
 								stems[nextNode].push(node);

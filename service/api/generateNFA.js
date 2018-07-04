@@ -33,8 +33,8 @@ function IndexChar(char) {
 }
 var Index_a=IndexChar('a')
 var Index_package=IndexChar('(')
-console.log("Index_a",Index_a)
-console.log("Index_package",Index_package)
+// console.log("Index_a",Index_a)
+// console.log("Index_package",Index_package)
 
 //返回运算符优先级
 function Priority(char){
@@ -171,13 +171,13 @@ function generateNFA(){
   if( stateReturn.state === 0 ){
   }else{
     this.OperatorPerform();//运算符出栈并执行
-    this.printSingalNFA()
+    //this.printSingalNFA()
     //弹出完毕
     //更新状态
     this.generateStateTable()
     this.updateNFA()
     //更新状态完毕
-    this.printSingalNFA()
+    //this.printSingalNFA()
 
   }
   return stateReturn
@@ -257,7 +257,7 @@ function OperatorInToStack()
               this.state += 2
               this.NFAStack.push(regularChar)
               i++
-              regularChar.printNFA()
+              //regularChar.printNFA()
               if (i + 1 < length && Priority(str[i + 1]) <= 0) {
                 this.OperatorStack.push('.');
               }
@@ -301,7 +301,7 @@ function OperatorInToStack()
             if( i === str.length && str[i] !== ']'){
               return {state:0,message:"single \'\[\'"}
             }
-            console.log("str_content",str_content)
+            //console.log("str_content",str_content)
             var res=new NFA(this.state,this.state+1)
             this.state+=2
             if(str_content.length==0){
@@ -352,7 +352,7 @@ function OperatorInToStack()
               }
               this.NFAStack.push(res)
             }
-            res.printNFA()
+            //res.printNFA()
             if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.')}
             break;
           case ']':
@@ -438,25 +438,25 @@ function OperatorInToStack()
                 num = parseInt(numStr)
               }
 
-              console.log('test generate {: num = ' + num)
+              //console.log('test generate {: num = ' + num)
               if( num === 0 ){
                 var op2=new NFA(0,0);
                 op2.deepInit(this.NFAStack.top());
                 this.NFAStack.pop();
-                console.log('op2: ')
-                op2.printNFA()
+                //console.log('op2: ')
+                //op2.printNFA()
                 this.state -= op2.getNumOfState()
                 var op1 = new NFA( this.state , this.state + 1)
                 op1.stateTransitionList.push( new stateTransition1(op1.startState, 'ε', op1.endState))
                 this.state = this.state + 2
-                console.log('op1: ')
-                op1.printNFA()
+                // console.log('op1: ')
+                // op1.printNFA()
                 this.NFAStack.push(op1)
               }else{//num > 0
                 var op1=new NFA(0,0);
                 op1.init(this.NFAStack.top());
                 this.NFAStack.pop();
-                op1.printNFA()
+                //op1.printNFA()
 
                 var op3 = new NFA(0,0)
                 op3.deepInit(op1)
@@ -499,6 +499,7 @@ function OperatorInToStack()
                 numOne = parseInt(numStr)
                 if( numOne < 0){
                   console.log("numOne < 0 , invalid")
+                  return{state:0,message:"numOne<0 after \'\{\'"}
                   break;
                 }
               }
@@ -525,12 +526,12 @@ function OperatorInToStack()
                 // var numStr = numStrArray.join("")
                 numTwo = parseInt(numStr)
                 if( numTwo < numOne){
-                  console.log("numTwo < numOne , invalid")
+                  return{state:0,message:"numOne<numTwo after \'\{\'"}
                   break;
                 }
               }
-              console.log('numOne : ', numOne)
-              console.log('numTwo :', numTwo)
+              // console.log('numOne : ', numOne)
+              // console.log('numTwo :', numTwo)
               if( numOne === 0 ){
                 if(numTwo === 0 ){//相当于 {0}
                   var op2=new NFA(0,0);
@@ -560,8 +561,8 @@ function OperatorInToStack()
                   op1.stateTransitionList.push(new stateTransition1(op1.startState,'ε',op1.endState))
                   this.NFAStack.pop();
 
-                  console.log('op1: ' )
-                  op1.printNFA()
+                  // console.log('op1: ' )
+                  // op1.printNFA()
 
                   var op3 = new NFA(0,0)
                   op3.deepInit(op1)
@@ -593,7 +594,7 @@ function OperatorInToStack()
                 var op1=new NFA(0,0);
                 op1.init(this.NFAStack.top());
                 this.NFAStack.pop();
-                op1.printNFA()
+                //op1.printNFA()
 
                 var op3 = new NFA(0,0)
                 op3.deepInit(op1)
@@ -618,12 +619,12 @@ function OperatorInToStack()
                   this.state += countState
                 }
                 res.endState = op1.endState
-                console.log('countState :',countState)
-                console.log('res before:')
-                res.printNFA()
-                console.log('op1 before:')
-                op1.printNFA()
-                console.log('this.state befor:' , this.state)
+                // console.log('countState :',countState)
+                // console.log('res before:')
+                // res.printNFA()
+                // console.log('op1 before:')
+                // op1.printNFA()
+                // console.log('this.state befor:' , this.state)
 
                 if( numTwo === numOne ){
                   this.NFAStack.push(res)
@@ -636,9 +637,9 @@ function OperatorInToStack()
                   op1.startState +=  countState
                   op1.endState += countState
                   this.state += countState
-                  console.log('op1 after:')
-                  op1.printNFA()
-                  console
+                  // console.log('op1 after:')
+                  // op1.printNFA()
+                  // console
                   var op3=new NFA(this.state,this.state+1)
                   op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList)
                   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op3.startState,'ε',op1.startState)
@@ -647,16 +648,16 @@ function OperatorInToStack()
                   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
                   this.state=this.state+2
 
-                  console.log('op3 after:')
-                  op3.printNFA()
+                  // console.log('op3 after:')
+                  // op3.printNFA()
 
                   res.stateTransitionList.push.apply(res.stateTransitionList,op3.stateTransitionList)
                   res.stateTransitionList.push(new stateTransition1(res.endState,'ε',op3.startState))
                   res.endState = op1.endState
                   this.NFAStack.push(res)
 
-                  console.log('res after:')
-                  res.printNFA()
+                  // console.log('res after:')
+                  // res.printNFA()
 
                 }else{//
                   op1.stateTransitionList.push(new stateTransition1(op1.startState,'ε',op1.endState))
@@ -715,7 +716,7 @@ function OperatorInToStack()
 }
 //运算符弹出并执行
 function OperatorPerform() {
-  console.log(this.OperatorStack.dataStore)
+  //console.log(this.OperatorStack.dataStore)
   while(!this.OperatorStack.nullOrNot()){
 
   var operator =this.OperatorStack.top();
@@ -730,7 +731,7 @@ function OperatorPerform() {
       // this.selectOperator()
       //报错
       console.log('single \'\(\' ')
-
+      return{state:0,message:"singal \'\(\'"}
       break;
   }
 }
@@ -747,7 +748,7 @@ function connectOperator(){
   op3.stateTransitionList=op3.stateTransitionList.concat(op1.stateTransitionList,op2.stateTransitionList)
   op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op2.startState)
   this.NFAStack.push(op3);
-  op3.printNFA()
+  //op3.printNFA()
   this.OperatorStack.pop();
 }
 function selectOperator(){
@@ -773,7 +774,7 @@ function selectOperator(){
   }
   this.NFAStack.push(op3);
 
-  op3.printNFA();
+  //op3.printNFA();
 }
 function clodureOperator(){
   var op1=new NFA(0,0);
@@ -806,7 +807,7 @@ function addOperator(){
 function questionMarkOperator(){
   var op1=new NFA(0,0);
   op1.init(this.NFAStack.top());
-  op1.printNFA()
+  //op1.printNFA()
   this.NFAStack.pop();
   var op3=new NFA(this.state,this.state+1)
 
@@ -817,7 +818,7 @@ function questionMarkOperator(){
   //op3.stateTransitionList[op3.stateTransitionList.length]=new stateTransition1(op1.endState,'ε',op1.startState)
   this.state=this.state+2
   this.NFAStack.push(op3);
-  op3.printNFA()
+  //op3.printNFA()
 }
 
 function printSingalNFA(){
@@ -941,4 +942,4 @@ module.exports = function(strArray) {
     return {state:stateReturn.state,message:stateReturn.message,result:test.result};
   }
 }
-module.exports.zz = function(){console.log(1111111111)}
+//module.exports.zz = function(){console.log(1111111111)}

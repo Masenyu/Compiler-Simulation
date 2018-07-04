@@ -12,34 +12,52 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':NFA.isFull_screen,'graph':true}">
-
-                      <div class="vis" id="NFAvis"></div>
-                      <div style="position: absolute;  bottom: 1%; left:40%; width: 20%">
-                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                        <!-- button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
-                        <button class="buttonInGraph" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button -->
-                        <button class="buttonInGraph" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
-                        --><button class="buttonInGraph" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
-                        --><button class="buttonInGraph" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                        --><button class="buttonInGraph" @click="fitAnimatedN(NFA)"><img src="static/img/visibility_24.png" /></button>
-                        <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
-                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
+                      <div style="position: absolute; width:100%; margin: 2px">
+                        <el-row>
+                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
+                          <el-col span="5"><p>红色为进行读取字符</p></el-col>
+                        </el-row>
+                        <el-row>
+                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
+                          <el-col span="5"><p>蓝色为进行闭包操作</p></el-col>
+                        </el-row>
                       </div>
-                      <div style="position: absolute;  bottom: 1%; right:1%;">
-                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-
-                        <button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
+                      <div class="vis" id="NFAvis"></div>
+                      <div class="content">
+                        <div class="wrapper" ref="messBoxNFA">
+                          <div>
+                            <div class="box">
+                              <div style="min-height: 5rem"></div>
+                              <div style="min-height: 3.5rem; margin-buttom: 20px">
+                                <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
+                                  <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
+                                  <!-- button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
+                                  <button class="buttonInGraph" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button -->
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA)"><img src="static/img/description_24.png" /></button>
+                                  <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
+                                  <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
+                                </span>
+                                <span style=" float:right; padding-right: 1%">
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.fullscreenText" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
+                                </span>
+                              </div>
+                              <div class="token">
+                                <div>
+                                  <div class="scroll_bar">
+                                    <div :id="NFA.TokenId" v-html="NFA.Token"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </el-row>
-
-                  <div class="token">
-                    <div>
-                      <div class="scroll_bar">
-                        <div :id="NFA.TokenId" v-html="NFA.Token"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </el-tab-pane>
@@ -50,21 +68,37 @@
                     <div :class="{'active':DFA.isFull_screen,'graph':true}">
 
                       <div class="vis" id="DFAvis"></div>
-                      <div style="float: right; position: absolute; top: 0">
-                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                        <el-button type="info" :icon="DFA.zoomicon" circle @click="full_screen(DFA)"></el-button>
-                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(DFA)"></el-button>
+                      <div class="content">
+                        <div class="wrapper" id="messBoxDFA" ref="messBoxDFA">
+                          <div>
+                            <div class="box">
+                              <div style="min-height: 5rem"></div>
+                              <div style="min-height: 3.5rem; margin-buttom: 20px">
+                                <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA)"><img src="static/img/description_24.png" /></button>
+                                </span>
+                                <span style=" float:right; padding-right: 1%">
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.fullscreenText" @click="full_screen(DFA)"><img :src="DFA.zoomicon" /></button>
+                                </span>
+                              </div>
+                              <div class="token">
+                                <div>
+                                  <div class="scroll_bar">
+                                    <div :id="DFA.TokenId" v-html="DFA.Token"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </el-row>
 
-                  <div class="token">
-                    <div>
-                      <div class="scroll_bar">
-                        <div :id="DFA.TokenId" v-html="DFA.Token"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </el-tab-pane>
@@ -75,85 +109,88 @@
                     <div :class="{'active':DFA_S.isFull_screen,'graph':true}">
 
                       <div class="vis" id="DFA_Svis"></div>
-                      <div style="float: right; position: absolute; top: 0">
-                        <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
-                        <el-button type="info" :icon="DFA_S.zoomicon" circle @click="full_screen(DFA_S)"></el-button>
-                        <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(DFA_S)"></el-button>
-                      </div>
-                    </div>
-                  </el-row>
-                  <div class="token">
-                    <div>
-                      <div class="scroll_bar">
-                        <div :id="DFA_S.TokenId" v-html="DFA_S.Token"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="查看代码" name="codeShow">
-              <el-col :span="24">
-                <span style="font-size: 35px;">敬请期待</span>
-              </el-col>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-
-      </el-col>
-      <el-col :span="7" :offset="RE_offset">
-        <div>
-          <el-row>
-            <el-col :span="24" style="margin-top:50px;">
-              <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
-                <el-form-item prop="RE">
-                  <el-input style="font-size:20px;" placeholder="请输入词法规则：" type="textarea" :autosize="{ minRows: 8, maxRows: 8}" v-model="REForm.RE"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-popover
-                    placement="top"
-                    width="160"
-                    :disabled="!available"
-                    v-model="visible2">
-                    <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
-                    <div style="text-align: right; margin: 0">
-                      <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                      <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
-                    </div>
-                    <el-button slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
-                  </el-popover>
-                  <!--el-button :disabled="available" type="primary" @click="generateFA('REForm')">构建状态机</el-button-->
-                  <el-button @click="resetForm('REForm')" icon="el-icon-circle-close-outline" circle></el-button>
-                  <el-button icon="el-icon-star-off" circle></el-button>
-                </el-form-item>
-                <code-area></code-area>
-                <!--el-input style="font-size:20px;" placeholder="请输入待分析的的源码：" type="textarea" :autosize="{ minRows: 3, maxRows: 3}" v-model="NFA.TokenForm"></el-input-->
-                <el-row style="margin-top: 5px">
-                    <div class="box">
-                      <div class="wrapper" ref="messBoxNFA">
-                        <div>
+                      <div class="content">
+                        <div class="wrapper" ref="messBoxDFA_S">
                           <div>
-                            <p style="height: 30px; margin: 0; padding: 0" v-for="item in NFA.mess">{{item}}</p>
+                            <div class="box">
+                              <div style="min-height: 5rem"></div>
+                              <div style="min-height: 3.5rem; margin-buttom: 20px">
+                                <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S)"><img src="static/img/description_24.png" /></button>
+                                </span>
+                                <span style=" float:right; padding-right: 1%">
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.fullscreenText" @click="full_screen(DFA_S)"><img :src="DFA_S.zoomicon" /></button>
+                                </span>
+                              </div>
+                              <div class="token">
+                                <div>
+                                  <div class="scroll_bar">
+                                    <div :id="DFA_S.TokenId" v-html="DFA_S.Token"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="contentCover"></div>
-                    <div class="content"></div>
-                  <el-col :span="24">
-                    <div class="controller">
-                      <el-row class="buttonela">
-                        <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-                        <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
-                      </el-row>
-                      <el-row class="buttonelb">
-                        <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
-                        <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
-                      </el-row>
-                    </div>
-                  </el-col>
-                </el-row>
+                  </el-row>
+
+                </div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <el-dialog title="代码" :visible.sync="dialogVisible" width="900px" style="height: 950px; margin-top: -5%" :before-close="handleClose">
+          <div>
+            <code-area2 ref="codearea2"></code-area2>
+          </div>
+        </el-dialog>
+
+      </el-col>
+      <el-col :span="7" :offset="1">
+        <div>
+          <el-row>
+            <el-col :span="24" style="margin-top:75px;position:relative">
+              <code-area1 @reformchange="updatere"></code-area1>
+              <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
+                <el-form-item prop="RE">
+                  <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
+                </el-form-item>
               </el-form>
+              <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
+                <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
+                <div style="text-align: right; margin: 0">
+                  <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                  <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
+                </div>
+                <el-button class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
+              </el-popover>
+            </el-col>
+          </el-row>
+          <el-row style="margin-top: 35px">
+            <el-col :span="24">
+              <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
+              <el-row style="margin-top: 15px;text-align:right">
+              <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+              <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
+              <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
+              <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button>
+              </el-row>
+              <!-- <div class="controller">
+              <el-row class="buttonela">
+                <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+                <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
+              </el-row>
+              <el-row class="buttonelb">
+                <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
+
+              </div> -->
             </el-col>
           </el-row>
         </div>
@@ -170,10 +207,14 @@ import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
 import BScroll from 'better-scroll'
 import codeArea from './code'
+import codeArea1 from './code1'
+import codeArea2 from './code2'
 
 export default {
   components: {
-    codeArea
+    codeArea,
+    codeArea1,
+    codeArea2
   },
   props: {
     messBoxNFA: {
@@ -209,7 +250,7 @@ export default {
           } catch (e) {
             callback(
               new Error(
-                '第' + (i + 1).toString() + '条规则不合法，请重新输入'
+                '第' + (i + 1).toString() + '条正则表达式不合法，请重新输入'
               )
             )
           }
@@ -224,13 +265,14 @@ export default {
     return {
       title: '词法分析',
       visible2: false,
+      dialogVisible: false,
       REForm: {
         RE: ''
       },
       rulesRE: {
         RE: [
-          { max: 1200, message: '不能超过1200个字符', tirgger: 'blur' },
-          { validator: validateRe, trigger: 'blur' }
+          { max: 1200, message: '不能超过1200个字符', tirgger: 'change' },
+          { validator: validateRe, trigger: 'change' }
         ]
       },
       TabActiveName: 'NFAGeneration',
@@ -239,6 +281,9 @@ export default {
       },
       startbuttonType: 'primary',
       startbuttonText: '开始分词',
+      autobuttonType: 'primary',
+      autoicon: 'static/img/play_24.png',
+      autobuttonText: '自动展示',
       TokenForm: '',
       hasbegin: false,
       NFA: {
@@ -261,9 +306,11 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         zoomicon: 'static/img/fullscreen_24.png',
+        fullscreenText: '全屏',
         magnifier: false,
-        mess: [],
-        messBoxScroll: null
+        messBoxScroll: null,
+        first: true,
+        code: ''
       },
       DFA: {
         data: {
@@ -285,9 +332,11 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
-        zoomicon: 'el-icon-zoom-in',
-        mess: [],
-        messBoxScroll: null
+        zoomicon: 'static/img/fullscreen_24.png',
+        fullscreenText: '全屏',
+        messBoxScroll: null,
+        first: true,
+        code: ''
       },
       DFA_S: {
         data: {
@@ -309,18 +358,19 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
-        zoomicon: 'el-icon-zoom-in',
-        mess: [],
-        messBoxScroll: null
+        zoomicon: 'static/img/fullscreen_24.png',
+        fullscreenText: '全屏',
+        messBoxScroll: null,
+        first: true,
+        code: ''
       },
-      RE_offset: 1,
       isFirsttime: true
     }
   },
   created () {
-    this.$nextTick(() => {
-      this._initScroll()
-    })
+    // this.$nextTick(() => {
+    //   this._initScroll()
+    // })
   },
   computed: {
     available () {
@@ -328,6 +378,20 @@ export default {
     }
   },
   methods: {
+    code (object) {
+      this.dialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.codearea2.showcode(object.code)
+      })
+    },
+    updatere (data) {
+      const self = this
+      self.REForm.RE = data
+    },
+    updatetoken (data) {
+      const self = this
+      self.TokenForm = data
+    },
     // 构建状态机
     generateFA (formName) {
       const self = this
@@ -349,6 +413,10 @@ export default {
             .post(url, Params)
             .then(function (response) {
               if (response.data.state === 1) {
+                // self.$refs.codearea.resetForm('REForm')
+                self.NFA.code = response.data.code[0]
+                self.DFA.code = response.data.code[1]
+                self.DFA_S.code = response.data.code[2]
                 self.NFA.data.transitionTable = response.data.result[0].transitionTable
                 self.NFA.data.alphabet = response.data.result[0].alphabet
                 self.NFA.data.acceptState = response.data.result[0].acceptStateList
@@ -430,9 +498,10 @@ export default {
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
-        zoomicon: 'el-icon-zoom-in',
-        mess: [],
-        messBoxScroll: null
+        zoomicon: 'static/img/fullscreen_24.png',
+        fullscreenText: '全屏',
+        messBoxScroll: null,
+        tokenBoxScroll: null
       }
       console.log(object.Token)
     },
@@ -533,14 +602,15 @@ export default {
       self.doubleClick(self.DFA_S)
     },
     // 重置表单
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    },
+    // resetForm (formName) {
+    //   this.$refs[formName].resetFields()
+    // },
     // 开始分词
     startButton () {
       const self = this
+
       // self.TokenForm = 'dododouble'
-      self.TokenForm = sessionStorage.getItem('msg')
+      // self.TokenForm = sessionStorage.getItem('msg')
       if (self.hasbegin === false) {
         if (self.TokenForm === '') {
           Message({
@@ -583,6 +653,52 @@ export default {
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
 
+          if (self.TabActiveName === 'DFAGeneration') {
+            if (self.DFA.first === true) {
+              self.$nextTick(() => {
+                self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                  click: false,
+                  bounce: false
+                // disableMouse: true
+                })
+              })
+              self.DFA.first = false
+            }
+            self.$nextTick(() => {
+              if (self.hasbegin) { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce') }
+            })
+          } else if (self.TabActiveName === 'NFAGeneration') {
+            if (self.NFA.first === true) {
+              self.$nextTick(() => {
+                self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                  click: false,
+                  bounce: false
+                // disableMouse: true
+                })
+              })
+              self.NFA.first = false
+            }
+            self.$nextTick(() => {
+              if (self.hasbegin) { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce') }
+            })
+          } else if (self.TabActiveName === 'DFASimplification') {
+            if (self.DFA_S.first === true) {
+              self.$nextTick(() => {
+                self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+                // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+                  click: true,
+                  bounce: false
+                })
+              })
+              self.DFA_S.first = false
+            }
+            self.$nextTick(() => {
+              if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
+            })
+          }
+
           self.hasbegin = true
           self.startbuttonType = 'danger'
           self.startbuttonText = '停止分词'
@@ -595,20 +711,26 @@ export default {
         self.NFA.machine = null
         self.refresh(self.NFA)
         self.NFA.Token = ''
+        self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
+
         self.DFA.machine = null
         self.refresh(self.DFA)
         self.DFA.Token = ''
+        self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
+
         self.DFA_S.machine = null
         self.refresh(self.DFA_S)
         self.DFA_S.Token = ''
+        self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
+
         if (self.NFA.autobuttonText === '停止') {
-          self.autoControl(self.NFA)
+          self.autoControl()
         }
         if (self.DFA.autobuttonText === '停止') {
-          self.autoControl(self.DFA)
+          self.autoControl()
         }
         if (self.DFA_S.autobuttonText === '停止') {
-          self.autoControl(self.DFA_S)
+          self.autoControl()
         }
       }
     },
@@ -652,14 +774,14 @@ export default {
       })
     },
     // 将消息push到消息数组中并刷新显示框
-    pushMess (object, str) {
-      object.mess.push(str)
-      console.log(object.messBoxScroll.maxScrollY)
-      console.log(str)
-      object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
-      object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
-      // this.messBoxScroll.scrollTo(0, this.aa, 700, 'bounce')
-    },
+    // pushMess (object, str) {
+    //   object.mess.push(str)
+    //   console.log(object.messBoxScroll.maxScrollY)
+    //   console.log(str)
+    //   object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
+    //   object.messBoxScroll.scrollTo(0, object.messBoxScroll.maxScrollY, 700, 'bounce')
+    //   // this.messBoxScroll.scrollTo(0, this.aa, 700, 'bounce')
+    // },
     // 改变节点的颜色
     changeNode (object, _nodes, status) {
       let bgcolor
@@ -736,23 +858,23 @@ export default {
               type: 'success',
               message: 'Token提取完成'
             })
-            self.pushMess(object, 'Token提取完成')
+            // self.pushMess(object, 'Token提取完成')
             break
           case NFA_CODE.DOCLOSURE:
-            self.$message({
-              type: 'success',
-              message: '闭包'
-            })
-            self.pushMess(object, '闭包')
+            // self.$message({
+            //   type: 'success',
+            //   message: '闭包'
+            // })
+            // self.pushMess(object, '闭包')
             self.changeWindow(object)
             self.changeGraph(object, 2)
             break
           case NFA_CODE.READCHAR:
-            self.$message({
-              type: 'success',
-              message: '读取字符'
-            })
-            self.pushMess(object, '读取字符')
+            // self.$message({
+            //   type: 'success',
+            //   message: '读取字符'
+            // })
+            // self.pushMess(object, '读取字符')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -761,7 +883,7 @@ export default {
               type: 'success',
               message: '提取Token'
             })
-            self.pushMess(object, '提取Token')
+            // self.pushMess(object, '提取Token')
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -770,7 +892,7 @@ export default {
           //   type: 'error',
           //   message: '遇到了NFA拒绝的输入'
           // })
-            self.pushMess(object, '遇到了NFA拒绝的输入')
+            // self.pushMess(object, '遇到了NFA拒绝的输入')
             alert('遇到了NFA拒绝的输入')
             break
           case NFA_CODE.UNKNOWN:
@@ -778,7 +900,7 @@ export default {
             //   type: 'error',
             //   message: '遇到了NFA不认识的字符'
             // })
-            self.pushMess(object, '遇到了NFA不认识的字符')
+            // self.pushMess(object, '遇到了NFA不认识的字符')
             alert('遇到了NFA不认识的字符')
             break
           default:
@@ -794,19 +916,19 @@ export default {
             self.fitAnimated(object)
             break
           case DFA_CODE.NEXTSTEP:
-            self.$message({
-              type: 'success',
-              message: '读取字符'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '读取字符'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
             break
           case DFA_CODE.READCHAR:
-            self.$message({
-              type: 'info',
-              message: '遵循最长子串原则继续读字符'
-            })
+            // self.$message({
+            //   type: 'info',
+            //   message: '遵循最长子串原则继续读字符'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
@@ -870,10 +992,10 @@ export default {
             })
             break
           case NFA_CODE.PRESTEP:
-            self.$message({
-              type: 'success',
-              message: '返回到上一个步骤'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '返回到上一个步骤'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -889,10 +1011,10 @@ export default {
             })
             break
           case DFA_CODE.PRESTEP:
-            self.$message({
-              type: 'success',
-              message: '返回到上一个步骤'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '返回到上一个步骤'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
@@ -988,12 +1110,18 @@ export default {
       switch (this.TabActiveName) {
         case 'NFAGeneration':
           this.autoControl1(this.NFA, 0)
+          this.autobuttonText = this.NFA.autobuttonText
+          this.autobuttonType = this.NFA.autobuttonType
           break
         case 'DFAGeneration':
           this.autoControl1(this.DFA, 1)
+          this.autobuttonText = this.DFA.autobuttonText
+          this.autobuttonType = this.DFA.autobuttonType
           break
         case 'DFASimplification':
           this.autoControl1(this.DFA_S, 2)
+          this.autobuttonText = this.DFA_S.autobuttonText
+          this.autobuttonType = this.DFA_S.autobuttonType
           break
         default:
           break
@@ -1011,6 +1139,8 @@ export default {
             object.autobuttonText = '自动展示'
             object.autobuttonType = 'primary'
             object.autoicon = 'static/img/play_24.png'
+            self.autobuttonText = object.autobuttonText
+            self.autobuttonType = object.autobuttonType
             clearInterval(object.timer)
           }
         }, 1000)
@@ -1048,9 +1178,16 @@ export default {
     },
     // 全屏化/还原
     full_screen (object) {
-      object.zoomicon = object.isFull_screen
-        ? 'static/img/fullscreen_24.png'
-        : 'static/img/fullscreen_exit_24.png'
+      if (object.isFull_screen === false) {
+        object.zoomicon = 'static/img/fullscreen_exit_24.png'
+        object.fullscreenText = '取消全屏'
+      } else {
+        object.zoomicon = 'static/img/fullscreen_24.png'
+        object.fullscreenText = '全屏'
+      }
+      // object.zoomicon = object.isFull_screen
+      //   ? 'static/img/fullscreen_24.png'
+      //   : 'static/img/fullscreen_exit_24.png'
       object.isFull_screen = !object.isFull_screen
     },
     // 刷新图
@@ -1068,33 +1205,81 @@ export default {
     // 切换Tab菜单时自动鹰眼
     handleClick (tab, event) {
       const self = this
-      if (self.TabActiveName === 'DFAGeneration') {
-        self.$nextTick(() => {
-          self.fitAnimatedNow(self.DFA)
-        })
-      } else if (self.TabActiveName === 'NFAGeneration') {
-        self.$nextTick(() => {
-          self.fitAnimatedNow(self.NFA)
-        })
-      } else if (self.TabActiveName === 'DFASimplification') {
-        self.$nextTick(() => {
-          self.fitAnimated(self.DFA_S)
-        })
-      }
       if (self.NFA.autobuttonText === '停止') {
         self.NFA.autobuttonText = '自动展示'
         self.NFA.autobuttonType = 'primary'
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.NFA.timer)
       }
       if (self.DFA.autobuttonText === '停止') {
         self.DFA.autobuttonText = '自动展示'
         self.DFA.autobuttonType = 'primary'
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.DFA.timer)
       }
       if (self.DFA_S.autobuttonText === '停止') {
         self.DFA_S.autobuttonText = '自动展示'
         self.DFA_S.autobuttonType = 'primary'
+        self.NFA.autoicon = 'static/img/play_24.png'
         clearInterval(self.DFA_S.timer)
+      }
+      if (self.TabActiveName === 'DFAGeneration') {
+        if (self.DFA.first === true) {
+          self.$nextTick(() => {
+            self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
+              // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+              click: false,
+              bounce: false
+            })
+          })
+          self.DFA.first = false
+        }
+        self.$nextTick(() => {
+          self.fitAnimatedNow(self.DFA)
+        })
+        self.autobuttonText = self.DFA.autobuttonText
+        self.autobuttonType = self.DFA.autobuttonType
+        self.$nextTick(() => {
+          if (self.hasbegin) { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce') }
+        })
+      } else if (self.TabActiveName === 'NFAGeneration') {
+        if (self.NFA.first === true) {
+          self.$nextTick(() => {
+            self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
+              // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+              click: false,
+              bounce: false
+            })
+          })
+          self.NFA.first = false
+        }
+        self.$nextTick(() => {
+          self.fitAnimatedNow(self.NFA)
+        })
+        self.autobuttonText = self.NFA.autobuttonText
+        self.autobuttonType = self.NFA.autobuttonType
+        self.$nextTick(() => {
+          if (self.hasbegin) { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce') }
+        })
+      } else if (self.TabActiveName === 'DFASimplification') {
+        if (self.DFA_S.first === true) {
+          self.$nextTick(() => {
+            self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
+              // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
+              click: false,
+              bounce: false
+            })
+          })
+          self.DFA_S.first = false
+        }
+        self.$nextTick(() => {
+          self.fitAnimatedNow(self.DFA_S)
+        })
+        self.autobuttonText = self.DFA_S.autobuttonText
+        self.autobuttonType = self.DFA_S.autobuttonType
+        self.$nextTick(() => {
+          if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
+        })
       }
     },
     doubleClick (object) {
@@ -1128,42 +1313,39 @@ export default {
   width: 70%;
   margin-left: auto;
   margin-right: auto;
-  /*margin-top: 40px;*/
+  padding-bottom: 40px;
   min-width: 1200px;
-  height: 100%;
+  min-height: 100%;
+  border:1px solid #cccccc;
   background-color: #fff;
 }
 .tab{
   height: auto;
   width: 100%;
-  margin-top: 4%
+  margin-top: 20px;
 }
 .token {
   background-color: #cccccc;
+  width: 100%;
+  /*bottom: 0px;*/
+  position: relative;
   height: 100px;
 }
 .content {
   height: 100px;
   width: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .box {
-  height: 100px;
-  width: 66.7%;
-  overflow: hidden;
-  position: absolute;
-}
-.contentCover {
-  height: 100px;
-  width: 66.7%;
-  overflow: hidden;
-  background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1) 85%);
-  position: absolute;
+  height: 200px;
+  width: 100%;
+  bottom: 0px;
+  /*overflow: hidden;*/
 }
 .wrapper {
-  height: 55px;
-  margin: 3%;
-  margin-left: 15%;
+ /*position: relative;*/
+ height: 100px;
+ /*bottom: -100px;*/
 }
 .controller {
   text-align: right;
@@ -1194,6 +1376,9 @@ export default {
   height:80px;
   overflow: hidden;
 }
+div.graph{
+  background: #eef0f1;
+}
 div.graph.active {
   position: fixed;
   bottom: 0;
@@ -1203,13 +1388,17 @@ div.graph.active {
   width: 100%;
   height: 100%;
   z-index: 10;
-  background-color: rgba(221, 221, 221, 1);
+  background: #eef0f1;
 }
-div.graph.active div.vis {
+div.graph.active div.vis{
   height: 95%;
 }
+div.graph.active div.content{
+  position: absolute;
+  bottom: 0%
+}
 div.graph div.vis {
-  height: 48rem;
+  height: 51rem;
 }
 .buttonInGraph{
   /*background: transparent;*/
@@ -1220,6 +1409,9 @@ div.graph div.vis {
   border: none;
   outline: none;
   margin: 0;
+  display: inline-block;
+  position: relative;
+  z-index: 5;
   /*background-image: url("../../assets/fullscreen.png")*/
 }
 .buttonInGraph:hover{
@@ -1229,11 +1421,81 @@ div.graph div.vis {
   opacity: 0.6;
   background: rgba(0, 0, 0, 0.3);
 }
+
+.buttonInGraph:before,
+.buttonInGraph:after {
+  opacity: 0; /*透明度为完全透明*/
+  position: absolute;
+  z-index: 1000; /*设为最上层*/
+  /*鼠标放上元素上时的动画，鼠标放上后效果在.tip-*:hover:before, .tip-*:hover:after中设置;
+            0.3s:规定完成过渡效果需要多少秒或毫秒,ease:规定慢速开始，然后变快，然后慢速结束的过渡效果*/
+  transition: 0.3s ease;
+  -webkit-transition: 0.3s ease;
+  -moz-transition: 0.3s ease;
+}
+
+.buttonInGraph:before {
+  content: '';
+  border: 6px solid transparent;
+}
+
+.buttonInGraph:after {
+  content: attr(data-tip); /*后去要提示的文本*/
+  padding: 5px;
+  white-space: nowrap; /*强制不换行*/
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.buttonInGraph:hover:before,
+.buttonInGraph:hover:after {
+  opacity: 1; /*鼠标放上时透明度为完全显示*/
+  z-index: 1000;
+}
+
+/*top*/
+.buttonInGraph-top:before {
+  bottom: 100%;
+  left: 30%;
+  border-top-color: rgba(0, 0, 0, 0.8); /*小三角效果*/
+  margin-left: -3px;
+  margin-bottom: -12px;
+}
+
+.buttonInGraph-top:after {
+  bottom: 100%;
+  left: 10%;
+  margin-left: -6px;
+}
+
+.buttonInGraph-top:hover:before {
+  margin-bottom: -6px;
+}
+
+.buttonInGraph-top:hover:after {
+  margin-bottom: 6px;
+}
+.generateFA{
+  position: absolute;
+  right:0px;
+  top:315px;
+}
+.autobutton{
+  width:80px;
+  margin-right:10px
+}
 </style>
 
 <style>
 span.mode999 {
   background-color: red;
+}
+.el-textarea{
+  opacity: 0;
+  z-index:-1;
+}
+.el-form{
+  margin-top:1rem;
 }
 .el-tabs__item {
   font-size: 2rem
