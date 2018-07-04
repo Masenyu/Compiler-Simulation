@@ -31,7 +31,7 @@
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimatedN(NFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.fullscreenText" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                                 </span>
                               </div>
@@ -71,7 +71,7 @@
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimatedN(DFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.fullscreenText" @click="full_screen(DFA)"><img :src="DFA.zoomicon" /></button>
                                 </span>
                               </div>
@@ -112,7 +112,7 @@
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimatedN(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.fullscreenText" @click="full_screen(DFA_S)"><img :src="DFA_S.zoomicon" /></button>
                                 </span>
                               </div>
