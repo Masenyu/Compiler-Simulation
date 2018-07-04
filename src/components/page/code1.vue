@@ -1,7 +1,7 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor" name="editor" v-model="TokenForm">
+      <textarea id="editor1" name="editor1" v-model="TokenForm">
       </textarea>
     </div>
     <el-tooltip class="item" effect="dark" content="清空" placement="top">
@@ -75,7 +75,7 @@ export default {
       return 'assets/codemirror/mode/' + name + '/' + name + '.js'
     },
     setmirror () {
-      let myTextarea = document.getElementById('editor')
+      let myTextarea = document.getElementById('editor1')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
         theme: 'neat',
         // styleActiveLine: true,
@@ -84,22 +84,27 @@ export default {
         lineNumbers: true,
         tabSize: 10,
         // readOnly:"nocursor",
-        smartIndent: true,
+        smartIndent: false,
         scrollbarStyle: 'overlay'
         // keymap:"defaule"
       })
-      let str1 = '请输入待分析的源码：'
+      let str1 = '词法规则定义规范：\n（规则名=规则）\n\n例如：\nT_DOUBLE=double\nT_DO=do'
       this.CodeMirrorEditor.setValue(str1)
       this.CodeMirrorEditor.on('focus', () => {
         if (this.CodeMirrorEditor.getValue() === str1) {
           this.CodeMirrorEditor.setValue('')
         }
       })
+      // this.CodeMirrorEditor.on('blur', () => {
+      //   if (this.CodeMirrorEditor.getValue() === '') {
+      //     this.CodeMirrorEditor.setValue(str1)
+      //   }
+      // })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
         // 编译器内容更改事件
         // sessionStorage.setItem('msg', this.CodeMirrorEditor.getValue())
-        this.$emit('tokenchange', this.CodeMirrorEditor.getValue())
+        this.$emit('reformchange', this.CodeMirrorEditor.getValue())
         if (this.CodeMirrorEditor.getValue() !== '') {
           this.hasinput = true
         } else {
@@ -172,5 +177,4 @@ export default {
   font-size:20px;
   font-family:Arial;
 }
-.CodeMirror-line{}
 </style>

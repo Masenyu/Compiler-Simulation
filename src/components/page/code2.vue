@@ -1,12 +1,9 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor" name="editor" v-model="TokenForm">
+      <textarea id="editor2" name="editor2" v-model="TokenForm">
       </textarea>
     </div>
-    <el-tooltip class="item" effect="dark" content="清空" placement="top">
-      <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
-    </el-tooltip>
   </div>
 </template>
 
@@ -55,7 +52,7 @@ export default {
       CodeMirrorEditor: null,
       something: '',
       TokenForm: '',
-      hasinput: true
+      hasinput: false
     }
   },
 
@@ -75,37 +72,30 @@ export default {
       return 'assets/codemirror/mode/' + name + '/' + name + '.js'
     },
     setmirror () {
-      let myTextarea = document.getElementById('editor')
+      let myTextarea = document.getElementById('editor2')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-        theme: 'neat',
-        // styleActiveLine: true,
-        mode: 'text/x-c++src',
-        extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
-        lineNumbers: true,
-        tabSize: 10,
-        // readOnly:"nocursor",
-        smartIndent: true,
-        scrollbarStyle: 'overlay'
-        // keymap:"defaule"
-      })
-      let str1 = '请输入待分析的源码：'
-      this.CodeMirrorEditor.setValue(str1)
-      this.CodeMirrorEditor.on('focus', () => {
-        if (this.CodeMirrorEditor.getValue() === str1) {
-          this.CodeMirrorEditor.setValue('')
-        }
-      })
+          theme:'liquibyte', 
+          styleActiveLine: true,
+          mode: "text/x-c++src",
+          extraKeys: {"Ctrl": "autocomplete"},//输入s然后ctrl就可以弹出选择项  
+          lineNumbers: true,
+          tabSize:10,
+          // readOnly:"nocursor",
+          smartIndent:true,
+          scrollbarStyle:"overlay"
+          // keymap:"defaule"
+      });
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
-      this.CodeMirrorEditor.on('change', () => {
-        // 编译器内容更改事件
-        // sessionStorage.setItem('msg', this.CodeMirrorEditor.getValue())
-        this.$emit('tokenchange', this.CodeMirrorEditor.getValue())
-        if (this.CodeMirrorEditor.getValue() !== '') {
-          this.hasinput = true
-        } else {
-          this.hasinput = false
-        }
-      })
+      // this.CodeMirrorEditor.on('change', () => {
+      //   // 编译器内容更改事件
+      //   // sessionStorage.setItem('msg', this.CodeMirrorEditor.getValue())
+      //   this.$emit('tokenchange', this.CodeMirrorEditor.getValue())
+      //   if (this.CodeMirrorEditor.getValue() !== '') {
+      //     this.hasinput = true
+      //   } else {
+      //     this.hasinput = false
+      //   }
+      // })
       // this.CodeMirrorEditor.setValue("Hello Kitty\nHello Tony\nHow are you\nFine thank you and you \nI love you")
 
       // this.CodeMirrorEditor.setOption("lineNumbers","true")
@@ -113,7 +103,7 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)
-      // this.CodeMirrorEditor.setSize(350, 280)
+      this.CodeMirrorEditor.setSize(800, 680)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
@@ -144,8 +134,7 @@ export default {
   margin: 0;
   width: auto;
   height: auto;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(210, 210, 210);
+  background-color: rgb(248, 248, 248);
   /*h1 {
     margin: 0;
   }*/
@@ -169,8 +158,8 @@ export default {
 </style>
 <style>
 .CodeMirror pre{
-  font-size:20px;
-  font-family:Arial;
+  font-size:16px;
+  /*font-family:Arial;*/
 }
 .CodeMirror-line{}
 </style>
