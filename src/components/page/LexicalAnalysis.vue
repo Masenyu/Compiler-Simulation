@@ -12,6 +12,16 @@
                 <div style="background-color: #dddddd;">
                   <el-row>
                     <div :class="{'active':NFA.isFull_screen,'graph':true}">
+                      <div style="position: absolute; width:100%; margin: 2px">
+                        <el-row>
+                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
+                          <el-col span="5"><p>红色为进行读取字符</p></el-col>
+                        </el-row>
+                        <el-row>
+                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
+                          <el-col span="5"><p>蓝色为进行闭包操作</p></el-col>
+                        </el-row>
+                      </div>
                       <div class="vis" id="NFAvis"></div>
                       <div class="content">
                         <div class="wrapper" ref="messBoxNFA">
@@ -26,7 +36,7 @@
                                   <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
-                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime"><img src="static/img/description_24.png" /></button>
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="dialogVisible = true"><img src="static/img/description_24.png" /></button>
                                   <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
@@ -135,6 +145,11 @@
             </el-tab-pane>
           </el-tabs>
         </div>
+        <el-dialog title="代码" :visible.sync="dialogVisible" width="900px" style="height: 950px; margin-top: -5%" :before-close="handleClose">
+          <div>
+            <code-area2></code-area2>
+          </div>
+        </el-dialog>
 
       </el-col>
       <el-col :span="7" :offset="1">
@@ -193,11 +208,13 @@ import { create_DFA, DFA_CODE } from '../../api/DFA'
 import BScroll from 'better-scroll'
 import codeArea from './code'
 import codeArea1 from './code1'
+import codeArea2 from './code2'
 
 export default {
   components: {
     codeArea,
-    codeArea1
+    codeArea1,
+    codeArea2
   },
   props: {
     messBoxNFA: {
@@ -248,6 +265,7 @@ export default {
     return {
       title: '词法分析',
       visible2: false,
+      dialogVisible: false,
       REForm: {
         RE: ''
       },
@@ -619,6 +637,7 @@ export default {
           self.DFA.nextState = self.DFA.machine.init()
           self.changeNode(self.DFA, self.DFA.nextState.graphInfo.highlightNodes, 1)
 
+          
           self.DFA_S.machine.feedText(self.TokenForm)
           self.DFA_S.nextState = self.DFA_S.machine.init()
           self.changeNode(self.DFA_S, self.DFA_S.nextState.graphInfo.highlightNodes, 1)
@@ -628,7 +647,9 @@ export default {
               self.$nextTick(() => {
                 self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                  click: true
+                click: false,
+                bounce: false,
+                // disableMouse: true
                 })
               })
               self.DFA.first = false
@@ -641,7 +662,9 @@ export default {
               self.$nextTick(() => {
                 self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                  click: true
+                click: false,
+                bounce: false,
+                // disableMouse: true
                 })
               })
               self.NFA.first = false
@@ -654,7 +677,8 @@ export default {
               self.$nextTick(() => {
                 self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                  click: true
+                click: true,
+                bounce: false,
                 })
               })
               self.DFA_S.first = false
@@ -663,6 +687,13 @@ export default {
               if (self.hasbegin) { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.maxScrollY, 700, 'bounce') } else { self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce') }
             })
           }
+        
+
+
+
+
+
+
 
           self.hasbegin = true
           self.startbuttonType = 'danger'
@@ -802,7 +833,6 @@ export default {
           break
         case 'DFAGeneration':
           this.next1(this.DFA)
-          console.log('222222222222222222222222222222222222222222222222')
           break
         case 'DFASimplification':
           this.next1(this.DFA_S)
@@ -827,19 +857,19 @@ export default {
             // self.pushMess(object, 'Token提取完成')
             break
           case NFA_CODE.DOCLOSURE:
-            self.$message({
-              type: 'success',
-              message: '闭包'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '闭包'
+            // })
             // self.pushMess(object, '闭包')
             self.changeWindow(object)
             self.changeGraph(object, 2)
             break
           case NFA_CODE.READCHAR:
-            self.$message({
-              type: 'success',
-              message: '读取字符'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '读取字符'
+            // })
             // self.pushMess(object, '读取字符')
             self.changeWindow(object)
             self.changeGraph(object, 1)
@@ -882,19 +912,19 @@ export default {
             self.fitAnimated(object)
             break
           case DFA_CODE.NEXTSTEP:
-            self.$message({
-              type: 'success',
-              message: '读取字符'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '读取字符'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
             break
           case DFA_CODE.READCHAR:
-            self.$message({
-              type: 'info',
-              message: '遵循最长子串原则继续读字符'
-            })
+            // self.$message({
+            //   type: 'info',
+            //   message: '遵循最长子串原则继续读字符'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
@@ -958,10 +988,10 @@ export default {
             })
             break
           case NFA_CODE.PRESTEP:
-            self.$message({
-              type: 'success',
-              message: '返回到上一个步骤'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '返回到上一个步骤'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             break
@@ -977,10 +1007,10 @@ export default {
             })
             break
           case DFA_CODE.PRESTEP:
-            self.$message({
-              type: 'success',
-              message: '返回到上一个步骤'
-            })
+            // self.$message({
+            //   type: 'success',
+            //   message: '返回到上一个步骤'
+            // })
             self.changeWindow(object)
             self.changeGraph(object, 1)
             self.focusNode(object.nextState.graphInfo.highlightNodes[0], object)
@@ -1194,7 +1224,8 @@ export default {
           self.$nextTick(() => {
             self.DFA.messBoxScroll = new BScroll(this.$refs.messBoxDFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-              click: true
+              click: false,
+              bounce: false,
             })
           })
           self.DFA.first = false
@@ -1212,7 +1243,8 @@ export default {
           self.$nextTick(() => {
             self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-              click: true
+              click: false,
+              bounce: false,
             })
           })
           self.NFA.first = false
@@ -1230,7 +1262,8 @@ export default {
           self.$nextTick(() => {
             self.DFA_S.messBoxScroll = new BScroll(this.$refs.messBoxDFA_S, {
               // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-              click: true
+              click: false,
+              bounce: false,
             })
           })
           self.DFA_S.first = false
@@ -1276,9 +1309,10 @@ export default {
   width: 70%;
   margin-left: auto;
   margin-right: auto;
-  /*margin-top: 40px;*/
+  padding-bottom: 40px;
   min-width: 1200px;
   min-height: 100%;
+  border:1px solid #cccccc;
   background-color: #fff;
 }
 .tab{
@@ -1299,14 +1333,14 @@ export default {
   /*overflow: hidden;*/
 }
 .box {
-  height: 250px;
+  height: 200px;
   width: 100%;
   bottom: 0px;
   /*overflow: hidden;*/
 }
 .wrapper {
  /*position: relative;*/
- height: 150px;
+ height: 100px;
  /*bottom: -100px;*/
 }
 .controller {
@@ -1360,7 +1394,7 @@ div.graph.active div.content{
   bottom: 0%
 }
 div.graph div.vis {
-  height: 52rem;
+  height: 51rem;
 }
 .buttonInGraph{
   /*background: transparent;*/
