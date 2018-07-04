@@ -38,7 +38,8 @@ module.exports = function(nfa) {
     this.endState = e
   }
 
-  var nfaAcceptState = new Array();
+  var dfaAcceptState = new Array();
+  var dfaAcceptStateFinal = new Array();
   var nfaAlphabet = []
   for (i = 0; nfa_tran_t.alphabet[i] != undefined; i++) {
     if (nfa_tran_t.alphabet[i] != 'ε') nfaAlphabet.push(nfa_tran_t.alphabet[i]);
@@ -310,10 +311,33 @@ state_num+=1;
       for (s = 0; state[s] != undefined; s++) {
         for (ss = 0; state[s][ss] != undefined; ss++) {
           if (state[s][ss] == nfa_tran_t.acceptState[bet].state) {
-            nfaAcceptState[nfaAcceptState.length] = new AcceptState(s, nfa_tran_t.acceptState[bet].REId);
+            dfaAcceptState[dfaAcceptState.length] = new AcceptState(s, nfa_tran_t.acceptState[bet].REId);
           }
         }
       }
+    }
+
+
+    for(var i=0;i<dfaAcceptState.length;i++)//遍历要去多余的表
+    {
+      if(i==0){dfaAcceptStateFinal.push(dfaAcceptState[0])}//默认先弹入dfaAcceptState的第一条到dfaAcceptStateFinal
+      else
+        {//判断遍历到的dfaAcceptState是否有相同的state在dfaAcceptTableFinal里,并记录是哪条dfaAcceptStateFinal
+          var isin=0
+          var updateState=0
+          for(var j=0;j<dfaAcceptStateFinal.length;j++)
+          {
+            if(dfaAcceptStateFinal[j].state==dfaAcceptState[i].state){isin=1;whichState=j;break;}
+          }
+          if(isin==1)
+          {//如果有则判断REid大小，将较小的REid更新到dfaAcceptTableFinal里
+            if(dfaAcceptStateFinal[updateState].REId>dfaAcceptState[i].REId){dfaAcceptStateFinal[updateState].REId=dfaAcceptState[i].REId;}
+          }
+           else//如果没有则push
+          {
+            dfaAcceptStateFinal.push(dfaAcceptState[i]);
+          }
+        }
     }
     // console.log("state:");
     // console.log(state);
@@ -327,10 +351,10 @@ state_num+=1;
   var result = {
     stateTransition: dfa_tran,
     alphabet: nfaAlphabet,
-    acceptStateList: nfaAcceptState
+    acceptStateList: dfaAcceptStateFinal
   }
-  //console.log("00000000000000000000000000000");
-  //console.log(result);
+  console.log("00000000000000000000000000000");
+  console.log(result);
   return result;
 }
 
