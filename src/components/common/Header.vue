@@ -16,22 +16,26 @@
             </div>
             <div class="nav-login">
               <ul>
-                <li><a class='login-btn' @click="login = true">登录</a></li>
+                <li><a class='login-btn' @click="show = true,islogin=true,titletext='登陆'">登录</a></li>
+                <li><a class='login-btn' @click="show = true,islogin=false,titletext='注册'">注册</a></li>
               </ul>
             </div>
           </div>
         </div>
-        <el-dialog title="文法分析模拟器登录" :visible.sync="login" width="420px" :close-on-click-modal="canclose">
-            <login-area></login-area>
+        <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
+            <login-area v-if="islogin" @gotoRegister="islogin=false,titletext='注册'"></login-area>
+            <register-area v-else @gotoLogin="islogin=true,titletext='登陆'"></register-area>
         </el-dialog>
     </el-row>
 </template>
 
 <script>
-import loginArea from '../page/login'
+import loginArea from '../page/Login'
+import registerArea from '../page/Register'
 export default {
   components: {
-    loginArea
+    loginArea,
+    registerArea
   },
   data () {
     return {
@@ -39,11 +43,17 @@ export default {
       active2: false,
       active3: false,
       active4: false,
-      login: false,
-      canclose: false
+      islogin: true,
+      show: false,
+      canclose: true,
+      titletext: ''
     }
   },
   methods: {
+    gotoRegister () {
+      this.register = true
+      this.login = false
+    },
     gotoUrl (url, highlightindex) {
       const self = this
       self.active1 = false

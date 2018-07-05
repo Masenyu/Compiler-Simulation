@@ -118,8 +118,9 @@ export default {
       this.$router.push('/find-back')
     },
     gotoRegister () {
-      console.log(this)
-      this.$router.push('/register')
+      console.log('gotoRegister')
+      this.$emit('gotoRegister')
+      // this.$router.push('/register')
     },
     randomNum (min, max) {
       return Math.floor(Math.random() * (max - min) + min)
