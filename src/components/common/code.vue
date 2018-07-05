@@ -4,6 +4,7 @@
       <textarea id="editor" name="editor" v-model="TokenForm">
       </textarea>
     </div>
+    <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">请输入待分析源码：</div>
     <el-tooltip class="item" effect="dark" content="清空" placement="top">
       <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
     </el-tooltip>
@@ -55,7 +56,7 @@ export default {
       CodeMirrorEditor: null,
       something: '',
       TokenForm: '',
-      hasinput: true
+      hasinput: false
     }
   },
 
@@ -88,13 +89,13 @@ export default {
         scrollbarStyle: 'overlay'
         // keymap:"defaule"
       })
-      let str1 = '请输入待分析的源码：'
-      this.CodeMirrorEditor.setValue(str1)
-      this.CodeMirrorEditor.on('focus', () => {
-        if (this.CodeMirrorEditor.getValue() === str1) {
-          this.CodeMirrorEditor.setValue('')
-        }
-      })
+      // let str1 = '请输入待分析的源码：'
+      // this.CodeMirrorEditor.setValue(str1)
+      // this.CodeMirrorEditor.on('focus', () => {
+      //   if (this.CodeMirrorEditor.getValue() === str1) {
+      //     this.CodeMirrorEditor.setValue('')
+      //   }
+      // })
       // // this.CodeMirrorEditor.setOption('lineWrapping', true);
       this.CodeMirrorEditor.on('change', () => {
         // 编译器内容更改事件
