@@ -10,7 +10,7 @@
 .cm-s-cobalt .CodeMirror-guttermarker { color: #ffee80; }
 .cm-s-cobalt .CodeMirror-guttermarker-subtle { color: #d0d0d0; }
 .cm-s-cobalt .CodeMirror-linenumber { color: #0e1f3f; }
-.cm-s-cobalt .CodeMirror-cursor { border-left: 1px solid rgb(0, 69, 173); }
+.cm-s-cobalt .CodeMirror-cursor { border-left: 1px solid rgb(7, 7, 7); }
 
 .cm-s-cobalt span.cm-comment { color: rgb(7, 7, 7); }
 .cm-s-cobalt span.cm-atom { color: rgb(7, 7, 7); }
