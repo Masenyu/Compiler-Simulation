@@ -1,10 +1,18 @@
-function MailService(qq, code) {
+function MailService(sender, code) {
 	let nodemailer = require("nodemailer");
-	let transporter = nodemailer.createTransport(`smtps://${qq}:${code}@smtp.qq.com`);
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.163.com',
+        port: 25,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: `${sender}@163.com`, // generated ethereal user
+            pass: code // generated ethereal password
+        }
+    });
 	return {
 		resetPassword: function (recipient, verCode) {
 			let mailOptions = {
-				from: `<${qq}@qq.com>`,
+				from: `<${sender}@163.com>`,
 				to: recipient,
 				subject: '文法分析模拟器 - 请确认你的邮箱地址',
 				text: 'Compiler Simulation',
@@ -16,6 +24,7 @@ function MailService(qq, code) {
 			};
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
+					console.log(error)
 					return error;
 				}
 				return true;
@@ -23,7 +32,7 @@ function MailService(qq, code) {
 		},
 		createAccount: function (recipient, verCode) {
 			let mailOptions = {
-				from: `<${qq}@qq.com>`,
+				from: `<${sender}@smtp.163.com>`,
 				to: recipient,
 				subject: '文法分析模拟器 - 重置密码',
 				text: 'Compiler Simulation',
@@ -33,6 +42,7 @@ function MailService(qq, code) {
 			};
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
+					console.log(error)
 					return error;
 				}
 				return true;
@@ -41,11 +51,9 @@ function MailService(qq, code) {
 	}
 }
 module.exports = MailService;
-
-
-// var qq = '2369969039';
-// var code = 'rgafqfcwwindebgd';
+// var sender = '13427532895';
+// var code = 'qq594978168';
 // var recipient = '835380624@qq.com'
-// var verCode = 'hwllo world'
-// var mailService = MailService(qq, code);
-// mailService.resetPW(recipient, verCode);
+// var verCode = '123456'
+// var mailService = MailService(sender, code);
+// mailService.resetPassword(recipient, verCode);
