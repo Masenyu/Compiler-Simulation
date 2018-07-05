@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded())
 
-app.use(express.static(path.join(__dirname, 'dist')))
+// app.use(express.static(path.join(__dirname, 'dist')))
 
 app.use('/api/lexical', lexical);
 
