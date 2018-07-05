@@ -114,8 +114,9 @@ export default {
       })
     },
     gotoFindback () {
-      console.log(this)
-      this.$router.push('/find-back')
+      // console.log(this)
+      this.$emit('gotoFindback')
+      // this.$router.push('/find-back')
     },
     gotoRegister () {
       console.log('gotoRegister')

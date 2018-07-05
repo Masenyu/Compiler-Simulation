@@ -16,15 +16,16 @@
             </div>
             <div class="nav-login">
               <ul>
-                <li><a class='login-btn' @click="show = true,islogin=true,titletext='登陆'">登录</a></li>
-                <li><a class='login-btn' @click="show = true,islogin=false,titletext='注册'">注册</a></li>
+                <li><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
+                <li><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
             </div>
           </div>
         </div>
         <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
-            <login-area v-if="islogin" @gotoRegister="islogin=false,titletext='注册'"></login-area>
-            <register-area v-else @gotoLogin="islogin=true,titletext='登陆'"></register-area>
+            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'"></login-area>
+            <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
+            <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
         </el-dialog>
     </el-row>
 </template>
@@ -32,10 +33,12 @@
 <script>
 import loginArea from '../page/Login'
 import registerArea from '../page/Register'
+import findBack from '../page/FindBack'
 export default {
   components: {
     loginArea,
-    registerArea
+    registerArea,
+    findBack
   },
   data () {
     return {
@@ -43,17 +46,13 @@ export default {
       active2: false,
       active3: false,
       active4: false,
-      islogin: true,
+      status: '',
       show: false,
       canclose: true,
       titletext: ''
     }
   },
   methods: {
-    gotoRegister () {
-      this.register = true
-      this.login = false
-    },
     gotoUrl (url, highlightindex) {
       const self = this
       self.active1 = false
@@ -174,7 +173,7 @@ ul li a.active{
   font-size:1.5rem;
   color: #ffffff;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 1.2rem 2rem; /* 内部填充的距离 */
+  padding: 1.2rem 1rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }
