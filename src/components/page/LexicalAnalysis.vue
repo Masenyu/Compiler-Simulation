@@ -172,7 +172,7 @@
               </el-popover>
             </el-col>
           </el-row>
-          <el-row style="margin-top: 35px">
+          <el-row style="margin-top: 25px">
             <el-col :span="24">
               <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
               <el-row style="margin-top: 15px;text-align:right">
@@ -1500,6 +1500,9 @@ span.mode999 {
 }
 .el-form{
   margin-top:1rem;
+}
+.el-form-item__error{
+  font-size:14px;
 }
 .el-tabs__item {
   font-size: 2rem

@@ -4,6 +4,7 @@
       <textarea id="editor1" name="editor1" v-model="TokenForm">
       </textarea>
     </div>
+    <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">词法规则定义规范：<br/>(Token类型=规则)<br/><br/>例如：<br/>T_DOUBLE=double<br/>T_DO=do</div>
     <el-tooltip class="item" effect="dark" content="清空" placement="top">
       <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
     </el-tooltip>
@@ -55,7 +56,7 @@ export default {
       CodeMirrorEditor: null,
       something: '',
       TokenForm: '',
-      hasinput: true
+      hasinput: false
     }
   },
 
@@ -71,6 +72,10 @@ export default {
   },
 
   methods: {
+    focusevent () {
+      document.getElementsByClassName('CodeMirror-overlayscroll')[0].focus()
+      console.log(11111)
+    },
     transToSrc (name) {
       return 'assets/codemirror/mode/' + name + '/' + name + '.js'
     },
@@ -88,13 +93,13 @@ export default {
         scrollbarStyle: 'overlay'
         // keymap:"defaule"
       })
-      let str1 = '词法规则定义规范：\n（规则名=规则）\n\n例如：\nT_DOUBLE=double\nT_DO=do'
-      this.CodeMirrorEditor.setValue(str1)
-      this.CodeMirrorEditor.on('focus', () => {
-        if (this.CodeMirrorEditor.getValue() === str1) {
-          this.CodeMirrorEditor.setValue('')
-        }
-      })
+      // let str1 = '词法规则定义规范：\n（规则名=规则）\n\n例如：\nT_DOUBLE=double\nT_DO=do'
+      // this.CodeMirrorEditor.setValue(str1)
+      // this.CodeMirrorEditor.on('focus', () => {
+      //   if (this.CodeMirrorEditor.getValue() === str1) {
+      //     this.CodeMirrorEditor.setValue('')
+      //   }
+      // })
       // this.CodeMirrorEditor.on('blur', () => {
       //   if (this.CodeMirrorEditor.getValue() === '') {
       //     this.CodeMirrorEditor.setValue(str1)
@@ -169,12 +174,17 @@ export default {
   z-index: 5;
 }
 .setting{
-  width:93%
+  width:93%;
+  background-color: rgb(255, 255, 255,0)
 }
 </style>
 <style>
 .CodeMirror pre{
   font-size:20px;
   font-family:Arial;
+}
+.CodeMirror {
+    background: #ffffff00;
+    z-index: 2;
 }
 </style>
