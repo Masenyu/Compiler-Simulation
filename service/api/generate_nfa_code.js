@@ -262,7 +262,7 @@ module.exports=function(NFAdata){
           if(j==0){
             if(NFAdata.transitionTable[i][j].length==0){str+="-1"}else{str+=NFAdata.transitionTable[i][j][0]}
           }else{
-            if(NFAdata.transitionTable[i][j].length==0){str+="-1,"}else{str+=NFAdata.transitionTable[i][j][0]+','}
+            if(NFAdata.transitionTable[i][j].length==0){str+=",-1"}else{str+=','+NFAdata.transitionTable[i][j][0]}
           }
         }
         str+="} //状态 "+i+"在输入字符"+NFAdata.alphabet.toString()+"对应的变更状态 (-1表示不存在) \n"
@@ -273,7 +273,7 @@ module.exports=function(NFAdata){
           if(j==0){
             if(NFAdata.transitionTable[i][j].length==0){str+="-1"}else{str+=NFAdata.transitionTable[i][j][0]}
           }else{
-            if(NFAdata.transitionTable[i][j].length==0){str+="-1,"}else{str+=NFAdata.transitionTable[i][j][0]+','}
+            if(NFAdata.transitionTable[i][j].length==0){str+=",-1"}else{str+=','+NFAdata.transitionTable[i][j][0]}
           }
         }
         str+="},//状态 "+i+"在输入字符"+NFAdata.alphabet.toString()+"对应的变更状态 (-1表示不存在)\n"
