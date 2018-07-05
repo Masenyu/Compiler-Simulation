@@ -3,7 +3,7 @@
         <div class="header">
           <div class="navigation">
             <div class="logo">
-              <img src="../../assets/_logo.png"/>
+              <!-- <img src="../../assets/_logo.png"/> -->
               <a style="float:left">文法分析模拟器</a>
             </div>
             <div class="nav-menu">
@@ -16,11 +16,16 @@
             </div>
             <div class="nav-login">
               <ul>
-                <li><a class='login-btn'>登录</a></li>
+                <li><a class='login-btn' @click="centerDialogVisible = true">登录</a></li>
               </ul>
             </div>
           </div>
         </div>
+        <el-dialog title="登录" :visible.sync="centerDialogVisible" width="400px" style="height: 400px;" center>
+          <div>
+            132456
+          </div>
+        </el-dialog>
     </el-row>
 </template>
 
@@ -31,7 +36,8 @@ export default {
       active1: false,
       active2: false,
       active3: false,
-      active4: false
+      active4: false,
+      centerDialogVisible: false
     }
   },
   methods: {
