@@ -1,9 +1,9 @@
 ﻿// generateNFA.test.js
-var generateNFA = require('../api/generateNFA.js');
+var generateNFA = require('../api/lexical/generateNFA.js');
 var ST = generateNFA.ST;
 var alphabet = generateNFA.alphabet;
 var AcceptStateList=generateNFA.AcceptStateList;
-var tool = require('../api/tool.js');
+var tool = require('../api/lexical/tool.js');
 var expect = require('chai').expect;
 
 function ST_sort(a,b){

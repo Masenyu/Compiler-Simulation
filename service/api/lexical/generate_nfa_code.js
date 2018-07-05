@@ -1,36 +1,3 @@
-// var express = require('express');
-// var generateNFA = require("../api/generateNFA");
-// var generateDFA = require("../api/generateDFA");
-// var simplifyDFA = require("../api/simplifyDFA");
-// // var generateNFACode=require("../")
-// var router = express.Router();
-// var tool =require("../api/tool");
-//
-// // var expressions=["a"];
-// var expressions=["[abc]{3,4}"];
-// var NFA =new generateNFA(expressions)
-// var DFA =new generateDFA(NFA.result)
-// var s_DFA=new simplifyDFA(DFA)
-//
-// var NFAdata={
-//   transitionTable:tool(NFA.result),
-//   alphabet:NFA.result.alphabet,
-//   acceptStateList:NFA.result.acceptStateList};
-// var DFAdata={
-//   transitionTable:tool(DFA),
-//   alphabet:DFA.alphabet,
-//   acceptStateList:DFA.acceptStateList};
-// var S_DFAdata={
-//   transitionTable:tool(s_DFA),
-//   alphabet:s_DFA.alphabet,
-//   acceptStateList:s_DFA.acceptStateList
-// };
-// // console.log(NFAdata)
-// // console.log(NFAdata.transitionTable.length)
-// // console.log(NFAdata.alphabet.length)
-// //console.log(s_DFA)
-// var result=[NFAdata,DFAdata,S_DFAdata]
-// // console.log(NFAdata)\
 module.exports=function(NFAdata){
   var existOfNull=-1;
 
@@ -123,9 +90,9 @@ module.exports=function(NFAdata){
         if(NFAdata.acceptStateList[j].state==i){endOrNot=true;break;}
       }
       if(i+1==NFAdata.transitionTable.length){
-        if(endOrNot){code_str+=" ture   //状态"+i+"为接受态!!!!!\n"}else{code_str+=" false  //状态"+i+"\n"}
+        if(endOrNot){code_str+=" true   //状态"+i+"为接受态!!!!!\n"}else{code_str+=" false  //状态"+i+"\n"}
       }else{
-        if(endOrNot){code_str+=" ture , //状态"+i+"为接受态!!!!!\n"}else{code_str+=" false, //状态"+i+"\n"}
+        if(endOrNot){code_str+=" true , //状态"+i+"为接受态!!!!!\n"}else{code_str+=" false, //状态"+i+"\n"}
       }
 
     }
@@ -262,7 +229,7 @@ module.exports=function(NFAdata){
           if(j==0){
             if(NFAdata.transitionTable[i][j].length==0){str+="-1"}else{str+=NFAdata.transitionTable[i][j][0]}
           }else{
-            if(NFAdata.transitionTable[i][j].length==0){str+="-1,"}else{str+=NFAdata.transitionTable[i][j][0]+','}
+            if(NFAdata.transitionTable[i][j].length==0){str+=",-1"}else{str+=','+NFAdata.transitionTable[i][j][0]}
           }
         }
         str+="} //状态 "+i+"在输入字符"+NFAdata.alphabet.toString()+"对应的变更状态 (-1表示不存在) \n"
@@ -273,7 +240,7 @@ module.exports=function(NFAdata){
           if(j==0){
             if(NFAdata.transitionTable[i][j].length==0){str+="-1"}else{str+=NFAdata.transitionTable[i][j][0]}
           }else{
-            if(NFAdata.transitionTable[i][j].length==0){str+="-1,"}else{str+=NFAdata.transitionTable[i][j][0]+','}
+            if(NFAdata.transitionTable[i][j].length==0){str+=",-1"}else{str+=','+NFAdata.transitionTable[i][j][0]}
           }
         }
         str+="},//状态 "+i+"在输入字符"+NFAdata.alphabet.toString()+"对应的变更状态 (-1表示不存在)\n"

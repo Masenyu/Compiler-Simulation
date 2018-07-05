@@ -1,0 +1,86 @@
+var models = require('../../db/db');
+var express = require('express');
+var router = express.Router();
+var mysql = require('mysql');
+var $sql = require('../../db/sqlMap_new');
+
+var conn = mysql.createConnection(models.mysql);
+
+conn.connect();
+
+var jsonWrite = function(res, ret) {
+  if(typeof ret === 'undefined') {
+    res.send('err');
+  } else {
+    console.log(ret);
+    res.send(ret);
+  }
+}
+
+var tempCode
+
+var dateStr = function(str) {
+  return new Date(str.slice(0,7));
+}
+
+//验证码接口
+//输入：邮箱
+//随机生成一个6位验证码
+//遍历验证码表，如果邮箱已存在，则将该邮箱的验证码更新
+//               邮箱不存在，则插入邮箱和验证码到验证码表格，属性为1
+
+
+
+// 用户注册接口
+//调用完验证码接口
+// 输入：studentName studentID password email 用户输入的验证码和验证码的属性
+//         判断studentID是否存在  存在   则返回state = 0   message :"学号已经被注册"
+//                              不存在  如果验证码和属性正确  插入数据库 返回state=1 message:"注册成功"
+//                                     如果验证码或属性不正确  返回state = -1   message :"验证码错误"
+//
+
+//登陆成功后更改密码 modifyPassword
+//输入: studentID old_password new_password
+//         判断旧密码是否正确0.0   正确则将密码重置为新密码 返回state=1 message=“修改成功”
+//                              错误则返回state=0  message=“密码错误”
+
+//登录login
+//输入studentID password
+//     验证 studentID password
+//         判断studentID是否存在
+//                              存在   密码如果正确则返回state = 1   message :"验证成功"  data=[studentName,studentID,password,email]
+//                                            错误   state = -1    message :"密码错误"
+//                              不存在 则返回state = 0   message :"学号不存在"
+
+//忘记密码  你输入学号   向邮箱发邮件  输入验证码  0.0
+//输入：studentID
+//随机生成验证码并发送到该账号绑定的邮箱
+//将验证码和邮箱插入到验证码表格，属性为2
+//返回是否发送验证码成功
+
+//修改密码（忘记密码）
+//输入：studentID ，验证码和验证码属性， 新的密码
+//判断验证码和属性是否正确   都正确  则修改密码 返回state=1，message=“修改密码成功”
+//                       其一不正确 则返回state=0，message=“验证码错误”
+//
+
+
+//用户新增收藏 接口  用户点击收藏按钮  添加数据
+//输入 studentID data_content 类型
+//查找到用户  并且插入 ID自增的ID  插入数据(studentID  collectionID collectionType )
+//返回state = 1  message:"收藏成功"
+
+
+//获取用户收藏信息接口
+//输入 stutendID
+//返回studentID VARCHAR(12) NOT NULL,collectionID，collectionType，data_content，displayOrNot，primary
+
+//用户删除收藏接口
+//输入 studentID,collectionID
+//将该条收藏记录的displayOrNot设置为0
+
+
+
+
+
+module.exports = router;

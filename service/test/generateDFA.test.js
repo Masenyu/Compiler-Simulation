@@ -1,10 +1,10 @@
 // generateDFA.test.js
-var generateDFA = require('../api/generateDFA.js');
-var generateNFA = require('../api/generateNFA.js');
+var generateDFA = require('../api/lexical/generateDFA.js');
+var generateNFA = require('../api/lexical/generateNFA.js');
 
 var ST = generateNFA.ST;
 var AcceptStateList=generateNFA.AcceptStateList;
-var tool = require('../api/tool.js');
+var tool = require('../api/lexical/tool.js');
 var expect = require('chai').expect;
 
 function AcceptState(s, id) {
@@ -36,7 +36,7 @@ function AS_sort(a,b){
 //第一组测试，正常输入情况，NFA比较简单，作为范例
 var re_0 = ['a|b'];
 var stateTransitions_0 = new Array();
-var acceptStates_0 = new Array(); 
+var acceptStates_0 = new Array();
 var edge1=new ST(0,'ε',1);
 var edge2=new ST(1,'a',2);
 var edge3=new ST(2,'ε',5);
@@ -72,7 +72,7 @@ describe('DFA生成测试1', function(){
 //第一组测试，正常输入情况，NFA比较复杂
 var re_1 = ['a','b*a'];
 var stateTransitions_1 = new Array();
-var acceptStates_1 = new Array(); 
+var acceptStates_1 = new Array();
 var edge1=new ST(0,'ε',1);
 var edge2=new ST(1,'a',2);
 var edge3=new ST(0,'ε',3);
@@ -115,7 +115,7 @@ describe('DFA生成测试2', function(){
 
 //第二组测试，非正常输入情况(无ε的NFA)
 var stateTransitions_2 = new Array();
-var acceptStates_2 = new Array(); 
+var acceptStates_2 = new Array();
 var edge1=new ST(0,'a',1);
 var edge2=new ST(0,'b',1);
 stateTransitions_2.push(edge1,edge2);
@@ -147,7 +147,7 @@ console.log('该NFA为非法输入，测试结束');
 };
 //第二组测试，非正常输入情况(不符合Thompson构造法的NFA)
 var stateTransitions_3 = new Array();
-var acceptStates_3 = new Array(); 
+var acceptStates_3 = new Array();
 var edge1=new ST(0,'ε',1);
 var edge2=new ST(1,'a',2);
 var edge3=new ST(2,'ε',3);
