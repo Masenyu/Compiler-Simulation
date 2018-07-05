@@ -31,7 +31,8 @@ export default {
   min-height:100%;
   height: auto !important;
   position: relative;
-  background-color: rgba(233, 233, 233, 0.2)
+  background-color: rgba(233, 233, 233, 0.2);
+  /*background-image: url("/static/img/login.jpg")*/
 }
 .content{
   /*background-color: #bbbbbb;*/
