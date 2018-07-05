@@ -1,6 +1,6 @@
 <template>
  <div class="wrapper">
-   <vue-canvas-nest :config="{color:'255,0,255', count: 99, opacity: 0.7,}"> </vue-canvas-nest>
+   <vue-canvas-nest :config="{color:'0,0,255', count: 99, opacity: 1,}"> </vue-canvas-nest>
     <v-head></v-head>
     <div class="content">
       <transition name="move" mode="out-in"><router-view></router-view></transition>
