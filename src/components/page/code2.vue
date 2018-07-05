@@ -12,6 +12,7 @@ import * as CodeMirror from 'codemirror/lib/codemirror'
 import 'codemirror/theme/liquibyte.css'// 白色高亮
 import 'codemirror/theme/cobalt.css'// 黑色朴素
 import 'codemirror/theme/neat.css'// 白色朴素
+import 'codemirror/theme/mdn-like.css'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
@@ -46,24 +47,13 @@ import 'codemirror/addon/selection/active-line'
 export default {
   data () {
     return {
-      nameArray: [],
-      modeArray: [],
-      mapArray: [],
       CodeMirrorEditor: null,
-      something: '',
       TokenForm: '',
       hasinput: false
     }
   },
 
   mounted () {
-    // console.log(CodeMirror)
-    // for(var i=0;i<CodeMirror.modeInfo.length;i++){
-    //     let mode=CodeMirror.modeInfo[i];
-    //     this.mapArray.push({name:mode.name,mode2:mode.mode})
-    // }
-    // this.something="clike"
-    // document.getElementById("theme").nodeValue="clike"
     this.setmirror()
   },
 
@@ -74,10 +64,10 @@ export default {
     setmirror () {
       let myTextarea = document.getElementById('editor2')
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
-        // theme: 'liquibyte',
+        theme: 'mdn-like',
         styleActiveLine: true,
-        // mode: 'text/x-c++src',
-        mode: 'javascript',
+        mode: 'text/x-c++src',
+        // mode: 'javascript',
         extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
         lineNumbers: true,
         tabSize: 10,
@@ -109,10 +99,19 @@ export default {
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
     },
-    showcode (str) {
+    showcode (str, language) {
+     
       this.$nextTick(() => {
+        var headElement=document.body;
+        var element=document.createElement("script");
+        element.setAttribute("src",this.transToSrc(language));
+        headElement.appendChild(element);
+        element.onload=() => {
+          this.CodeMirrorEditor.setOption("mode",language)
+        }
         this.CodeMirrorEditor.setValue(str)
       })
+      
     }
   },
 

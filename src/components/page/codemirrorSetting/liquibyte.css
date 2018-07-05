@@ -10,7 +10,7 @@
 }
 .cm-s-liquibyte .CodeMirror-focused .cm-matchhighlight {
 	text-decoration: underline;
-	text-decoration-color: #0f0;
+	text-decoration-color: rgb(31, 168, 31);
 	text-decoration-style: wavy;
 }
 .cm-s-liquibyte .cm-trailingspace {

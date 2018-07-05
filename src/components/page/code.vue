@@ -79,8 +79,8 @@ export default {
       this.CodeMirrorEditor = CodeMirror.fromTextArea(myTextarea, {
         theme: 'neat',
         // styleActiveLine: true,
-        mode: 'text/x-c++src',
-        extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
+        // mode: 'text/x-c++src',
+        // extraKeys: {'Ctrl': 'autocomplete'}, // 输入s然后ctrl就可以弹出选择项
         lineNumbers: true,
         tabSize: 10,
         // readOnly:"nocursor",
