@@ -16,28 +16,31 @@
             </div>
             <div class="nav-login">
               <ul>
-                <li><a class='login-btn' @click="centerDialogVisible = true">登录</a></li>
+                <li><a class='login-btn' @click="login = true">登录</a></li>
               </ul>
             </div>
           </div>
         </div>
-        <el-dialog title="登录" :visible.sync="centerDialogVisible" width="400px" style="height: 400px;" center>
-          <div>
-            132456
-          </div>
+        <el-dialog title="文法分析模拟器登录" :visible.sync="login" width="420px" :close-on-click-modal="canclose">
+            <login-area></login-area>
         </el-dialog>
     </el-row>
 </template>
 
 <script>
+import loginArea from '../page/login'
 export default {
+  components: {
+    loginArea
+  },
   data () {
     return {
       active1: false,
       active2: false,
       active3: false,
       active4: false,
-      centerDialogVisible: false
+      login: false,
+      canclose: false
     }
   },
   methods: {
@@ -65,11 +68,11 @@ export default {
     }
   },
   mounted () {
-    switch (window.location.href) {
-      case 'http://localhost:8088/#/index/main-interface':
+    switch (window.location.hash) {
+      case '#/index/main-interface':
         this.active1 = true
         break
-      case 'http://localhost:8088/#/index/lexical-analysis':
+      case '#/index/lexical-analysis':
         this.active2 = true
         break
     }
@@ -164,5 +167,11 @@ ul li a.active{
   padding: 1.2rem 2rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
+}
+</style>
+
+<style>
+.el-dialog__header{
+  text-align:center;
 }
 </style>
