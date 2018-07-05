@@ -3,10 +3,10 @@ function MailService(sender, code) {
     let transporter = nodemailer.createTransport({
         host: 'smtp.163.com',
         port: 25,
-        secure: false, // true for 465, false for other ports
+        secure: false, 
         auth: {
-            user: `${sender}@163.com`, // generated ethereal user
-            pass: code // generated ethereal password
+            user: `${sender}@163.com`,
+            pass: code
         }
     });
 	return {
@@ -32,7 +32,7 @@ function MailService(sender, code) {
 		},
 		createAccount: function (recipient, verCode) {
 			let mailOptions = {
-				from: `<${sender}@smtp.163.com>`,
+				from: `${sender}@163.com`,
 				to: recipient,
 				subject: '文法分析模拟器 - 重置密码',
 				text: 'Compiler Simulation',
