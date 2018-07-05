@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size: 40px">
+  <div class="page">
     逐步开放中
     <el-button @click="turnToHome">返回主页</el-button>
   </div>
@@ -17,5 +17,9 @@ export default {
 </script>
 
 <style scoped>
-
+.page {
+  font-size: 40px;
+  /*background-image: url("/static/img/login.jpg");*/
+  min-height: 1000px;
+}
 </style>

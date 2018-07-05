@@ -7,6 +7,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VIS from 'vis'
 import axios from 'axios'
+import SIdentify from './components/common/Identify' // 自定义组件
+
+Vue.component('SIdentify', SIdentify)
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
