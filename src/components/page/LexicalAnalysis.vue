@@ -176,10 +176,10 @@
             <el-col :span="24">
               <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
               <el-row style="margin-top: 15px;text-align:right">
-              <el-button size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-              <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
+              <el-button style="width:90px" size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+              <!-- <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
               <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
-              <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button>
+              <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button> -->
               </el-row>
               <!-- <div class="controller">
               <el-row class="buttonela">
@@ -364,7 +364,8 @@ export default {
         first: true,
         code: ''
       },
-      isFirsttime: true
+      isFirsttime: true,
+      regulation: []
     }
   },
   created () {
@@ -426,7 +427,8 @@ export default {
                 self.DFA_S.data.transitionTable = response.data.result[2].transitionTable
                 self.DFA_S.data.alphabet = response.data.result[2].alphabet
                 self.DFA_S.data.acceptState = response.data.result[2].acceptStateList
-                sessionStorage.setItem('regulation', regulation)
+                self.regulation = regulation
+                // sessionStorage.setItem('regulation', regulation)
                 self.addCSS(self.getCsstext())
                 self.isFirsttime = false
                 self.fresh()
@@ -743,7 +745,8 @@ export default {
       head.appendChild(style)
     },
     getCsstext () {
-      let length = sessionStorage.getItem('regulation').split(',').length
+      const self = this
+      let length = self.regulation.length
       let cssText = '\n'
       for (let i = 0; i < length; i++) {
         cssText =
@@ -1073,6 +1076,7 @@ export default {
       )
     },
     cut (str, arr, object) {
+      const self = this
       let str1 = ''
       for (let i of arr) {
         if (i[2] < 888) {
@@ -1084,7 +1088,7 @@ export default {
             str.substring(i[0], i[1]) +
             '&nbsp;' +
             '<span class="tooltiptext">' +
-            sessionStorage.getItem('regulation').split(',')[i[2]] +
+            self.regulation[i[2]] +
             '</span></div>'
         } else if (i[2] === 999) {
           str1 =
