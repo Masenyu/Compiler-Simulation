@@ -206,9 +206,9 @@ import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
 import BScroll from 'better-scroll'
-import codeArea from './code'
-import codeArea1 from './code1'
-import codeArea2 from './code2'
+import codeArea from '../common/code'
+import codeArea1 from '../common/code1'
+import codeArea2 from '../common/code2'
 
 export default {
   components: {
