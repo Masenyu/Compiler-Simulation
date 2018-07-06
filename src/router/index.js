@@ -40,9 +40,9 @@ export default new Router({
             require(['../components/page/lexicalAnalysis.vue'], resolve)
         },
         {
-          path: '/index/lexical-analysis1',
+          path: '/index/modifypassword',
           component: resolve =>
-            require(['../components/page/lexicalAnalysis_beta.vue'], resolve)
+            require(['../components/page/Modifypassword.vue'], resolve)
         }
       ]
     }
