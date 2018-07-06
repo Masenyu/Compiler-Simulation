@@ -65,15 +65,49 @@ var dateStr = function(str) {
 //
 
 
+
 //用户新增收藏 接口  用户点击收藏按钮  添加数据
-//输入 studentID data_content 类型
+//输入 studentID data_content 类型 data_content
 //查找到用户  并且插入 ID自增的ID  插入数据(studentID  collectionID collectionType )
 //返回state = 1  message:"收藏成功"
+router.post('/collectionAdd', (req, res) => {
+  var params=req.body;
+var sqlAdd="INSERT INTO user_collection(`studentID`,`collectionType`,`data_content`,`displayOrNot`) VALUES ?"
+//var studentID=params.studentID
+//var data_content=params.data_content
+var values =   [
+  [params.studentID,params.collectionType,params.data_content,params.data_content,1]
+];
+conn.query(sqlAdd,values, function(err, result) {
+  if (err) {
+    console.log(err);
+  }
+  if (result) {
+    jsonWrite(res, result);
+  }
+})
+});
 
 
 //获取用户收藏信息接口
 //输入 stutendID
 //返回studentID VARCHAR(12) NOT NULL,collectionID，collectionType，data_content，displayOrNot，primary
+router.post('/collectionAdd', (req, res) => {
+  var params=req.body;
+var sqlSelect="SELECT * FROM user_collection WHERE studentID="
+
+
+conn.query(sqlSelect,values, function(err, result) {
+  if (err) {
+    console.log(err);
+  }
+  if (result) {
+    jsonWrite(res, result);
+  }
+})
+});
+
+
 
 //用户删除收藏接口
 //输入 studentID,collectionID
