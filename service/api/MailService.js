@@ -20,7 +20,7 @@ function MailService(sender, code) {
 							<b>${verCode}</b><br/>
 							<b>祝您愉快！</b><br/>
 							<b>Team scutbanks</b>`
-						
+
 			};
 			transporter.sendMail(mailOptions, (error, info) => {
 				if (error) {
@@ -53,7 +53,7 @@ function MailService(sender, code) {
 module.exports = MailService;
 // var sender = '13427532895';
 // var code = 'qq594978168';
-// var recipient = '835380624@qq.com'
+// var recipient = '3556350883@qq.com'
 // var verCode = '123456'
 // var mailService = MailService(sender, code);
 // mailService.resetPassword(recipient, verCode);
