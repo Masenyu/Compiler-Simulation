@@ -1,5 +1,5 @@
 <template>
-    <div>
+    
         <div class="ms-doc">
             <h3>README.md</h3>
             <article>
@@ -52,7 +52,7 @@
             </article>
         </div>
 
-    </div>
+    
 </template>
 
 <script>
@@ -89,6 +89,7 @@ export default {
 .ms-doc article {
   padding: 45px;
   word-wrap: break-word;
+  min-height: 500px;
   background-color: rgba(120, 120, 120, 0.5);
   border: 1px solid #ddd;
   border-bottom-right-radius: 3px;
@@ -115,6 +116,7 @@ export default {
   margin-bottom: 15px;
   line-height: 1.5;
   color: #fff;
+  font-size: 1.8rem
 }
 .ms-doc article .el-checkbox {
   margin-bottom: 5px;

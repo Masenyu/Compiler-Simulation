@@ -13,9 +13,9 @@
 
 <script>
 import * as CodeMirror from 'codemirror/lib/codemirror'
-import 'codemirror/theme/liquibyte.css'// 白色高亮
-import 'codemirror/theme/cobalt.css'// 黑色朴素
-import 'codemirror/theme/neat.css'// 白色朴素
+import '../../../static/codemirrorSetting/neat.css'// 白色朴素
+import '../../../static/codemirrorSetting/liquibyte.css'// 白色高亮
+import '../../../static/codemirrorSetting/cobalt.css'// 黑色朴素
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'

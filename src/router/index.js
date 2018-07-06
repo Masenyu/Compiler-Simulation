@@ -27,7 +27,7 @@ export default new Router({
     {
       path: '/index',
       component: resolve => require(['../components/common/Home.vue'], resolve),
-      redirect: '/index/lexical-analysis',
+      redirect: '/index/main-interface',
       children: [
         {
           path: '/index/main-interface',
