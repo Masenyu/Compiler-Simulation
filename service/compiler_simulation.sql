@@ -10,12 +10,11 @@ primary key (email)
 )default charset=utf8 ;
 
 
-
 /*select * from student_user;*/
 create table if not exists student_user (
-studentName varchar(30) NOT NULL, 
-studentID varchar(12) NOT NULL, 
-password varchar(30) NOT NULL, 
+studentName varchar(30) NOT NULL,
+studentID varchar(12) NOT NULL,
+password varchar(30) NOT NULL,
 email varchar(50) NOT NULL,
 primary key (studentID)
 )default charset=utf8 ;
@@ -30,4 +29,3 @@ CREATE TABLE IF NOT EXISTS user_collection (
 	primary key(collectionID)
 )  DEFAULT CHARSET=UTF8;
 /*增删查*/
-

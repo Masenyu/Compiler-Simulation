@@ -27,10 +27,6 @@ var jsonWrite = function(res, ret) {
 
 
 
-var dateStr = function(str) {
-  return new Date(str.slice(0,7));
-}
-
 //生成验证码接口  ///  /api/user_function/generateVerificationCode
 //输入：邮箱
 //随机生成一个6位验证码
@@ -77,8 +73,14 @@ var dateStr = function(str) {
 //
 
 
+
 //用户新增收藏 接口  用户点击收藏按钮  添加数据 /api/user_function/collectionADD
 //输入 studentID data_content 0，1，2 （词法）
+
+
+//用户新增收藏 接口  用户点击收藏按钮  添加数据
+//输入 studentID data_content 类型 data_content
+
 //查找到用户  并且插入 ID自增的ID  插入数据(studentID  collectionID collectionType )
 //返回state = 1  message:"收藏成功"
 router.post('/collectionAdd', (req, res) => {
@@ -89,7 +91,7 @@ router.post('/collectionAdd', (req, res) => {
   var values =   [
     [params.studentID,params.collectionType,params.data_content,params.data_content,1]
   ];
-  conn.query(sqlAdd,values, function(err, result) {
+  conn.query(sqlAdd,[values], function(err, result) {
     if (err) {
       console.log(err);
     }
@@ -100,10 +102,9 @@ router.post('/collectionAdd', (req, res) => {
 });
 
 
-//获取用户收藏信息接口/api/user_function/collectionQuery
-//输入 stutendID
-//返回 studentID ,collectionID，collectionType，data_content，displayOrNot
-//  true才传过来  false
+
+
+
 
 router.post('/collectionQuery', (req, res) => {
   var params=req.body;
@@ -138,14 +139,4 @@ router.post('/collectionDelete', (req, res) => {
 });
 
 
-var sqlSelect='INSERT INTO user_collection(`studentID`,`collectionType`,`data_content`,`displayOrNot`) VALUES ?'
-var params =[['201530613702',1,'143214213',true]];
-conn.query(sqlSelect,[params], function(err, result) {
-  if (err) {
-    console.log(err);
-  }
-  if (result) {
-    console.log(result);
-  }
-})
 module.exports = router;
