@@ -1,2 +1,0 @@
-webpackJsonp([4],{"2jaC":function(t,e){},"R6+n":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var i={render:function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticStyle:{"font-size":"40px"}},[this._v("\n  逐步开放中\n  "),e("el-button",{on:{click:this.turnToHome}},[this._v("返回主页")])],1)},staticRenderFns:[]};var a=n("vSla")({name:"mainInterface",methods:{turnToHome:function(){this.$router.push("/")}}},i,!1,function(t){n("2jaC")},"data-v-a3e17612",null);e.default=a.exports}});
-//# sourceMappingURL=4.0c048d2a9d7045d8daae.js.map
