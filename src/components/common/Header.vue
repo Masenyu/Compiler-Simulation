@@ -8,22 +8,32 @@
             </div>
             <div class="nav-menu">
               <ul class="menu-ul">
-                <li><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
-                <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
-                <li><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
-                <li><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
+                <li class="floatleftli"><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
               </ul>
             </div>
             <div class="nav-login">
-              <ul>
-                <li><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
-                <li><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
+              <ul v-if="!userName">
+                <li class="floatleftli"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
+                <li class="floatleftli"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
+              <el-dropdown v-else>
+                <span class="el-dropdown-link">
+                  {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>我的收藏</el-dropdown-item>
+                  <el-dropdown-item>修改密码</el-dropdown-item>
+                  <el-dropdown-item>注销</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
           </div>
         </div>
         <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
-            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'"></login-area>
+            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="show=false,userName=sessionStorage.getItem('studentName')"></login-area>
             <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
             <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
         </el-dialog>
@@ -49,7 +59,8 @@ export default {
       status: '',
       show: false,
       canclose: true,
-      titletext: ''
+      titletext: '',
+      userName: ''
     }
   },
   methods: {
@@ -85,6 +96,7 @@ export default {
         this.active2 = true
         break
     }
+    this.userName = sessionStorage.getItem('studentName')
   }
 }
 </script>
@@ -139,7 +151,7 @@ ul{
   padding: 0px; /* 与内部元素的距离为0 */
   width: auto; /* 宽度根据元素内容调整 */
 }
-ul li
+ul li.floatleftli
 {
   padding:0px 1rem;
   float:left; /* 向左漂移，将竖排变为横排 */
@@ -182,5 +194,11 @@ ul li a.active{
 <style>
 .el-dialog__header{
   text-align:center;
+}
+.el-dropdown {
+  height:45px;
+  line-height:45px;
+  color: #ffffff;
+  font-size: 16px;
 }
 </style>

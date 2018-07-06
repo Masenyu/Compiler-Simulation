@@ -9,8 +9,8 @@
                 <el-form-item prop="studentID">
                     <el-input v-model="ruleForm.studentID" placeholder="学号"></el-input>
                 </el-form-item>
-                <el-form-item prop="passWord">
-                    <el-input type="password" placeholder="密码" v-model="ruleForm.passWord" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+                <el-form-item prop="password">
+                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <el-form-item prop="validate">
                     <el-input v-model="ruleForm.validate" class="validate-code" placeholder="验证码"></el-input>
@@ -31,16 +31,26 @@
 </template>
 
 <script>
+import {Message} from 'element-ui'
 export default {
   name: 'login',
   data () {
+    var validate = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入验证码'))
+      } else if (value !== this.identifyCode) {
+        callback(new Error('验证码错误!'))
+      } else {
+        callback()
+      }
+    }
     return {
       identifyCodes: '1234567890',
       identifyCode: '',
       errorInfo: false,
       ruleForm: {
         studentID: '',
-        passWord: '',
+        password: '',
         validate: ''
       },
       rules: {
@@ -51,7 +61,7 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         validate: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
+          { validator: validate, trigger: 'blur' }
         ]
       }
     }
@@ -61,67 +71,55 @@ export default {
     this.makeCode(this.identifyCodes, 4)
   },
   methods: {
-    getStudentName () {
-      var student_ID = sessionStorage.getItem('studentID')
-      console.log(student_ID)
-      this.$http.get('/api/user/getUser', {studentID: student_ID}).then(function (response) {
-        console.log(11111)
-        console.log(response)
-        let result = response.data[0]
-        var name = result.studentName
-        console.log(name)
-        sessionStorage.setItem('studentName', name)
-      }).then(function (error) {
-        console.log(error)
-      })
-    },
     submitForm (formName) {
-      // debounceAjax(formName)
-      // 提交表格数据  用户登陆名  密码  以及验证码
-      // 在提交表单前会先调用SubmitForm()函数，
-      // 通常用这种方法实现在提交表单前对表单进行简单验证，
-      // 验证方式写在SubmitForm()函数里。
-
+      // 登录   /api/user_function/login
+      // 输入studentID password
+      // 验证 studentID password
+      // 判断studentID是否存在
+      // 存在   密码如果正确则返回state = 1   message :"验证成功"  data=[studentName,studentID,email]
+      //               错误     state = -1  message :"密码错误"
+      // 不存在            则返回state = 0   message :"学号不存在"
       const self = this
       self.$refs[formName].validate((valid) => {
         if (valid) {
-          self.$http.post('/api/user/login', JSON.stringify(self.ruleForm))
+          let Params = {studentID: self.ruleForm.studentID, password: self.ruleForm.password}
+          self.$axios.post('/api/user_function/login', Params)
             .then((response) => {
-              console.log(response)
-
-              if (response.data == -1) {
+              if (response.data.state === -1) {
                 self.errorInfo = true
-                self.errInfo = '该用户不存在'
-                console.log('该用户不存在')
-              } else if (response.data == 0) {
-                console.log('密码错误')
+                self.errInfo = response.data.message
+              } else if (response.data.state === 0) {
                 self.errorInfo = true
-                self.errInfo = '密码错误'
-              } else if (response.status == 200) {
-                sessionStorage.setItem('studentID', self.ruleForm.studentID)
-                this.getStudentName()
-                console.log(JSON.stringify(self.ruleForm))
-                self.$router.push('/readme')
-                // location.reload()
+                self.errInfo = response.data.message
+              } else if (response.status.state === 1) {
+                sessionStorage.setItem('studentID', response.data.data.studentID)
+                sessionStorage.setItem('studentName', response.data.data.studentName)
+                sessionStorage.setItem('email', response.data.data.email)
+                this.$emit('loginsuccess')
               }
-            }).then((error) => {
+            }).catch((error) => {
               console.log(error)
+              Message({
+                message: '请检查网络并重试',
+                type: 'error',
+                center: true
+              })
             })
         } else {
-          console.log('error submit!!')
+          Message({
+            message: '格式错误，请检查输入',
+            type: 'error',
+            center: true
+          })
           return false
         }
       })
     },
     gotoFindback () {
-      // console.log(this)
       this.$emit('gotoFindback')
-      // this.$router.push('/find-back')
     },
     gotoRegister () {
-      console.log('gotoRegister')
       this.$emit('gotoRegister')
-      // this.$router.push('/register')
     },
     randomNum (min, max) {
       return Math.floor(Math.random() * (max - min) + min)
@@ -136,49 +134,6 @@ export default {
       }
       console.log(this.identifyCode)
     }
-    // debounce(func, delay) {
-    //     return function(args) {
-    //         var _this = this
-    //         var _args = args
-    //         clearTimeout(func.id)
-    //         func.id = setTimeout(function() {
-    //         func.call(_this, _args)
-    //         }, delay)
-    //     }
-    // },
-    // submitDebounce(formName) {
-    //     const self = this;
-    //     self.$refs[formName].validate((valid) => {
-    //         if (valid) {
-    //             localStorage.setItem('ms_username',self.ruleForm.studentID);
-    //             localStorage.setItem('ms_user',JSON.stringify(self.ruleForm));
-    //             console.log(JSON.stringify(self.ruleForm));
-    //             self.$http.post('/api/user/login',JSON.stringify(self.ruleForm))
-    //             .then((response) => {
-    //                 console.log(response);
-    //                 if (response.data == -1) {
-    //                     self.errorInfo = true;
-    //                     self.errInfo = '该用户不存在';
-    //                     console.log('该用户不存在')
-    //                 } else if (response.data == 0) {
-    //                     console.log('密码错误')
-    //                     self.errorInfo = true;
-    //                     self.errInfo = '密码错误';
-    //                 } else if (response.status == 200) {
-    //                     self.$router.push('/readme');
-    //                 }
-    //             }).then((error) => {
-    //                 console.log(error);
-    //             })
-    //         } else {
-    //             console.log('error submit!!');
-    //             return false;
-    //         }
-    //     });
-    // },
-    // debounceAjax () {
-    //     debounce(submitDebounce,1000);
-    // }
   }
 }
 </script>
