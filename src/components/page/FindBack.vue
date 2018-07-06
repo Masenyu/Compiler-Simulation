@@ -1,43 +1,42 @@
 <template>
   <div class="login-wrap">
-    <div class="ms-register">
-        <!-- <p class="tip">请输入您的学号</p> -->
-        <el-form ref="form" :model="form" :rules="rules">
+    <div class="ms-forget">
+        <el-form v-if="!next" ref="form" :model="form" :rules="rules">
           <el-form-item prop="studentID">
             <el-row>
-              <!-- <el-col span="5">
-                <p class="label">学号</p>
-              </el-col> -->
               <el-col span="24">
-                <el-input v-model="form.studentID" placeholder="请输入学号"></el-input>
+                <el-input v-model="form.studentID" placeholder="学号"></el-input>
               </el-col>
             </el-row>
           </el-form-item>
-          <el-form-item prop="validWord">
-            <el-row>
-              <!-- <el-col span="5">
-                <p class="label">验证码</p>
-              </el-col> -->
-              <el-col span="12">
-                <el-input v-model="form.validWord" placeholder="验证码"></el-input>
-              </el-col>
-              <el-col span="10" offset="1">
-                <el-button width="100%" @click="onSubmit('form')">获取邮箱验证码</el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item prop="passWord">
+          <el-form-item prop="new_password">
             <el-col span="24">
-              <el-input v-model="form.passWord" type="password" placeholder="请输入密码"></el-input>
+              <el-input v-model="form.new_password" type="password" placeholder="新的密码"></el-input>
             </el-col>
           </el-form-item>
-          <el-form-item prop="checkPassWord">
+          <el-form-item prop="checkpassword">
             <el-col span="24">
-              <el-input v-model="form.checkPassWord" type="password" placeholder="请再次输入密码"></el-input>
+              <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
             </el-col>
           </el-form-item>
           <div class="login-btn1">
-            <el-button type="primary" @click="onSubmit('form')">确认更改</el-button>
+            <el-button type="primary" @click="GetVerificationCode('form')">下一步</el-button>
+            <p class="register" @click="gotoLogin()">已有账号？ 登录</p>
+          </div>
+        </el-form>
+        <el-form v-else ref="verificationCodeform" :model="form" :rules="verificationCoderules">
+          <p>验证码已发送到{{email}}</p>
+          <el-button type="text" @click="again()">未收到?再次发送</el-button>
+          <el-form-item prop="verificationCode">
+            <el-row>
+              <el-col span="24">
+                <el-input v-model="form.verificationCode" placeholder="邮箱验证码"></el-input>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <div class="login-btn">
+            <el-button type="primary" @click="next=false">上一步</el-button>
+            <el-button type="primary" @click="onSubmit('verificationCodeform')">确认更改</el-button>
             <p class="register" @click="gotoLogin()">已有账号？ 登录</p>
           </div>
         </el-form>
@@ -46,86 +45,130 @@
 </template>
 
 <script>
+import {Message} from 'element-ui'
 export default {
   data () {
-    var validateStudentID = (rule, value, callback) => {
-      if (value.toString().length !== 12) {
-        callback(new Error('请输入正确的学号'))
-      } else {
-        for (var i = 0; i < value.toString().length; i = i + 1) {
-          if (value.toString()[i] !== '0' && value.toString()[i] !== '1' &&
-              value.toString()[i] !== '2' && value.toString()[i] !== '3' &&
-              value.toString()[i] !== '4' && value.toString()[i] !== '9' &&
-              value.toString()[i] !== '8' && value.toString()[i] !== '7' &&
-              value.toString()[i] !== '6' && value.toString()[i] !== '5') { callback(new Error('请输入正确的学号')) } else {
-            // console.lo`g(value.toString()[i])
-            continue
-          }
-        }
-        this.$refs.form.validateField('passWord')
-      }
-      callback()
-    }
-    var validatePassWord = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        if (this.form.checkPass !== '') {
-          this.$refs.form.validateField('checkPassWord')
-        }
-        callback()
-      }
-    }
-    var validatePassWord2 = (rule, value, callback) => {
+    var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.form.passWord) {
-        callback(new Error('两次输入的密码不一致'))
+      } else if (value !== this.form.new_password) {
+        callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
       }
     }
-
     return {
-      visible: true,
+      next: false,
       form: {
         studentID: '',
-        passWord: '',
-        checkPassWord: ''
+        new_password: '',
+        checkpassword: '',
+        verificationCode: ''
       },
       rules: {
         studentID: [
-          { validator: validateStudentID, trigger: 'blur' }
+          { required: true, message: '请输入正确的学号!', trigger: 'blur' },
+          { pattern: /^[0-9]{12}$/, message: '请输入正确的学号!' }
         ],
-        validWord: [
-          { required: true, trigger: 'blur' }
+        new_password: [
+          {required: true, message: '请输入新的密码!', trigger: 'blur'},
+          { min: 6, max: 20, message: '长度在6-20位之间', trigger: 'blur' }
         ],
-        passWord: [
-          { validator: validatePassWord, trigger: 'blur' }
-        ],
-        checkPassWord: [
-          { validator: validatePassWord2, trigger: 'blur' }
+        checkpassword: [
+          { validator: validatePass, trigger: 'blur' }
         ]
+      },
+      verificationCoderules: {
+        verificationCode: [{ required: true, message: '请输入验证码!', trigger: 'blur' }]
       }
     }
   },
   methods: {
+    // 忘记密码 /api/user_function/forgetPasswordGetVerificationCode  你输入学号   向邮箱发邮件  输入验证码  0.0
+    // 输入：studentID
+    // 判断studentID是否存在  存在
+    // 随机生成验证码并发送到该账号绑定的邮箱
+    // 将验证码和邮箱插入到验证码表格，属性为2
+    // 返回是否发送验证码成功  返回1~~
+    //                       不存在 返回0
+
+    // 修改密码（忘记密码）api/user_function/modifyPasswordOfForgetPassword
+    // 输入：studentID ，verificationCode verificationAttribute（2）， new_password
+    // 判断验证码和属性是否正确   都正确  则修改密码 返回state=1，message=“修改密码成功”
+    //                       其一不正确 则返回state=0，message=“验证码错误”
+    //
+    GetVerificationCode (formName) {
+      const self = this
+      self.$refs[formName].validate((valid) => {
+        if (valid) {
+          let Params = {studentID: self.form.studentID}
+          self.$axios.post('/api/user_function/forgetPasswordGetVerificationCode', Params)
+            .then((response) => {
+              if (response.data.state === 0) {
+                self.errorInfo = true
+                self.errInfo = response.data.message
+              } else if (response.status.state === 1) {
+                self.next = true
+              }
+            }).catch((error) => {
+              console.log(error)
+              Message({
+                message: '请检查网络并重试',
+                type: 'error',
+                center: true
+              })
+            })
+        }
+      })
+    },
     onSubmit (formName) {
-      // const self = this;
-      // self.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     self.$http.post('/api/user/addUser',self.form).then(function(response) {
-      //     console.log(response);
-      //     self.$router.push('/register-success');
-      //   }).then(function(error) {
-      //     console.log(error);
-      //   })
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
-      this.visible = false
+      const self = this
+      self.$refs[formName].validate((valid) => {
+        if (valid) {
+          let Params = {studentID: self.form.studentID, verificationCode: self.form.verificationCode, verificationAttribute: 2, new_password: self.form.new_password}
+          self.$axios.post('/api/user_function/modifyPasswordOfForgetPassword', Params)
+            .then((response) => {
+              if (response.data.state === 0) {
+                self.errorInfo = true
+                self.errInfo = response.data.message
+              } else if (response.status.state === 1) {
+                Message({
+                  message: '成功修改密码',
+                  type: 'error',
+                  center: true
+                })
+                self.gotoLogin()
+              }
+            }).catch((error) => {
+              console.log(error)
+              Message({
+                message: '请检查网络并重试',
+                type: 'error',
+                center: true
+              })
+            })
+        }
+      })
+    },
+    again () {
+      let Params = {studentID: self.form.studentID}
+      self.$axios.post('/api/user_function/forgetPasswordGetVerificationCode', Params)
+        .then((response) => {
+          if (response.status.state === 1) {
+            Message({
+              message: '已发送，请查收邮箱',
+              type: 'success',
+              center: true
+            })
+          }
+        }).catch((error) => {
+          console.log(error)
+          Message({
+            message: '请检查网络并重试',
+            type: 'error',
+            center: true
+          })
+        })
     },
     gotoLogin () {
       this.$emit('gotoLogin')
@@ -137,9 +180,9 @@ export default {
 <style scoped>
 .login-wrap {
   width: 300px;
-  height: 300px;
+  height: 250px;
 }
-.ms-register {
+.ms-forget {
   width: 300px;
   height: 210px;
   padding: 0px 40px 40px 40px;
@@ -160,7 +203,7 @@ export default {
   margin-bottom: 1rem
 }
 .login-btn {
-  margin-top: 80px;
+  margin-top: 10px;
   text-align: center;
 }
 .login-btn1 {
@@ -168,7 +211,7 @@ export default {
   text-align: center;
 }
 .login-btn button {
-  width: 50%;
+  width: 120px;
   height: 36px;
 }
 .login-btn1 button {

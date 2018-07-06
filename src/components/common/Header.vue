@@ -58,7 +58,7 @@ export default {
       active4: false,
       status: '',
       show: false,
-      canclose: true,
+      canclose: false,
       titletext: '',
       userName: ''
     }

@@ -48,6 +48,7 @@ export default {
       identifyCodes: '1234567890',
       identifyCode: '',
       errorInfo: false,
+      errInfo: '',
       ruleForm: {
         studentID: '',
         password: '',
