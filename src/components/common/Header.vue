@@ -19,14 +19,14 @@
                 <li class="floatleftli"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
                 <li class="floatleftli"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
-              <el-dropdown v-else>
+              <el-dropdown v-else @command="handleCommand">
                 <span class="el-dropdown-link">
                   {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>我的收藏</el-dropdown-item>
-                  <el-dropdown-item>修改密码</el-dropdown-item>
-                  <el-dropdown-item>注销</el-dropdown-item>
+                  <el-dropdown-item command="my-collection">我的收藏</el-dropdown-item>
+                  <el-dropdown-item command="modifypassword">修改密码</el-dropdown-item>
+                  <el-dropdown-item command="logout"><el-button type="text" @click="logout()">注销</el-button></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -64,6 +64,26 @@ export default {
     }
   },
   methods: {
+    logout () {
+      this.$confirm('此操作将注销账号, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        sessionStorage.setItem('studentID', '')
+        sessionStorage.setItem('studentName', '')
+        sessionStorage.setItem('email', '')
+        this.userName = ''
+      }).catch(() => {
+      })
+    },
+    handleCommand (command) {
+      if (command === 'modifypassword') {
+        this.$router.push('/index/modifypassword')
+      } else if (command === 'logout') {
+        this.logout()
+      }
+    },
     gotoUrl (url, highlightindex) {
       const self = this
       self.active1 = false

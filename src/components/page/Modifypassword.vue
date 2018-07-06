@@ -50,7 +50,6 @@ export default {
     return {
       next: false,
       form: {
-        studentID: '',
         old_password: '',
         new_password: '',
         checkpassword: ''
@@ -78,7 +77,8 @@ export default {
       const self = this
       self.$refs[formName].validate((valid) => {
         if (valid) {
-          let Params = {studentID: self.form.studentID, old_password: self.form.old_password, new_password: self.form.new_password}
+          let studentID = sessionStorage.getItem('studentID')
+          let Params = {studentID: studentID, old_password: self.form.old_password, new_password: self.form.new_password}
           self.$axios.post('/api/user_function/modifyPassword', Params)
             .then((response) => {
               if (response.data.state === 0) {
