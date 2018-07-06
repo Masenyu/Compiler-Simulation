@@ -1,7 +1,7 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor" name="editor" v-model="TokenForm">
+      <textarea id="editor" name="editor">
       </textarea>
     </div>
     <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">请输入待分析源码：</div>
@@ -13,9 +13,12 @@
 
 <script>
 import * as CodeMirror from 'codemirror/lib/codemirror'
-import 'codemirror/theme/liquibyte.css'// 白色高亮
-import 'codemirror/theme/cobalt.css'// 黑色朴素
-import 'codemirror/theme/neat.css'// 白色朴素
+import '../../../static/codemirrorSetting/neat.css'
+import '../../../static/codemirrorSetting/liquibyte.css'
+import '../../../static/codemirrorSetting/cobalt.css'
+// import 'codemirror/theme/liquibyte.css'// 白色高亮
+// import 'codemirror/theme/cobalt.css'// 黑色朴素
+// import 'codemirror/theme/neat.css'// 白色朴素
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
@@ -55,7 +58,6 @@ export default {
       mapArray: [],
       CodeMirrorEditor: null,
       something: '',
-      TokenForm: '',
       hasinput: false
     }
   },
@@ -121,21 +123,6 @@ export default {
     }
   },
 
-  watch: {
-    TokenForm: function () {
-      sessionStorage.setItem('msg', this.TokenForm)
-      console.log(this.TokenForm)
-    }
-    // something: function () {
-    //   var headElement=document.body;
-    //   var element=document.createElement("script");
-    //   element.setAttribute("src",this.transToSrc(this.something));
-    //   headElement.appendChild(element);
-    //   element.onload=() => {
-    //     this.CodeMirrorEditor.setOption("mode",this.something)
-    //   }
-    // }
-  }
 }
 </script>
 

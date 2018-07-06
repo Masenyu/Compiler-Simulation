@@ -1,21 +1,21 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor1" name="editor1" v-model="TokenForm">
+      <textarea id="editor1" name="editor1">
       </textarea>
     </div>
     <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">词法规则定义规范：<br/>(Token类型=规则)<br/><br/>例如：<br/>T_DOUBLE=double<br/>T_DO=do</div>
     <el-tooltip class="item" effect="dark" content="清空" placement="top">
-      <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
+      <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png" /></button>
     </el-tooltip>
   </div>
 </template>
 
 <script>
 import * as CodeMirror from 'codemirror/lib/codemirror'
-import 'codemirror/theme/liquibyte.css'// 白色高亮
-import 'codemirror/theme/cobalt.css'// 黑色朴素
-import 'codemirror/theme/neat.css'// 白色朴素
+import '../../../static/codemirrorSetting/neat.css'// 白色朴素
+import '../../../static/codemirrorSetting/liquibyte.css'// 白色高亮
+import '../../../static/codemirrorSetting/cobalt.css'// 黑色朴素
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/clike/clike'
@@ -55,7 +55,6 @@ export default {
       mapArray: [],
       CodeMirrorEditor: null,
       something: '',
-      TokenForm: '',
       hasinput: false
     }
   },
@@ -69,6 +68,21 @@ export default {
     // this.something="clike"
     // document.getElementById("theme").nodeValue="clike"
     this.setmirror()
+    let str = ''
+    console.log('2018/7/6')
+    if(str = localStorage.getItem('collectionToWatch'))
+    {
+      console.log(str)
+      this.$nextTick(() => {
+       
+         this.showcode(str)
+      localStorage.removeItem('collectionToWatch')
+      })
+      
+    }
+    // this.$nextTick(() => {
+    //   this._initScroll()
+    // })
   },
 
   methods: {
@@ -127,24 +141,57 @@ export default {
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
+    },
+    showcode (str) {
+      console.log('收到了')
+     this.CodeMirrorEditor.setValue(str)
+      this.$nextTick(() => {
+        this.$emit('reformchange', this.CodeMirrorEditor.getValue())
+      })
+    },
+    collect (str) {
+      var self=this;
+      if(self.hasinput === true)
+      {
+        var _url = '/collect/addItem';
+        self.$axios({
+          url:_url,
+          method: 'post',
+          data:{
+            expression: this.CodeMirrorEditor.getValue(),
+            studentId: userId,
+          },
+          baseURL:this.hostURL,
+        }).then((response)=>{
+          console.log(response.data);
+          if(response.data.success == true)
+          {
+            this.$message({
+              type: 'success',
+              message: '添加成功'
+            });
+          }
+          else
+            this.$message({
+              type: 'info',
+              message: '添加失败'
+            });
+        }).catch((error)=>{
+          this.$message({
+            type:'info',
+            message:'connection fail,press F12 to see the error in console'
+          });
+          console.log("ERROR:");
+          console.log(error);
+        });
+      }
+      else
+      {
+        alert('请输入语法规则')
+      }
     }
-  },
-
-  watch: {
-    TokenForm: function () {
-      sessionStorage.setItem('msg', this.TokenForm)
-      console.log(this.TokenForm)
-    }
-    // something: function () {
-    //   var headElement=document.body;
-    //   var element=document.createElement("script");
-    //   element.setAttribute("src",this.transToSrc(this.something));
-    //   headElement.appendChild(element);
-    //   element.onload=() => {
-    //     this.CodeMirrorEditor.setOption("mode",this.something)
-    //   }
-    // }
   }
+ 
 }
 </script>
 
@@ -160,10 +207,10 @@ export default {
     margin: 0;
   }*/
 }
-.resetbutton{
-  position:absolute;
-  right:0px;
-  top:4.2px;
+.resetbutton {
+  position: absolute;
+  right: 0px;
+  top: 4.2px;
   cursor: pointer;
   width: 2rem;
   height: 2rem;
@@ -173,18 +220,18 @@ export default {
   margin: 0;
   z-index: 5;
 }
-.setting{
-  width:93%;
-  background-color: rgb(255, 255, 255,0)
+.setting {
+  width: 93%;
+  background-color: rgb(255, 255, 255, 0);
 }
 </style>
 <style>
-.CodeMirror pre{
-  font-size:20px;
-  font-family:Arial;
+.CodeMirror pre {
+  font-size: 20px;
+  font-family: Arial;
 }
 .CodeMirror {
-    background: #ffffff00;
-    z-index: 2;
+  background: #ffffff00;
+  z-index: 2;
 }
 </style>
