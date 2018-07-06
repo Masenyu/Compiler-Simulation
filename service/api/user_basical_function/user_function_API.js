@@ -92,7 +92,7 @@ conn.query(sqlAdd,values, function(err, result) {
 //返回studentID VARCHAR(12) NOT NULL,collectionID，collectionType，data_content，displayOrNot，primary
 router.post('/collectionQuery', (req, res) => {
   var params=req.body;
-var sqlSelect="SELECT * FROM user_collection WHERE studentID=?"
+var sqlSelect="SELECT * FROM user_collection WHERE studentID=?,displayOrNot=1"
 
 conn.query(sqlSelect,params.studentID, function(err, result) {
   if (err) {
