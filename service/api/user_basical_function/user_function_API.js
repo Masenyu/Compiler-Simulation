@@ -90,7 +90,7 @@ conn.query(sqlAdd,values, function(err, result) {
 //获取用户收藏信息接口
 //输入 stutendID
 //返回studentID VARCHAR(12) NOT NULL,collectionID，collectionType，data_content，displayOrNot，primary
-router.post('/collectionAdd', (req, res) => {
+router.post('/collectionQuery', (req, res) => {
   var params=req.body;
 var sqlSelect="SELECT * FROM user_collection WHERE studentID=?"
 
