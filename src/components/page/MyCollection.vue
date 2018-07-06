@@ -13,16 +13,32 @@
         <el-col :span="4">操作</el-col>
       </el-row>
       <div style="margin: 15px 0;"></div>
-        <div class="table" v-for="item in collection">
+      <div class="table-block">
+        <div class="table" v-for="item in currCollection">
           <el-row>
-            <el-col :span="2">{{item.collectionId}}</el-col>
-            <el-col :span="4"><p>{{item.collectionType}}</p></el-col>
-            <el-col style="margin-right: 80px" :span="10"><el-input type="textarea" readonly="true" :rows="3" resize="none" v-model="item.expression"></el-input></el-col>
-            <el-col :span="1"><el-button @click="deleteItem(item.collectionId)" type="text">查看</el-button></el-col>
-            <el-col :span="2"><el-button style="color: #f00" @click="deleteItem(item.collectionId)" type="text">删除</el-button></el-col>
+            <el-col :span="2">{{item.itemId}}</el-col>
+            <el-col :span="4">
+              <p>{{item.collectionType}}</p>
+            </el-col>
+            <el-col style="margin-right: 80px" :span="10">
+              <textarea readonly="readonly" class="textStyle" :rows="4" v-model="item.expression"></textarea>
+            </el-col>
+            <el-col :span="1">
+              <el-button @click="gotoWatch(item)" type="text">查看</el-button>
+            </el-col>
+            <el-col :span="2">
+              <el-button style="color: #f00" @click="deleteItem(item.collectionId)" type="text">删除</el-button>
+            </el-col>
           </el-row>
         </div>
+      </div>
+
+      <div class="block">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="collection.length">
+        </el-pagination>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -30,44 +46,64 @@
   export default {
     data(){
       return{
+        pageSize: 6,
+        currentPage: 1,
+        currCollection: [],
         collection:[
           {
+            itemId: 1,
             studentId: '20153061380',
             collectionId: 1,
             collectionType: "词法分析",
             expression: "t=do\nt=double\nt=a|b\nt=abcd",
           },
           {
+            itemId: 2,
             studentId: '20153061380',
             collectionId: 2,
             collectionType: "词法分析",
             expression: 't=do\nt=double',
           },
           {
+            itemId: 3,
             studentId: '20153061380',
             collectionId: 3,
             collectionType: "词法分析",
             expression: 't=do\nt=double', 
           },
           {
+            itemId: 4,
             studentId: '20153061380',
             collectionId: 4,
             collectionType: "词法分析",
             expression: 't=don\nt=double', 
           },
           {
+            itemId: 5,
             studentId: '20153061380',
             collectionId: 5,
             collectionType: "词法分析",
             expression: 't=do\nt=double',
           },
+          {
+            itemId: 6,
+            studentId: '20153061380',
+            collectionId: 6,
+            collectionType: "词法分析",
+            expression: 't=do\nt=double',
+          },
         ],
-        books:[],
         hostURL:  'localhost',
       }
     },
     methods: {
-      getCartList(){
+      handleSizeChange(val) {
+        
+      },
+      handleCurrentChange(val) {
+       
+      },
+      getCollectionList(){
         var self=this;
         var _url = '/collection/getItems?userId='+ localStorage.getItem('userId');//用户ID（long）////////////////////////////////////+this.category;
         self.$axios({
@@ -76,6 +112,10 @@
           baseURL:this.hostURL
         }).then((response)=>{
           self.collection = response.data;
+          for(let i = 0; i < self.collection.length; i++)
+          {
+            self.collection[i].itemId = i
+          }
         }).catch((error)=>{
           this.$message({
             type:'info',
@@ -84,12 +124,6 @@
           console.log("ERROR:");
           console.log(error);
         });
-      },
-      fresh(){
-        this.getCartList();
-        this.books = [];
-        for(var i = 0; i < this.collection.length; i++)
-          this.books[i] = this.collection[i].collectionId;
       },
       deleteItem(val){
         var self=this;
@@ -121,44 +155,90 @@
           console.log(error);
         });
       },
+      gotoWatch(val) {
+        if(val.collectionType === '词法分析')
+        {
+          localStorage.setItem('collectionToWatch', val.expression)
+          this.$router.push('/index/lexical-analysis')
+        }
+      }
     },
     mounted() {
       document.getElementById('p').style.height=(window.innerHeight - 110)+'px'
+      this.getCollectionList()
+      for(let i = 0; i < this.pageSize; i++)
+        {
+          if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
+            this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
+          else
+            break
+        }
+       console.log(this.currCollection)
     },
+    watch: {
+      currentPage: function() {
+        console.log(this.currentPage)
+        this.currCollection = []
+        for(let i = 0; i < this.pageSize; i++)
+        {
+          if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
+            this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
+          else
+            break
+        }
+        console.log(this.currCollection)
+      }
+    }
   }
 </script>
 
 <style scoped>
-  .shoppingCart{
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid #cccccc;
-    background-color: rgba(255, 255, 255, 1)
-  }
-  .head{
-    margin: 1.5rem;
-    font-size: 2.5rem
-  }
-  .headLine{
-    height: 5px;
-    width: 100%;
-    background-color: #DD0606;
-  }
-  .cartTable{
-    margin: 2% 4%;
-    height: 80%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .table{
-    width: 100%;
-    height: 10%;
-    margin-bottom: 0px;
-    background-color: #fafafa;
-    padding: 10px;
-    border: 1px solid #ccd0d2;
-    border-bottom-color: #ececec;
-    border-top-color: #ececec;
-  }
+.shoppingCart {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #cccccc;
+  background-color: rgba(255, 255, 255, 1);
+}
+.head {
+  margin: 1.5rem;
+  font-size: 2.5rem;
+}
+.headLine {
+  height: 5px;
+  width: 100%;
+  background-color: #dd0606;
+}
+.cartTable {
+  margin: 2% 4%;
+
+  overflow: hidden;
+}
+.table-block {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  min-height: 80%;
+}
+.table {
+  width: 100%;
+  height: 85px;
+  margin-bottom: 0px;
+  background-color: #fafafa;
+  padding: 10px;
+  border: 1px solid #ccd0d2;
+  border-bottom-color: #ececec;
+  border-top-color: #ececec;
+}
+.block {
+  position: relative;
+  bottom: 10px;
+  margin-top: 2rem;
+  text-align: center;
+}
+.textStyle {
+  resize: none;
+  width: 100%;
+  border-color: #aaa;
+  font-size: 2rem
+}
 </style>

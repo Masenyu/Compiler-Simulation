@@ -191,6 +191,7 @@
                     <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
                   </el-form-item>
                 </el-form>
+                <el-button class="generateFA1" size="small" @click="collect()">收藏</el-button>
                 <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
                   <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
                   <div style="text-align: right; margin: 0">
@@ -400,20 +401,28 @@ export default {
       regulation: []
     }
   },
-  created () {
-    // this.$nextTick(() => {
-    //   this._initScroll()
-    // })
-  },
+ 
   computed: {
     available () {
       return this.hasbegin
     }
   },
   methods: {
+    collect(){
+      let studentId = localStorage.getItem('studentId')
+      if(studentId === null)
+      {
+        alert('请先登录！')
+      }
+      else
+      {
+        this.$refs.codearea1.collect(studentId)
+      }
+    },
     code (object, lan) {
       this.dialogVisible = true
       this.$nextTick(() => {
+        console.log(this.$refs.codearea2)
         this.$refs.codearea2.showcode(object.code, lan)
       })
     },
@@ -426,6 +435,7 @@ export default {
       self.TokenForm = data
     },
     // 构建状态机
+
     generateFA (formName) {
       const self = this
       // 验证表单输入
@@ -1518,6 +1528,11 @@ div.graph div.vis {
 .generateFA {
   position: absolute;
   right: 0px;
+  top: 310px;
+}
+.generateFA1 {
+  position: absolute;
+  right: 100px;
   top: 310px;
 }
 .autobutton {

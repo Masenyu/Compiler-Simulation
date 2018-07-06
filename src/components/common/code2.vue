@@ -1,7 +1,7 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor2" name="editor2" v-model="TokenForm">
+      <textarea id="editor2" name="editor2">
       </textarea>
     </div>
   </div>
@@ -48,7 +48,6 @@ export default {
   data () {
     return {
       CodeMirrorEditor: null,
-      TokenForm: '',
       hasinput: false
     }
   },
@@ -115,21 +114,6 @@ export default {
     }
   },
 
-  watch: {
-    TokenForm: function () {
-      sessionStorage.setItem('msg', this.TokenForm)
-      console.log(this.TokenForm)
-    }
-    // something: function () {
-    //   var headElement=document.body;
-    //   var element=document.createElement("script");
-    //   element.setAttribute("src",this.transToSrc(this.something));
-    //   headElement.appendChild(element);
-    //   element.onload=() => {
-    //     this.CodeMirrorEditor.setOption("mode",this.something)
-    //   }
-    // }
-  }
 }
 </script>
 

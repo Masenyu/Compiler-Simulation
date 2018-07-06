@@ -10,7 +10,7 @@
               <ul class="menu-ul">
                 <li><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
                 <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
-                <li><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
+                <li><a :class="{'active':active3}" @click="gotoUrl('/index/my-collection',3)">语法分析</a></li>
                 <li><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
               </ul>
             </div>
