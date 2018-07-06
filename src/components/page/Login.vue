@@ -92,10 +92,11 @@ export default {
               } else if (response.data.state === 0) {
                 self.errorInfo = true
                 self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
-                sessionStorage.setItem('studentID', response.data.data.studentID)
+              } else if (response.data.state === 1) {
+                sessionStorage.setItem('studentId', response.data.data.studentID)
                 sessionStorage.setItem('studentName', response.data.data.studentName)
                 sessionStorage.setItem('email', response.data.data.email)
+                console.log(11111111111111111111)
                 this.$emit('loginsuccess')
               }
             }).catch((error) => {

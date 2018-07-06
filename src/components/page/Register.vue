@@ -178,7 +178,7 @@ export default {
                   } else if (response.data.state === 0) {
                     self.errorInfo = true
                     self.errInfo = response.data.message
-                  } else if (response.status.state === 1) {
+                  } else if (response.data.state === 1) {
                     Message({
                       message: '注册成功',
                       type: 'success',

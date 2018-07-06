@@ -33,7 +33,7 @@
           </div>
         </div>
         <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
-            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="show=false,userName=sessionStorage.getItem('studentName')"></login-area>
+            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="loginsucceed()"></login-area>
             <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
             <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
         </el-dialog>
@@ -64,13 +64,18 @@ export default {
     }
   },
   methods: {
+    loginsucceed(){
+      this.show=false
+      console.log(sessionStorage.getItem('studentName'))
+      this.userName=sessionStorage.getItem('studentName')
+    },
     logout () {
       this.$confirm('此操作将注销账号, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        sessionStorage.setItem('studentID', '')
+        sessionStorage.setItem('studentId', '')
         sessionStorage.setItem('studentName', '')
         sessionStorage.setItem('email', '')
         this.userName = ''
@@ -83,6 +88,11 @@ export default {
       } else if (command === 'logout') {
         this.logout()
       }
+      if(command === 'my-collection')
+      {
+        this.$router.push('/index/my-collection')
+      }
+
     },
     gotoUrl (url, highlightindex) {
       const self = this

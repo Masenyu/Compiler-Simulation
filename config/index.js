@@ -20,7 +20,7 @@ module.exports = {
       }
     }},
 
-    // Various Dev Server settings
+    // Varous Dev Server settings
     host: '110.64.72.7', // can be overwritten by process.env.HOST
     port: 8088, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,

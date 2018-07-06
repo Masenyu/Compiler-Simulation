@@ -182,7 +182,7 @@
       </el-col>
       <el-col :span="7" :offset="1">
         <div>
-          
+
             <el-row>
               <el-col :span="24" style="margin-top:75px;position:relative">
                 <code-area1 @reformchange="updatere"></code-area1>
@@ -202,7 +202,7 @@
                 </el-popover>
               </el-col>
             </el-row>
-         
+
             <el-row style="margin-top: 25px">
               <el-col :span="24">
                 <code-area ref="codearea" @tokenchange="updatetoken"></code-area>
@@ -224,7 +224,7 @@
                 </div> -->
               </el-col>
             </el-row>
-       
+
 
         </div>
       </el-col>
@@ -401,7 +401,7 @@ export default {
       regulation: []
     }
   },
- 
+
   computed: {
     available () {
       return this.hasbegin
@@ -409,14 +409,54 @@ export default {
   },
   methods: {
     collect(){
-      let studentId = localStorage.getItem('studentId')
+      let studentId = sessionStorage.getItem('studentId')
+      console.log(sessionStorage.getItem('studentId'))
       if(studentId === null)
       {
         alert('请先登录！')
       }
       else
       {
-        this.$refs.codearea1.collect(studentId)
+        console.log(sessionStorage.getItem('studentId'))
+        var self=this;
+
+        if(self.REForm.RE != '')
+        {
+
+          let Params = {
+            data_content: self.REForm.RE,
+            collectionType: 0,
+            displayOrNot: true,
+            studentID: studentId}
+
+          self.$axios.post('/api/user_function/collectionAdd', Params)
+            .then((response)=>{
+              console.log(response.data);
+              if(response.data.state === 1)
+              {
+                this.$message({
+                  type: 'success',
+                  message: '添加成功'
+                });
+              }
+              else
+                this.$message({
+                  type: 'info',
+                  message: '添加失败'
+                });
+            }).catch((error)=>{
+            this.$message({
+              type:'info',
+              message:'connection fail,press F12 to see the error in console'
+            });
+            console.log("ERROR:");
+            console.log(error);
+          });
+        }
+        else
+        {
+          alert('请输入语法规则')
+        }
       }
     },
     code (object, lan) {

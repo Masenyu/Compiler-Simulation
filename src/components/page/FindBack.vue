@@ -66,6 +66,7 @@ export default {
     }
     return {
       next: false,
+      email:'',
       form: {
         studentID: '',
         new_password: '',
@@ -116,8 +117,9 @@ export default {
               if (response.data.state === 0) {
                 self.errorInfo = true
                 self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+              } else if (response.data.state === 1) {
                 self.next = true
+                self.email=response.data.email
               }
             }).catch((error) => {
               console.log(error)
@@ -134,13 +136,13 @@ export default {
       const self = this
       self.$refs[formName].validate((valid) => {
         if (valid) {
-          let Params = {studentID: self.form.studentID, verificationCode: self.form.verificationCode, verificationAttribute: 2, new_password: self.form.new_password}
+          let Params = {studentID: self.form.studentID, verificationCode: self.form.verificationCode, verificationAttribute: 2, new_password: self.form.new_password,email: self.email}
           self.$axios.post('/api/user_function/modifyPasswordOfForgetPassword', Params)
             .then((response) => {
               if (response.data.state === 0) {
                 self.errorInfo = true
                 self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+              } else if (response.data.state === 1) {
                 Message({
                   message: '成功修改密码',
                   type: 'success',
@@ -160,10 +162,12 @@ export default {
       })
     },
     again () {
+      console.log(11111111111)
+      const self=this
       let Params = {studentID: self.form.studentID}
       self.$axios.post('/api/user_function/forgetPasswordGetVerificationCode', Params)
         .then((response) => {
-          if (response.status.state === 1) {
+          if (response.data.state === 1) {
             Message({
               message: '已发送，请查收邮箱',
               type: 'success',

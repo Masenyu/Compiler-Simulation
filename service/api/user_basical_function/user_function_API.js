@@ -125,7 +125,7 @@ router.post('/addUser', (req, res) => {
               conn.query(sqlInsert,[[[params.studentID,params.studentName,params.password,params.email]]], function(err){
                 if(err){console.log(err)}else{
                   console.log("数据插入成功");
-                  //jsonWrite(res, {state:1,message:'数据插入成功'});
+                  jsonWrite(res, {state:1,message:'数据插入成功'});
                 }
               });
               var sqlDelete="DELETE FROM identity WHERE email=? AND identityCode=? AND style = ?";

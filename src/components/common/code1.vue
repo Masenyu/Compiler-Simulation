@@ -74,11 +74,11 @@ export default {
     {
       console.log(str)
       this.$nextTick(() => {
-       
+
          this.showcode(str)
       localStorage.removeItem('collectionToWatch')
       })
-      
+
     }
     // this.$nextTick(() => {
     //   this._initScroll()
@@ -149,49 +149,8 @@ export default {
         this.$emit('reformchange', this.CodeMirrorEditor.getValue())
       })
     },
-    collect (str) {
-      var self=this;
-      if(self.hasinput === true)
-      {
-        var _url = '/collect/addItem';
-        self.$axios({
-          url:_url,
-          method: 'post',
-          data:{
-            expression: this.CodeMirrorEditor.getValue(),
-            studentId: userId,
-          },
-          baseURL:this.hostURL,
-        }).then((response)=>{
-          console.log(response.data);
-          if(response.data.success == true)
-          {
-            this.$message({
-              type: 'success',
-              message: '添加成功'
-            });
-          }
-          else
-            this.$message({
-              type: 'info',
-              message: '添加失败'
-            });
-        }).catch((error)=>{
-          this.$message({
-            type:'info',
-            message:'connection fail,press F12 to see the error in console'
-          });
-          console.log("ERROR:");
-          console.log(error);
-        });
-      }
-      else
-      {
-        alert('请输入语法规则')
-      }
-    }
   }
- 
+
 }
 </script>
 
