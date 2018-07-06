@@ -35,6 +35,11 @@ export default new Router({
             require(['../components/page/mainInterface.vue'], resolve)
         },
         {
+          path: '/index/my-collection',
+          component: resolve =>
+            require(['../components/page/MyCollection.vue'], resolve)
+        },
+        {
           path: '/index/lexical-analysis',
           component: resolve =>
             require(['../components/page/lexicalAnalysis.vue'], resolve)
