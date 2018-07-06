@@ -3,38 +3,87 @@
         <div class="header">
           <div class="navigation">
             <div class="logo">
-              <img src="../../assets/_logo.png"/>
+              <!-- <img src="../../assets/_logo.png"/> -->
               <a style="float:left">文法分析模拟器</a>
             </div>
             <div class="nav-menu">
               <ul class="menu-ul">
-                <li><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
-                <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
-                <li><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
-                <li><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
+                <li class="floatleftli"><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
+                <li class="floatleftli"><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
               </ul>
             </div>
             <div class="nav-login">
-              <ul>
-                <li><a class='login-btn'>登录</a></li>
+              <ul v-if="!userName">
+                <li class="floatleftli"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
+                <li class="floatleftli"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
+              <el-dropdown v-else @command="handleCommand">
+                <span class="el-dropdown-link">
+                  {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="my-collection">我的收藏</el-dropdown-item>
+                  <el-dropdown-item command="modifypassword">修改密码</el-dropdown-item>
+                  <el-dropdown-item command="logout"><el-button type="text" @click="logout()">注销</el-button></el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
           </div>
         </div>
+        <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
+            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="show=false,userName=sessionStorage.getItem('studentName')"></login-area>
+            <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
+            <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
+        </el-dialog>
     </el-row>
 </template>
 
 <script>
+import loginArea from '../page/Login'
+import registerArea from '../page/Register'
+import findBack from '../page/FindBack'
 export default {
+  components: {
+    loginArea,
+    registerArea,
+    findBack
+  },
   data () {
     return {
       active1: false,
       active2: false,
       active3: false,
-      active4: false
+      active4: false,
+      status: '',
+      show: false,
+      canclose: false,
+      titletext: '',
+      userName: ''
     }
   },
   methods: {
+    logout () {
+      this.$confirm('此操作将注销账号, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        sessionStorage.setItem('studentID', '')
+        sessionStorage.setItem('studentName', '')
+        sessionStorage.setItem('email', '')
+        this.userName = ''
+      }).catch(() => {
+      })
+    },
+    handleCommand (command) {
+      if (command === 'modifypassword') {
+        this.$router.push('/index/modifypassword')
+      } else if (command === 'logout') {
+        this.logout()
+      }
+    },
     gotoUrl (url, highlightindex) {
       const self = this
       self.active1 = false
@@ -59,14 +108,15 @@ export default {
     }
   },
   mounted () {
-    switch (window.location.href) {
-      case 'http://localhost:8088/#/index/main-interface':
+    switch (window.location.hash) {
+      case '#/index/main-interface':
         this.active1 = true
         break
-      case 'http://localhost:8088/#/index/lexical-analysis':
+      case '#/index/lexical-analysis':
         this.active2 = true
         break
     }
+    this.userName = sessionStorage.getItem('studentName')
   }
 }
 </script>
@@ -76,7 +126,7 @@ export default {
   width: 100%;
   height: 4rem;
   color: #ffffff;
-  background-color: #161616;
+  background-color: rgba(16, 16, 16, 1);
   font-size: 1.6rem;
   font-weight: 400;
   padding:1.5rem 0rem;
@@ -121,7 +171,7 @@ ul{
   padding: 0px; /* 与内部元素的距离为0 */
   width: auto; /* 宽度根据元素内容调整 */
 }
-ul li
+ul li.floatleftli
 {
   padding:0px 1rem;
   float:left; /* 向左漂移，将竖排变为横排 */
@@ -155,8 +205,20 @@ ul li a.active{
   font-size:1.5rem;
   color: #ffffff;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 1.2rem 2rem; /* 内部填充的距离 */
+  padding: 1.2rem 1rem; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
+}
+</style>
+
+<style>
+.el-dialog__header{
+  text-align:center;
+}
+.el-dropdown {
+  height:45px;
+  line-height:45px;
+  color: #ffffff;
+  font-size: 16px;
 }
 </style>
