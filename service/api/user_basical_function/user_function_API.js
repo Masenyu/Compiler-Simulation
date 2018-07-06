@@ -17,8 +17,6 @@ var jsonWrite = function(res, ret) {
   }
 }
 
-var tempCode
-
 var dateStr = function(str) {
   return new Date(str.slice(0,7));
 }
@@ -96,8 +94,7 @@ router.post('/collectionAdd', (req, res) => {
   var params=req.body;
 var sqlSelect="SELECT * FROM user_collection WHERE studentID="
 
-
-conn.query(sqlSelect,values, function(err, result) {
+conn.query(sqlSelect,params.studentID, function(err, result) {
   if (err) {
     console.log(err);
   }
@@ -112,7 +109,19 @@ conn.query(sqlSelect,values, function(err, result) {
 //用户删除收藏接口
 //输入 studentID,collectionID
 //将该条收藏记录的displayOrNot设置为0
-
+router.post('/collectionDelete', (req, res) => {
+  var params=req.body;
+var sqlUpdate='UPDATE user_collection SET displayOrNot = 0, WHERE studentID = ?,collectionID=?'
+var Sql_Params = [params.studentID,params.collectionID];
+conn.query(sqlSelect,params.studentIDSql_Params, function(err, result) {
+  if (err) {
+    console.log(err);
+  }
+  if (result) {
+    jsonWrite(res, result);
+  }
+})
+});
 
 
 
