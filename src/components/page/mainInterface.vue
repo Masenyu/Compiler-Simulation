@@ -1,6 +1,7 @@
 <template>
-    
-        <div class="ms-doc">
+    <div id="p" class="page">
+      <div class="a">
+         <div class="ms-doc">
             <h3>README.md</h3>
             <article>
                 <h1>编译器文法分析模拟器</h1>
@@ -51,6 +52,10 @@
                 <!--</div>-->
             </article>
         </div>
+      </div>
+      
+    </div>
+       
 
     
 </template>
@@ -62,18 +67,30 @@ export default {
     turnToHome () {
       this.$router.push('/')
     }
+  },
+  mounted() {
+    document.getElementById('p').style.height=(window.innerHeight - 110)+'px';
   }
 }
 </script>
 
 <style scoped>
+.page {
+  height: 100%;
+  background-image: url("/static/img/main.jpg");
+}
+.a {
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.3)
+}
 .ms-doc {
   width: 100%;
   max-width: 980px;
-  margin: 100px;
+  height: 60%;
+  padding: 100px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
-  color: #fff;
+  
 }
 .ms-doc h3 {
   padding: 9px 10px 10px;
@@ -84,24 +101,24 @@ export default {
   border: 1px solid #d8d8d8;
   border-bottom: 0;
   border-radius: 3px 3px 0 0;
-  color: #fff;
+ 
 }
 .ms-doc article {
   padding: 45px;
   word-wrap: break-word;
-  min-height: 500px;
+  height: 90%;
   background-color: rgba(120, 120, 120, 0.5);
   border: 1px solid #ddd;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  color: #fff;
+  
 }
 .ms-doc article h1 {
   font-size: 32px;
   padding-bottom: 10px;
   margin-bottom: 15px;
   border-bottom: 1px solid #ddd;
-  color: #fff;
+  
 }
 .ms-doc article h2 {
   margin: 24px 0 16px;
@@ -110,12 +127,11 @@ export default {
   padding-bottom: 7px;
   font-size: 24px;
   border-bottom: 1px solid #eee;
-  color: #fff;
 }
 .ms-doc article p {
   margin-bottom: 15px;
   line-height: 1.5;
-  color: #fff;
+  
   font-size: 1.8rem
 }
 .ms-doc article .el-checkbox {
