@@ -70,9 +70,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        sessionStorage.setItem('studentID', '')
-        sessionStorage.setItem('studentName', '')
-        sessionStorage.setItem('email', '')
+        sessionStorage.removeItem('studentID')
+        sessionStorage.removeItem('studentName')
+        sessionStorage.removeItem('email')
         this.userName = ''
       }).catch(() => {
       })
@@ -124,29 +124,29 @@ export default {
 <style scoped>
 .header {
   width: 100%;
-  height: 4rem;
+  height: 45px;
   color: #ffffff;
   background-color: #161616;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 400;
-  padding:1.5rem 0rem;
-  box-shadow: 0rem 1px 1px #ece9e9;
-  position: absolute;
+  padding:15px 0px;
+  box-shadow: 0px 1px 1px #ece9e9;
+  position: relative;
   font-family:"Microsoft YaHei",Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
 }
 .navigation{
   position: relative;
   overflow: hidden;
   white-space: nowrap;
-  min-width: 80rem;
+  min-width: 900px;
   margin:0px auto;
   width:65%;
-  height:4.2rem;
+  height:45px;
 }
 .logo {
-  font-size: 3rem;
+  font-size: 30px;
   cursor: pointer;
-  -webkit-text-size-adjust:100%;
+  /* -webkit-text-size-adjust:100%; */
   float: left;
 }
 img{
@@ -155,13 +155,13 @@ img{
   height:40px;
 }
 .nav-menu {
-  height: 4rem;
-  padding-bottom: 0.2rem;
+  height: 40px;
+  padding-bottom: 2px;
   float: left;
-  margin-left: 10%
+  margin-left:10%;
 }
 .nav-login{
-  height: 4rem;
+  height: 40px;
   float: right;
 }
 
@@ -173,7 +173,7 @@ ul{
 }
 ul li.floatleftli
 {
-  padding:0px 1rem;
+  padding:0px 10px;
   float:left; /* 向左漂移，将竖排变为横排 */
 }
 ul li a, ul li a:visited
@@ -181,7 +181,7 @@ ul li a, ul li a:visited
   cursor: pointer;
   color:#eeeeee;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 1rem; /* 内部填充的距离 */
+  padding: 10px; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }
@@ -197,15 +197,15 @@ ul li a:active
 }
 ul li a.active{
   color: #409eff; /* 文字颜色 */
-  border-bottom: 0.2rem solid #409eff;
+  border-bottom: 2px solid #409eff;
 }
 
 .login-btn{
   cursor: pointer;
-  font-size:1.5rem;
+  font-size:15px;
   color: #ffffff;
   display: block; /* 此元素将显示为块级元素，此元素前后会带有换行符 */
-  padding: 1.2rem 1rem; /* 内部填充的距离 */
+  padding: 12px 10px; /* 内部填充的距离 */
   text-decoration: none; /* 不显示超链接下划线 */
   white-space: nowrap; /* 对于文本内的空白处，不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。 */
 }
