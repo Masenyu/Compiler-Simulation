@@ -113,7 +113,7 @@ router.post('/collectionDelete', (req, res) => {
   var params=req.body;
 var sqlUpdate='UPDATE user_collection SET displayOrNot = 0, WHERE studentID = ?,collectionID=?'
 var Sql_Params = [params.studentID,params.collectionID];
-conn.query(sqlSelect,params.studentIDSql_Params, function(err, result) {
+conn.query(sqlUpdate,Sql_Params, function(err, result) {
   if (err) {
     console.log(err);
   }
