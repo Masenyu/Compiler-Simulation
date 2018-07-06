@@ -94,7 +94,7 @@ export default {
   width: 100%;
   height: 4rem;
   color: #ffffff;
-  background-color: #161616;
+  background-color: rgba(22, 22, 22, 0.5);
   font-size: 1.6rem;
   font-weight: 400;
   padding:1.5rem 0rem;

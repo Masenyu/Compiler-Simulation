@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <el-row>
-      <el-col :span="14" :offset="1">
+      <el-col :span="13" :offset="1">
         <!-- <div v-if="isFirsttime" >
           <p>词法分析是编译的第一阶段</p>
         </div> -->
@@ -154,45 +154,50 @@
       </el-col>
       <el-col :span="7" :offset="1">
         <div>
-          <el-row>
-            <el-col :span="24" style="margin-top:75px;position:relative">
-              <code-area1 @reformchange="updatere"></code-area1>
-              <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
-                <el-form-item prop="RE">
-                  <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
-                </el-form-item>
-              </el-form>
-              <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
-                <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
-                <div style="text-align: right; margin: 0">
-                  <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-                  <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
-                </div>
-                <el-button class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
-              </el-popover>
-            </el-col>
-          </el-row>
-          <el-row style="margin-top: 25px">
-            <el-col :span="24">
-              <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
-              <el-row style="margin-top: 15px;text-align:right">
-              <el-button style="width:90px" size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-              <!-- <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
-              <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
-              <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button> -->
-              </el-row>
-              <!-- <div class="controller">
-              <el-row class="buttonela">
-                <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
-                <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
-              </el-row>
-              <el-row class="buttonelb">
-                <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
-                <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
+          <div class="pad1">
+            <el-row>
+              <el-col :span="24" style="margin-top:0px;position:relative">
+                <code-area1 @reformchange="updatere"></code-area1>
+                <el-form ref="REForm" :rules="rulesRE" :model="REForm" label-width="0px">
+                  <el-form-item prop="RE">
+                    <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
+                  </el-form-item>
+                </el-form>
+                <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
+                  <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+                    <el-button type="primary" size="mini" @click="judgeGenerateSure()" >确定</el-button>
+                  </div>
+                  <el-button class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
+                </el-popover>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="pad2">
+            <el-row style="margin-top: 0px">
+              <el-col :span="24">
+                <code-area  ref="codearea" @tokenchange="updatetoken"></code-area>
+                <el-row style="margin-top: 15px;text-align:right">
+                <el-button style="width:90px" size="small" :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+                <!-- <el-button size="small" class="autobutton" :disabled="!hasbegin" @click="autoControl()" :type="autobuttonType" plain>{{autobuttonText}}</el-button>
+                <el-button size="small" :disabled="!hasbegin" @click="previous()">上一步</el-button>
+                <el-button size="small" :disabled="!hasbegin" @click="next()">下一步</el-button> -->
+                </el-row>
+                <!-- <div class="controller">
+                <el-row class="buttonela">
+                  <el-button :disabled="isFirsttime" @click="startButton()" :type="startbuttonType">{{startbuttonText}}</el-button>
+                  <el-button :disabled="!hasbegin" @click="previous()">上一步</el-button>
+                </el-row>
+                <el-row class="buttonelb">
+                  <el-button :disabled="!hasbegin" @click="autoControl()" :type="NFA.autobuttonType" plain>{{NFA.autobuttonText}}</el-button>
+                  <el-button :disabled="!hasbegin" @click="next()">下一步</el-button>
 
-              </div> -->
-            </el-col>
-          </el-row>
+                </div> -->
+              </el-col>
+            </el-row>
+          </div>
+          
         </div>
       </el-col>
     </el-row>
@@ -1314,19 +1319,39 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page {
-  width: 70%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 40px;
   min-width: 1200px;
   min-height: 100%;
   border:1px solid #cccccc;
-  background-color: #fff;
+  /*background-color: rgba(125, 125, 125, 0.5);*/
 }
 .tab{
   height: auto;
   width: 100%;
   margin-top: 20px;
+  background-color: rgba(125, 125, 125, 0.5);
+  padding: 2.5rem
+}
+.pad1{
+  height: auto;
+  width: auto;
+  background-color: rgba(125, 125, 125, 0.5);
+  margin-left: 3rem;
+  margin-top: 20px;
+  padding: 1.5rem;
+  padding-top: 65px;
+  padding-bottom: 2rem
+}
+.pad2{
+  height: auto;
+  width: auto;
+  background-color: rgba(125, 125, 125, 0.5);
+  margin-left: 3rem;
+  padding: 1.5rem;
+  margin-top: 15px
 }
 .token {
   background-color: #cccccc;
@@ -1402,7 +1427,7 @@ div.graph.active div.content{
   bottom: 0%
 }
 div.graph div.vis {
-  height: 51rem;
+  height: 48rem;
 }
 .buttonInGraph{
   /*background: transparent;*/
@@ -1482,7 +1507,7 @@ div.graph div.vis {
 .generateFA{
   position: absolute;
   right:0px;
-  top:315px;
+  top:290px;
 }
 .autobutton{
   width:80px;
