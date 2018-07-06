@@ -4,7 +4,7 @@ var OperatorInformationTable=[
   {operator:'(',priority:0,numOfParams:0},
   {operator:'[',priority:0,numOfParams:0},
   {operator:'|',priority:1,numOfParams:2},
-  {operator:'.',priority:2,numOfParams:2},
+  {operator:'..',priority:2,numOfParams:2},
   //不是单目运算符感根据优先级压入
   //是单目运算符直接弹出
   {operator:'*',priority:3,numOfParams:1},
@@ -245,7 +245,7 @@ function OperatorInToStack()
         regularChar.stateTransitionList[regularChar.stateTransitionList.length]=new stateTransition1(this.state,temp_char,this.state+1)
         this.state+=2
         this.NFAStack.push(regularChar)
-        if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+        if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('..');}
         break;
       case 0://()
         switch(temp_char)
@@ -259,7 +259,7 @@ function OperatorInToStack()
               i++
               //regularChar.printNFA()
               if (i + 1 < length && Priority(str[i + 1]) <= 0) {
-                this.OperatorStack.push('.');
+                this.OperatorStack.push('..');
               }
               break;
             } else {
@@ -277,7 +277,7 @@ function OperatorInToStack()
                   case '|':
                     this.selectOperator()
                     break;
-                  case '.':
+                  case '..':
                     this.connectOperator()
                     break;
                 }
@@ -288,7 +288,7 @@ function OperatorInToStack()
               }
             }//逐步弹出所有操作符 并且执行，遇到( 停止
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
-              this.OperatorStack.push('.');
+              this.OperatorStack.push('..');
             }
             break;
           case '[':
@@ -353,7 +353,7 @@ function OperatorInToStack()
               this.NFAStack.push(res)
             }
             //res.printNFA()
-            if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.')}
+            if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('..')}
             break;
           case ']':
             return {state:0,message:"single \'\]\'."}
@@ -369,7 +369,7 @@ function OperatorInToStack()
               this.state+=2
               i ++;
               this.NFAStack.push(regularChar)
-              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('..');}
               break;
             }
             else if( str[i+1] == 'd' ){
@@ -385,7 +385,7 @@ function OperatorInToStack()
               }
               i++
               this.NFAStack.push(tempNFA)
-              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+              if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('..');}
               break;
             }
             else {
@@ -394,19 +394,19 @@ function OperatorInToStack()
           case '*':
             this.clodureOperator();
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
-              this.OperatorStack.push('.')
+              this.OperatorStack.push('..')
             }
             break;
           case '+':
             this.addOperator();
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
-              this.OperatorStack.push('.')
+              this.OperatorStack.push('..')
             }
             break;
           case '?':
             this.questionMarkOperator();
             if (i + 1 < length && Priority(str[i + 1]) <= 0) {
-              this.OperatorStack.push('.')
+              this.OperatorStack.push('..')
             }
             break;
           case'{':
@@ -681,7 +681,7 @@ function OperatorInToStack()
                 }
               }
             }
-            if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('.');}
+            if(i+1<length&&Priority(str[i+1])<=0){this.OperatorStack.push('..');}
             break;
           case'}':
             return {state:0,message:"single \'\}\'."}
@@ -695,7 +695,7 @@ function OperatorInToStack()
         while (!this.OperatorStack.nullOrNot()&&priorityTop>priorityTemp) {
 
           switch(this.OperatorStack.top()){
-            case '.':
+            case '..':
               this.connectOperator()
               break;
             case '|':
@@ -721,7 +721,7 @@ function OperatorPerform() {
 
   var operator =this.OperatorStack.top();
   switch(operator){
-    case '.':
+    case '..':
       this.connectOperator()
       break;
     case '|':

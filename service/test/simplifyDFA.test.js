@@ -1,15 +1,15 @@
-var simplifyDFA =require('../api/simplifyDFA');
+var simplifyDFA =require('../api/lexical/simplifyDFA');
 var StateTransition=simplifyDFA.StateTransition;
 var AcceptStateList=simplifyDFA.AcceptStateList
-var tool = require('../api/tool.js');
+var tool = require('../api/lexical/tool.js');
 var expect = require('chai').expect;
-var assert = require('assert'); 
+var assert = require('assert');
 
 
 //第一组测试，正常输入情况，DFA比较简单
 var re = ['a|b']
 var stateTransitions_1 = new Array();
-var acceptStates_1 = new Array(); 
+var acceptStates_1 = new Array();
 var edge1=new StateTransition(0,'a',1);
 var edge2=new StateTransition(0,'b',1);
 stateTransitions_1.push(edge1,edge2);
@@ -30,7 +30,7 @@ describe('DFA化简简单测试',function(){
 
 //第二组测试，非正常输入情况，不符合分割法的要求，验证改进后的K次划分法
 var stateTransitions = new Array();
-var acceptStates = new Array(); 
+var acceptStates = new Array();
 
 var term = new StateTransition( 0 , 'a' , 1 );
 var term1 = new StateTransition( 0 , 'b' , 2 );
@@ -62,7 +62,7 @@ console.log(res)
 // var acceptStates = res.acceptStates;
 
 var stateTransitions_test = new Array();
-var acceptStates_test = new Array(); 
+var acceptStates_test = new Array();
 
 var term_test = new StateTransition( 0 , 'a' , 1 );
 var term1_test = new StateTransition( 0 , 'b' , 2 );
