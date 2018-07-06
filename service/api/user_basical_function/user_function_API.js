@@ -367,6 +367,7 @@ router.post('/collectionQuery', (req, res) => {
       jsonWrite(res, {state:0,message:"查询收藏失败"});
     }
     if (result) {
+      console.log(result)
       jsonWrite(res, {state:1,message:"查询成功",data: result});
     }
   })

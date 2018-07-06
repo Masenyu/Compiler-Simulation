@@ -138,9 +138,9 @@
         });
       },
       gotoWatch(val) {
-        if(val.collectionType === '词法分析')
+        if(val.collectionType === 0)
         {
-          localStorage.setItem('collectionToWatch', val.expression)
+          localStorage.setItem('collectionToWatch', val.data_content)
           this.$router.push('/index/lexical-analysis')
         }
       }
