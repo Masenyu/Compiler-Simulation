@@ -1,7 +1,7 @@
 <template>
   <div class="code">
     <div class="setting">
-      <textarea id="editor" name="editor" v-model="TokenForm">
+      <textarea id="editor" name="editor">
       </textarea>
     </div>
     <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">请输入待分析源码：</div>
@@ -58,7 +58,6 @@ export default {
       mapArray: [],
       CodeMirrorEditor: null,
       something: '',
-      TokenForm: '',
       hasinput: false
     }
   },
@@ -117,28 +116,13 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)
-      this.CodeMirrorEditor.setSize(350, 280)
+      // this.CodeMirrorEditor.setSize(350, 280)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
     }
   },
 
-  watch: {
-    TokenForm: function () {
-      sessionStorage.setItem('msg', this.TokenForm)
-      console.log(this.TokenForm)
-    }
-    // something: function () {
-    //   var headElement=document.body;
-    //   var element=document.createElement("script");
-    //   element.setAttribute("src",this.transToSrc(this.something));
-    //   headElement.appendChild(element);
-    //   element.onload=() => {
-    //     this.CodeMirrorEditor.setOption("mode",this.something)
-    //   }
-    // }
-  }
 }
 </script>
 
