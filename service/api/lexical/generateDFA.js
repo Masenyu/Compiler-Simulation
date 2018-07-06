@@ -32,7 +32,7 @@ module.exports = function(nfa) {
 //  this.printStateTransition=printStateTransition;
   }
 
-  function dfa_mid_StateTransition(s = new Array(), i, e = new Array()) {
+  function dfa_mid_StateTransition(s, i, e) {
     this.startState = s
     this.inputChar = i
     this.endState = e
