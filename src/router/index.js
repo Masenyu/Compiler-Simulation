@@ -27,7 +27,7 @@ export default new Router({
     {
       path: '/index',
       component: resolve => require(['../components/common/Home.vue'], resolve),
-      redirect: '/index/lexical-analysis',
+      redirect: '/index/main-interface',
       children: [
         {
           path: '/index/main-interface',
@@ -40,9 +40,9 @@ export default new Router({
             require(['../components/page/lexicalAnalysis.vue'], resolve)
         },
         {
-          path: '/index/lexical-analysis1',
+          path: '/index/modifypassword',
           component: resolve =>
-            require(['../components/page/lexicalAnalysis_beta.vue'], resolve)
+            require(['../components/page/Modifypassword.vue'], resolve)
         }
       ]
     }

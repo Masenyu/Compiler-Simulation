@@ -57,6 +57,13 @@ export default {
         callback()
       }
     }
+    var password = (rule, value, callback) => {
+      if (value.indexOf('_') === 0) {
+        callback(new Error('密码不得以下划线开头'))
+      } else {
+        callback()
+      }
+    }
     return {
       next: false,
       form: {
@@ -71,7 +78,9 @@ export default {
           { pattern: /^[0-9]{12}$/, message: '请输入正确的学号!' }
         ],
         new_password: [
-          {required: true, message: '请输入新的密码!', trigger: 'blur'},
+          {required: true, message: '请输入密码!', trigger: 'blur'},
+          { validator: password, trigger: 'change' },
+          { pattern: /^[a-zA-Z0-9][_a-zA-Z0-9]*$/, message: '密码必须由字母、数字或下划线组成' },
           { min: 6, max: 20, message: '长度在6-20位之间', trigger: 'blur' }
         ],
         checkpassword: [
@@ -134,7 +143,7 @@ export default {
               } else if (response.status.state === 1) {
                 Message({
                   message: '成功修改密码',
-                  type: 'error',
+                  type: 'success',
                   center: true
                 })
                 self.gotoLogin()
