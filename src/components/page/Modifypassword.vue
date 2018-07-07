@@ -1,23 +1,23 @@
 <template>
+<div class="page">
+  <el-breadcrumb separator-class="el-icon-arrow-right">
+    <el-breadcrumb-item >我的账号</el-breadcrumb-item>
+    <el-breadcrumb-item >修改密码</el-breadcrumb-item>
+  </el-breadcrumb>
   <div class="login-wrap">
     <div class="ms-forget">
         <el-form ref="form" :model="form" :rules="rules">
+          <div class="errdiv" v-if="errorInfo">
+            <span>{{errInfo}}</span>
+          </div>
           <el-form-item prop="old_password">
-            <el-row>
-              <el-col span="24">
-                <el-input v-model="form.old_password" type="password" placeholder="旧的密码"></el-input>
-              </el-col>
-            </el-row>
+            <el-input v-model="form.old_password" type="password" placeholder="旧的密码"></el-input>
           </el-form-item>
           <el-form-item prop="new_password">
-            <el-col span="24">
-              <el-input v-model="form.new_password" type="password" placeholder="新的密码"></el-input>
-            </el-col>
+            <el-input v-model="form.new_password" type="password" placeholder="新的密码"></el-input>
           </el-form-item>
           <el-form-item prop="checkpassword">
-            <el-col span="24">
-              <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
-            </el-col>
+            <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
           </el-form-item>
           <div class="login-btn1">
             <el-button type="primary" @click="modifyPassword('form')">确认修改</el-button>
@@ -25,6 +25,7 @@
         </el-form>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -48,7 +49,8 @@ export default {
       }
     }
     return {
-      next: false,
+      errorInfo: false,
+      errInfo: '',
       form: {
         old_password: '',
         new_password: '',
@@ -75,6 +77,8 @@ export default {
     //                                                                错误则 返回state=0  message=“密码错误”
     modifyPassword (formName) {
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs[formName].validate((valid) => {
         if (valid) {
           let studentID = sessionStorage.getItem('studentID')
@@ -82,17 +86,16 @@ export default {
           self.$axios.post('/api/user_function/modifyPassword', Params)
             .then((response) => {
               if (response.data.state === 0) {
-                Message({
-                  message: '旧密码错误',
-                  type: 'error',
-                  center: true
-                })
-              } else if (response.status.state === 1) {
+                self.errorInfo = true
+                self.errInfo = '旧密码不正确'
+              } else if (response.data.state === 1) {
                 Message({
                   message: '成功修改密码',
                   type: 'success',
                   center: true
                 })
+                self.errorInfo = false
+                self.errInfo = ''
                 self.resetForm('form')
               }
             }).catch((error) => {
@@ -115,65 +118,41 @@ export default {
 </script>
 
 <style scoped>
+.page {
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 40px;
+  min-width: 900px;
+  min-height: 100%;
+}
 .login-wrap {
   margin:50px auto;
   width: 300px;
   height: 250px;
 }
 .ms-forget {
+  position: relative;
   width: 300px;
-  height: 210px;
-  padding: 0px 40px 40px 40px;
+  padding: 0px 40px;
   border-radius: 5px;
   background-color: rgba(125, 125, 125, 0);
 }
-.label {
-  color: #fff;
-}
-.tip {
-  color: #fff;
-  font-size: 2rem;
-  margin-bottom: 2rem
-}
-.tip1 {
-  color: #fff;
-  font-size: 1.5rem;
-  margin-bottom: 1rem
-}
-.login-btn {
-  margin-top: 10px;
-  text-align: center;
-}
+/* 确认修改 */
 .login-btn1 {
   margin-top: 10px;
   text-align: center;
 }
-.login-btn button {
-  width: 120px;
-  height: 36px;
-}
 .login-btn1 button {
-  width: 50%;
+  width: 100%;
   height: 36px;
 }
-.ms-login span {
+.errdiv {
+  position:absolute;
   color: red;
+  font-size:14px;
+  top:-40px;
 }
-.code {
-  width: 112px;
-  height: 35px;
-  border: 1px solid #ccc;
-  float: right;
-  border-radius: 2px;
-}
-.validate-code {
-  width: 136px;
-  float: left;
-}
-.register {
-  font-size: 14px;
-  line-height: 30px;
-  color:#2e82ff;
-  cursor: pointer;
-}
+</style>
+<style>
 </style>
