@@ -107,6 +107,7 @@ export default {
           break
         case 2:
           self.active2 = true
+          document.getElementById('head').style.background = "rgba(16, 16, 16, 1)";
           break
         case 3:
           self.active3 = true
@@ -139,7 +140,7 @@ export default {
   width: 100%;
   height: 4rem;
   color: #ffffff;
-  background-color: rgba(16, 16, 16, 1);
+  background-color: rgba(22, 22, 22, 0.5);
   font-size: 1.6rem;
   font-weight: 400;
   padding:1.5rem 0rem;

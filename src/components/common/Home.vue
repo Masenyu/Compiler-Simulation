@@ -30,7 +30,7 @@ export default {
   min-height:100%;
   height: auto !important;
   position: relative;
-  background-color: rgba(233, 233, 233, 0.2);
+  background-color: rgba(233, 233, 233, 0);
   /*background-image: url("/static/img/login.jpg")*/
 }
 .content{
@@ -38,5 +38,6 @@ export default {
   padding-top:7rem;
   min-height:100%;
   height: auto !important;
+  background-color: rgba(233, 233, 233, 0.25);
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
-    
-        <div class="ms-doc">
+  <div id="p" class="page">
+    <div>
+      <div class="ms-doc">
             <h3>README.md</h3>
             <article>
                 <h1>编译器文法分析模拟器</h1>
@@ -18,40 +19,12 @@
                 <br>
                 <el-checkbox disabled checked>4、 基于Web的模拟器系统方面学习这通过网络利用本模拟器。</el-checkbox>
                 <br>
-                <!--<el-checkbox disabled checked>修改用户信息</el-checkbox>-->
-                <!--<br>-->
-                <!--<h2>安装步骤</h2>-->
-                <!--<p>cd vue-manage-system //进入项目目录</p>-->
-                <!--<p>npm install //安装项目依赖，等待安装完成</p>-->
-                <!--<h2>本地开发</h2>-->
-                <!--<p>//开启前端服务，浏览器访问 http://localhost:8082</p>-->
-                <!--<p>npm run dev</p>-->
-                <!--<p>//开启后端服务</p>-->
-                <!--<p>cd service</p>-->
-                <!--<p>node app</p>-->
-                <!--<h2>设置代理与跨域</h2>-->
-                <!--<p>vue-cli的config文件中有一个proxyTable参数，用来设置地址映射表，可以添加到开发时配置（dev）中</p>-->
-                <!--<p>dev: {-->
-                <!--// ...-->
-                <!--proxyTable: {-->
-                <!--'/api': {-->
-                <!--target: 'http://127.0.0.1:3000/api/',-->
-                <!--changeOrigin: true,-->
-                <!--pathRewrite: {-->
-                <!--'^/api': ''-->
-                <!--}-->
-                <!--}-->
-                <!--},-->
-                <!--// ...-->
-                <!--}</p>-->
-                <!--<p>即请求/api时就代表http://127.0.0.1:3000/api/(这里要写ip，不要写localhost)，changeOrigin参数接收一个布尔值，如果为true，这样就不会有跨域问题了。</p>-->
-                <!--<h2>最终项目的目录结构</h2>-->
-                <!--<div>-->
-                <!--<img src="../../../static/img/tree.png" alt="">-->
-                <!--</div>-->
             </article>
         </div>
 
+    </div>
+  </div>  
+        
     
 </template>
 
@@ -61,16 +34,56 @@ export default {
   methods: {
     turnToHome () {
       this.$router.push('/')
+    },
+    randomNum(minNum,maxNum){
+      switch(arguments.length){
+        case 1:
+          return parseInt(Math.random()*minNum+1,10);
+          break;
+        case 2:
+          return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
+          break;
+        default:
+          return 0;
+          break;
     }
+}
+  },
+  mounted() {
+    document.getElementById('p').style.height=(window.innerHeight)+'px'
+   
+    switch( this.randomNum(0,1))
+    {
+      case 0:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/login.jpg')"
+        break
+      case 1:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/main.jpg')"
+        break
+    }
+
   }
 }
 </script>
 
 <style scoped>
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: -5;
+  margin-top: -7rem;
+  background-image: url("/static/img/main.jpg");
+}
+.a {
+  height: 100%;
+  /*background-color: rgba(255, 255, 255, 0.3)*/
+}
 .ms-doc {
   width: 100%;
   max-width: 980px;
   margin: 100px;
+  margin-top: 15rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
   color: #fff;
