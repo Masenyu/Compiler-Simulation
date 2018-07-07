@@ -8,16 +8,16 @@
             </div>
             <div class="nav-menu">
               <ul class="menu-ul">
-                <li class="floatleftli"><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
-                <li class="floatleftli"><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
-                <li class="floatleftli"><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
-                <li class="floatleftli"><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
+                <li class="menu-li"><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface')">首页</a></li>
+                <li class="menu-li"><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis')">词法分析</a></li>
+                <li class="menu-li"><a :class="{'active':active3}">语法分析</a></li>
+                <li class="menu-li"><a :class="{'active':active4}">语义分析</a></li>
               </ul>
             </div>
             <div class="nav-login">
               <ul v-if="!userName">
-                <li class="floatleftli"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
-                <li class="floatleftli"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
+                <li class="menu-li"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
+                <li class="menu-li"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
               <el-dropdown v-else @command="handleCommand">
                 <span class="el-dropdown-link">
@@ -32,10 +32,10 @@
             </div>
           </div>
         </div>
-        <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
+        <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose" @close="reset()">
             <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="show=false,userName=sessionStorage.getItem('studentName')"></login-area>
             <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
-            <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
+            <find-back v-else-if="status==='forget'" @gotoLogin="status='login',titletext='登陆'"></find-back>
         </el-dialog>
     </el-row>
 </template>
@@ -64,6 +64,38 @@ export default {
     }
   },
   methods: {
+    // 关闭dialog时重置登陆注册忘记密码等表单
+    reset () {
+      this.status = ''
+      this.titletext = ''
+    },
+    // 导航栏根据URL高亮显示某个按钮
+    highlightchange () {
+      console.log('url切换到' + window.location.hash)
+      const self = this
+      self.active1 = false
+      self.active2 = false
+      self.active3 = false
+      self.active4 = false
+      switch (window.location.hash) {
+        case '#/index/main-interface':
+          this.active1 = true
+          break
+        case '#/index/lexical-analysis':
+          this.active2 = true
+          break
+        case '#/index/gramma-analysis':
+          this.active3 = true
+          break
+        case '#/index/semantic-analysis':
+          this.active4 = true
+          break
+        default:
+          console.log('不是导航栏的URL')
+          break
+      }
+    },
+    // 注销
     logout () {
       this.$confirm('此操作将注销账号, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -77,45 +109,27 @@ export default {
       }).catch(() => {
       })
     },
+    // 处理账号下来菜单的点击事件
     handleCommand (command) {
       if (command === 'modifypassword') {
-        this.$router.push('/index/modifypassword')
+        this.gotoUrl('/index/modifypassword')
       } else if (command === 'logout') {
         this.logout()
       }
     },
-    gotoUrl (url, highlightindex) {
+    // 改变URL
+    gotoUrl (url) {
       const self = this
-      self.active1 = false
-      self.active2 = false
-      self.active3 = false
-      self.active4 = false
-      switch (highlightindex) {
-        case 1:
-          self.active1 = true
-          break
-        case 2:
-          self.active2 = true
-          break
-        case 3:
-          self.active3 = true
-          break
-        case 4:
-          self.active4 = true
-          break
-      }
       self.$router.push(url)
     }
   },
+  // 监听URL的变化
+  watch: {
+    $route: 'highlightchange'
+  },
+  // 初始化页面时，改变高亮的按钮，读取已登陆的账号名字
   mounted () {
-    switch (window.location.hash) {
-      case '#/index/main-interface':
-        this.active1 = true
-        break
-      case '#/index/lexical-analysis':
-        this.active2 = true
-        break
-    }
+    this.highlightchange()
     this.userName = sessionStorage.getItem('studentName')
   }
 }
@@ -171,7 +185,7 @@ ul{
   padding: 0px; /* 与内部元素的距离为0 */
   width: auto; /* 宽度根据元素内容调整 */
 }
-ul li.floatleftli
+ul li.menu-li
 {
   padding:0px 10px;
   float:left; /* 向左漂移，将竖排变为横排 */
