@@ -50,6 +50,18 @@ export default new Router({
             require(['../components/page/Modifypassword.vue'], resolve)
         }
       ]
+    },
+    {
+      path: '/index1',
+      component: resolve => require(['../components/common/Home1.vue'], resolve),
+      redirect: '/index1/main-interface',
+      children: [
+        {
+          path: '/index1/main-interface',
+          component: resolve =>
+            require(['../components/page/mainInterface.vue'], resolve)
+        }
+      ]
     }
   ]
 })
