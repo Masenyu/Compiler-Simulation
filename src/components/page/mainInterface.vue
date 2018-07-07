@@ -52,13 +52,55 @@ export default {
   mounted() {
     document.getElementById('p').style.height=(window.innerHeight)+'px'
    
-    switch( this.randomNum(0,1))
+    switch( this.randomNum(0,15))
     {
       case 0:
         document.getElementById('p').style.backgroundImage = "url('/static/img/login.jpg')"
         break
       case 1:
         document.getElementById('p').style.backgroundImage = "url('/static/img/main.jpg')"
+        break
+      case 2:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/city.jpg')"
+        break
+      case 3:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/dawn.jpg')"
+        break
+      case 4:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/sword.png')"
+        break
+      case 13:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/regex.jpg')"
+        break
+      case 14:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/1.jpg')"
+        break
+      case 15:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/2.jpg')"
+        break
+      case 5:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/3.jpg')"
+        break
+      case 6:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/4.jpg')"
+        break
+      case 7:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/5.jpg')"
+        break
+       case 8:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/6.jpg')"
+        break
+      case 9:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/7.jpg')"
+        break
+      case 10:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/8.jpg')"
+        break
+      case 11:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/9.jpg')"
+        break
+      case 12:
+        document.getElementById('p').style.backgroundImage = "url('/static/img/10.jpg')"
         break
     }
 
@@ -74,6 +116,7 @@ export default {
   z-index: -5;
   margin-top: -7rem;
   background-image: url("/static/img/main.jpg");
+  background-size:cover;
 }
 .a {
   height: 100%;
