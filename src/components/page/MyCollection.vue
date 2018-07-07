@@ -16,9 +16,9 @@
       <div class="table-block">
         <div class="table" v-for="item in currCollection">
           <el-row>
-            <el-col :span="2">{{item.itemId}}</el-col>
+            <el-col :span="2">{{item.itemID}}</el-col>
             <el-col :span="4">
-              <p>{{item.collectionType}}</p>
+              <p>{{item.leixing}}</p>
             </el-col>
             <el-col style="margin-right: 80px" :span="10">
               <textarea readonly="readonly" class="textStyle" :rows="4" v-model="item.data_content"></textarea>
@@ -27,7 +27,7 @@
               <el-button @click="gotoWatch(item)" type="text">查看</el-button>
             </el-col>
             <el-col :span="2">
-              <el-button style="color: #f00" @click="deleteItem(item.collectionId)" type="text">删除</el-button>
+              <el-button style="color: #f00" @click="deleteItem(item.collectionID)" type="text">删除</el-button>
             </el-col>
           </el-row>
         </div>
@@ -80,7 +80,16 @@
             for(let i = 0; i < this.pageSize; i++)
             {
               if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
+              {
                 this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
+                this.currCollection[i].itemID = this.pageSize * (this.currentPage-1) + i + 1
+                switch(this.currCollection[i].collectionType)
+                {
+                  case 0:
+                  this.currCollection[i].leixing = '词法分析'
+                  break
+                }
+              }
               else
                 break
             }
@@ -109,26 +118,30 @@
       },
       deleteItem(val){
         var self=this;
-        var _url = '/collection/deleteItem?collectionId=' + val;
-        self.$axios({
-          url:_url,
-          methods:'get',
-          baseURL:this.hostURL
-        }).then((response)=>{
-          if(response.data.success == true)
-          {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-            this.fresh();
-          }
-          else
-            this.$message({
-              type: 'info',
-              message: '删除失败'
-            });
-        }).catch((error)=>{
+
+
+
+        let Params = {
+              collectionID: val,
+              studentID: sessionStorage.getItem('studentId')
+              }
+        // console.log(Params)
+        self.$axios.post('/api/user_function/collectionDelete', Params)
+          .then((response)=>{
+            console.log(response.data);
+            if(response.data.state === 1)
+            {
+              this.$message({
+                type: 'success',
+                message: response.data.message
+              });
+            }
+            else
+              this.$message({
+                type: 'info',
+                message: '删除收藏失败'
+              });
+          }).catch((error)=>{
           this.$message({
             type:'info',
             message:'connection fail,press F12 to see the error in console'
@@ -136,6 +149,9 @@
           console.log("ERROR:");
           console.log(error);
         });
+
+
+
       },
       gotoWatch(val) {
         if(val.collectionType === 0)
@@ -169,7 +185,16 @@
         for(let i = 0; i < this.pageSize; i++)
         {
           if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
+          {
             this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
+            this.currCollection[i].itemID = this.pageSize * (this.currentPage-1) + i + 1
+            switch(this.currCollection[i].collectionType)
+              {
+                case 0:
+                this.currCollection[i].leixing = '词法分析'
+              }
+          }
+            
           else
             break
         }
