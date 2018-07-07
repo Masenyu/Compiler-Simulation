@@ -1,6 +1,6 @@
 <template>
     <el-row>
-        <div id="head" class="header">
+        <div class="header">
           <div class="navigation">
             <div class="logo">
               <!-- <img src="../../assets/_logo.png"/> -->
@@ -8,32 +8,22 @@
             </div>
             <div class="nav-menu">
               <ul class="menu-ul">
-                <li class="floatleftli"><a :class="{'active':active1}" @click="gotoUrl('/index/main-interface',1)">首页</a></li>
-                <li class="floatleftli"><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
-                <li class="floatleftli"><a :class="{'active':active3}" @click="gotoUrl('/index/main-interface',3)">语法分析</a></li>
-                <li class="floatleftli"><a :class="{'active':active4}" @click="gotoUrl('/index/main-interface',4)">语义分析</a></li>
+                <li><a :class="{'active':active1}" @click="gotoUrl('/main-interface',1)">首页</a></li>
+                <li><a :class="{'active':active2}" @click="gotoUrl('/index/lexical-analysis',2)">词法分析</a></li>
+                <li><a :class="{'active':active3}" @click="gotoUrl('/main-interface',3)">语法分析</a></li>
+                <li><a :class="{'active':active4}" @click="gotoUrl('/main-interface',4)">语义分析</a></li>
               </ul>
             </div>
             <div class="nav-login">
-              <ul v-if="!userName">
-                <li class="floatleftli"><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
-                <li class="floatleftli"><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
+              <ul>
+                <li><a class='login-btn' @click="show = true,status='login',titletext='登陆'">登录</a></li>
+                <li><a class='login-btn' @click="show = true,status='register',titletext='注册'">注册</a></li>
               </ul>
-              <el-dropdown v-else @command="handleCommand">
-                <span class="el-dropdown-link">
-                  {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="my-collection">我的收藏</el-dropdown-item>
-                  <el-dropdown-item command="modifypassword">修改密码</el-dropdown-item>
-                  <el-dropdown-item command="logout"><el-button type="text" @click="logout()">注销</el-button></el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
             </div>
           </div>
         </div>
         <el-dialog :title="titletext" :visible.sync="show" width="420px" :close-on-click-modal="canclose">
-            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'" @loginsuccess="loginsucceed()"></login-area>
+            <login-area v-if="status==='login'" @gotoRegister="status='register',titletext='注册'" @gotoFindback="status='forget',titletext='重置密码'"></login-area>
             <register-area v-else-if="status==='register'" @gotoLogin="status='login',titletext='登陆'"></register-area>
             <find-back v-else @gotoLogin="status='login',titletext='登陆'"></find-back>
         </el-dialog>
@@ -58,42 +48,11 @@ export default {
       active4: false,
       status: '',
       show: false,
-      canclose: false,
-      titletext: '',
-      userName: ''
+      canclose: true,
+      titletext: ''
     }
   },
   methods: {
-    loginsucceed(){
-      this.show=false
-      console.log(sessionStorage.getItem('studentName'))
-      this.userName=sessionStorage.getItem('studentName')
-    },
-    logout () {
-      this.$confirm('此操作将注销账号, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        sessionStorage.setItem('studentId', '')
-        sessionStorage.setItem('studentName', '')
-        sessionStorage.setItem('email', '')
-        this.userName = ''
-      }).catch(() => {
-      })
-    },
-    handleCommand (command) {
-      if (command === 'modifypassword') {
-        this.$router.push('/index/modifypassword')
-      } else if (command === 'logout') {
-        this.logout()
-      }
-      if(command === 'my-collection')
-      {
-        this.$router.push('/index/my-collection')
-      }
-
-    },
     gotoUrl (url, highlightindex) {
       const self = this
       self.active1 = false
@@ -103,18 +62,15 @@ export default {
       switch (highlightindex) {
         case 1:
           self.active1 = true
-          document.getElementById('head').style.background = "rgba(22, 22, 22, 0.5)";
           break
         case 2:
           self.active2 = true
           break
         case 3:
           self.active3 = true
-          document.getElementById('head').style.background = "rgba(22, 22, 22, 0.5)";
           break
         case 4:
           self.active4 = true
-          document.getElementById('head').style.background = "rgba(22, 22, 22, 0.5)";
           break
       }
       self.$router.push(url)
@@ -122,14 +78,13 @@ export default {
   },
   mounted () {
     switch (window.location.hash) {
-      case '#/index/main-interface':
+      case '#/main-interface':
         this.active1 = true
         break
       case '#/index/lexical-analysis':
         this.active2 = true
         break
     }
-    this.userName = sessionStorage.getItem('studentName')
   }
 }
 </script>
@@ -139,7 +94,7 @@ export default {
   width: 100%;
   height: 4rem;
   color: #ffffff;
-  background-color: rgba(16, 16, 16, 1);
+  background-color: rgba(22, 22, 22, 0.5);
   font-size: 1.6rem;
   font-weight: 400;
   padding:1.5rem 0rem;
@@ -184,7 +139,7 @@ ul{
   padding: 0px; /* 与内部元素的距离为0 */
   width: auto; /* 宽度根据元素内容调整 */
 }
-ul li.floatleftli
+ul li
 {
   padding:0px 1rem;
   float:left; /* 向左漂移，将竖排变为横排 */
@@ -227,11 +182,5 @@ ul li a.active{
 <style>
 .el-dialog__header{
   text-align:center;
-}
-.el-dropdown {
-  height:45px;
-  line-height:45px;
-  color: #ffffff;
-  font-size: 16px;
 }
 </style>

@@ -73,7 +73,7 @@ export default {
   margin: 100px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
-  /*background-image: url('/static/img/login.jpg')*/
+  color: #fff;
 }
 .ms-doc h3 {
   padding: 9px 10px 10px;

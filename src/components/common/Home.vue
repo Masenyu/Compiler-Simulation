@@ -1,5 +1,5 @@
 <template>
- <div class="wrapper">
+ <div id="home" class="wrapper">
    <vue-canvas-nest :config="{color:'0,0,255', count: 99, opacity: 1,}"> </vue-canvas-nest>
     <v-head></v-head>
     <div class="content">
@@ -21,7 +21,7 @@ export default {
     vHead,
     vFoot,
     vueCanvasNest
-  }
+  },
 }
 </script>
 

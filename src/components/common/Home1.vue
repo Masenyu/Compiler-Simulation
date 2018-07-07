@@ -6,12 +6,11 @@
       <transition name="move" mode="out-in"><router-view></router-view></transition>
     </div>
     <v-foot></v-foot>
-   
   </div>
 </template>
 
 <script>
-import vHead from './Header.vue'
+import vHead from './Header1.vue'
 import vFoot from './Footer.vue'
 import vueCanvasNest from 'vue-canvas-nest'
 
