@@ -409,15 +409,15 @@ export default {
   },
   methods: {
     collect(){
-      let studentId = sessionStorage.getItem('studentId')
-      console.log(sessionStorage.getItem('studentId'))
-      if(studentId === null)
+      let studentID = sessionStorage.getItem('studentID')
+      console.log(sessionStorage.getItem('studentID'))
+      if(studentID === '')
       {
         alert('请先登录！')
       }
       else
       {
-        console.log(sessionStorage.getItem('studentId'))
+        console.log(sessionStorage.getItem('studentID'))
         var self=this;
 
         if(self.REForm.RE != '')
@@ -427,7 +427,7 @@ export default {
             data_content: self.REForm.RE,
             collectionType: 0,
             displayOrNot: true,
-            studentID: studentId}
+            studentID: studentID}
 
           self.$axios.post('/api/user_function/collectionAdd', Params)
             .then((response)=>{

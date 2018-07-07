@@ -65,7 +65,7 @@
       getCollectionList(){
         const self = this;
         let Params = {
-          studentID: sessionStorage.getItem('studentId')}
+          studentID: sessionStorage.getItem('studentID')}
 
         self.$axios.post('/api/user_function/collectionQuery', Params)
           .then((response)=>{
@@ -123,7 +123,7 @@
 
         let Params = {
               collectionID: val,
-              studentID: sessionStorage.getItem('studentId')
+              studentID: sessionStorage.getItem('studentID')
               }
         // console.log(Params)
         self.$axios.post('/api/user_function/collectionDelete', Params)

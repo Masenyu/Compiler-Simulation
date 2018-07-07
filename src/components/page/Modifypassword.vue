@@ -78,6 +78,7 @@ export default {
       self.$refs[formName].validate((valid) => {
         if (valid) {
           let studentID = sessionStorage.getItem('studentID')
+          console.log(studentID)
           let Params = {studentID: studentID, old_password: self.form.old_password, new_password: self.form.new_password}
           self.$axios.post('/api/user_function/modifyPassword', Params)
             .then((response) => {
@@ -87,7 +88,7 @@ export default {
                   type: 'error',
                   center: true
                 })
-              } else if (response.status.state === 1) {
+              } else if (response.data.state === 1) {
                 Message({
                   message: '成功修改密码',
                   type: 'success',
