@@ -2,22 +2,17 @@
   <div class="login-wrap">
     <div class="ms-forget">
         <el-form v-if="!next" ref="form" :model="form" :rules="rules">
+          <div class="errdiv" v-if="errorInfo">
+            <span>{{errInfo}}</span>
+          </div>
           <el-form-item prop="studentID">
-            <el-row>
-              <el-col span="24">
-                <el-input v-model="form.studentID" placeholder="学号"></el-input>
-              </el-col>
-            </el-row>
+            <el-input v-model="form.studentID" placeholder="学号"></el-input>
           </el-form-item>
           <el-form-item prop="new_password">
-            <el-col span="24">
-              <el-input v-model="form.new_password" type="password" placeholder="新的密码"></el-input>
-            </el-col>
+            <el-input v-model="form.new_password" type="password" placeholder="新的密码"></el-input>
           </el-form-item>
           <el-form-item prop="checkpassword">
-            <el-col span="24">
-              <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
-            </el-col>
+            <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
           </el-form-item>
           <div class="login-btn1">
             <el-button type="primary" @click="GetVerificationCode('form')">下一步</el-button>
@@ -25,17 +20,16 @@
           </div>
         </el-form>
         <el-form v-else ref="verificationCodeform" :model="form" :rules="verificationCoderules">
-          <p>验证码已发送到{{email}}</p>
-          <el-button type="text" @click="again()">未收到?再次发送</el-button>
+          <div class="errdiv" v-if="errorInfo">
+            <span>{{errInfo}}</span>
+          </div>
+          <p style="overflow:hidden">验证码已发送到{{email}}</p>
+          <el-button type="text" @click="again()">未收到? 再次发送</el-button>
           <el-form-item prop="verificationCode">
-            <el-row>
-              <el-col span="24">
-                <el-input v-model="form.verificationCode" placeholder="邮箱验证码"></el-input>
-              </el-col>
-            </el-row>
+            <el-input v-model="form.verificationCode" placeholder="邮箱验证码"></el-input>
           </el-form-item>
           <div class="login-btn">
-            <el-button type="primary" @click="next=false">上一步</el-button>
+            <el-button type="primary" @click="next=false,errorInfo=false,errInfo=''">上一步</el-button>
             <el-button type="primary" @click="onSubmit('verificationCodeform')">确认更改</el-button>
             <p class="register" @click="gotoLogin()">已有账号？ 登录</p>
           </div>
@@ -66,6 +60,9 @@ export default {
     }
     return {
       next: false,
+      email: '',
+      errorInfo: false,
+      errInfo: '',
       form: {
         studentID: '',
         new_password: '',
@@ -106,8 +103,12 @@ export default {
     // 判断验证码和属性是否正确   都正确  则修改密码 返回state=1，message=“修改密码成功”
     //                       其一不正确 则返回state=0，message=“验证码错误”
     //
+
+    // 下一步按钮
     GetVerificationCode (formName) {
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs[formName].validate((valid) => {
         if (valid) {
           let Params = {studentID: self.form.studentID}
@@ -115,8 +116,11 @@ export default {
             .then((response) => {
               if (response.data.state === 0) {
                 self.errorInfo = true
-                self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+                self.errInfo = '该学号不存在'
+              } else if (response.data.state === 1) {
+                self.errorInfo = false
+                self.errInfo = ''
+                self.email = response.data.email
                 self.next = true
               }
             }).catch((error) => {
@@ -130,8 +134,12 @@ export default {
         }
       })
     },
+
+    // 确认更改
     onSubmit (formName) {
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs[formName].validate((valid) => {
         if (valid) {
           let Params = {studentID: self.form.studentID, verificationCode: self.form.verificationCode, verificationAttribute: 2, new_password: self.form.new_password}
@@ -139,8 +147,8 @@ export default {
             .then((response) => {
               if (response.data.state === 0) {
                 self.errorInfo = true
-                self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+                self.errInfo = response.data.message || '邮箱验证码错误'
+              } else if (response.data.state === 1) {
                 Message({
                   message: '成功修改密码',
                   type: 'success',
@@ -159,11 +167,12 @@ export default {
         }
       })
     },
+    // 未收到？ 再次发送
     again () {
       let Params = {studentID: self.form.studentID}
       self.$axios.post('/api/user_function/forgetPasswordGetVerificationCode', Params)
         .then((response) => {
-          if (response.status.state === 1) {
+          if (response.data.state === 1) {
             Message({
               message: '已发送，请查收邮箱',
               type: 'success',
@@ -179,6 +188,7 @@ export default {
           })
         })
     },
+    // 已有账号？ 登陆
     gotoLogin () {
       this.$emit('gotoLogin')
     }
@@ -193,53 +203,33 @@ export default {
 }
 .ms-forget {
   width: 300px;
-  height: 210px;
-  padding: 0px 40px 40px 40px;
+  padding: 0px 40px;
   border-radius: 5px;
   background-color: rgba(125, 125, 125, 0);
-}
-.label {
-  color: #fff;
-}
-.tip {
-  color: #fff;
-  font-size: 2rem;
-  margin-bottom: 2rem
-}
-.tip1 {
-  color: #fff;
-  font-size: 1.5rem;
-  margin-bottom: 1rem
 }
 .login-btn {
   margin-top: 10px;
   text-align: center;
 }
+/* 下一步 */
 .login-btn1 {
   margin-top: 10px;
   text-align: center;
 }
 .login-btn button {
-  width: 120px;
+  width: 47%;
   height: 36px;
 }
+/* 下一步 */
 .login-btn1 button {
-  width: 50%;
+  width: 100%;
   height: 36px;
 }
-.ms-login span {
+.errdiv {
+  position:absolute;
   color: red;
-}
-.code {
-  width: 112px;
-  height: 35px;
-  border: 1px solid #ccc;
-  float: right;
-  border-radius: 2px;
-}
-.validate-code {
-  width: 136px;
-  float: left;
+  font-size:14px;
+  top:60px;
 }
 .register {
   font-size: 14px;

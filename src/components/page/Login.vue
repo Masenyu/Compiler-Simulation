@@ -1,43 +1,41 @@
 <template>
-    <div class="login-wrap">
-        <!-- <div class="ms-title">文法分析模拟器</div> -->
-        <div class="ms-login">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
-                <div v-if="errorInfo">
-                    <span>{{errInfo}}</span>
-                </div>
-                <el-form-item prop="studentID">
-                    <el-input v-model="ruleForm.studentID" placeholder="学号"></el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
-                </el-form-item>
-                <el-form-item prop="validate">
-                    <el-input v-model="ruleForm.validate" class="validate-code" placeholder="验证码"></el-input>
-                    <div class="code" @click="refreshCode">
-                        <s-identify :identifyCode="identifyCode"></s-identify>
-                    </div>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-                </div>
-                <el-row>
-                    <el-col span="12"><p class="find-back" @click="gotoFindback()">忘记密码？</p></el-col>
-                    <el-col span="12"><p class="register" @click="gotoRegister()">没有账号？ 注册</p></el-col>
-                </el-row>
-            </el-form>
+  <div class="login-wrap">
+    <div class="ms-login">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
+        <div class="errdiv" v-if="errorInfo">
+          <span>{{errInfo}}</span>
         </div>
+        <el-form-item prop="studentID">
+          <el-input v-model="ruleForm.studentID" placeholder="学号"></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" placeholder="密码" v-model="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item prop="validate">
+          <el-input v-model="ruleForm.validate" class="validate-code" placeholder="验证码" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <div class="code" @click="refreshCode">
+            <s-identify :identifyCode="identifyCode"></s-identify>
+          </div>
+        </el-form-item>
+        <div class="login-btn">
+            <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+        </div>
+        <el-row>
+            <el-col span="12"><p class="find-back" @click="gotoFindback()">忘记密码？</p></el-col>
+            <el-col span="12"><p class="register" @click="gotoRegister()">没有账号？ 注册</p></el-col>
+        </el-row>
+      </el-form>
     </div>
+  </div>
 </template>
 
 <script>
 import {Message} from 'element-ui'
 export default {
-  name: 'login',
   data () {
     var validate = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入验证码'))
+        callback(new Error('请输入验证码!'))
       } else if (value !== this.identifyCode) {
         callback(new Error('验证码错误!'))
       } else {
@@ -58,7 +56,7 @@ export default {
         studentID: [
           { required: true, message: '请输入学号', trigger: 'blur' }
         ],
-        passWord: [
+        password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         validate: [
@@ -72,6 +70,7 @@ export default {
     this.makeCode(this.identifyCodes, 4)
   },
   methods: {
+    // 登陆按钮
     submitForm (formName) {
       // 登录   /api/user_function/login
       // 输入studentID password
@@ -81,6 +80,8 @@ export default {
       //               错误     state = -1  message :"密码错误"
       // 不存在            则返回state = 0   message :"学号不存在"
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs[formName].validate((valid) => {
         if (valid) {
           let Params = {studentID: self.ruleForm.studentID, password: self.ruleForm.password}
@@ -92,7 +93,7 @@ export default {
               } else if (response.data.state === 0) {
                 self.errorInfo = true
                 self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+              } else if (response.data.state === 1) {
                 sessionStorage.setItem('studentID', response.data.data.studentID)
                 sessionStorage.setItem('studentName', response.data.data.studentName)
                 sessionStorage.setItem('email', response.data.data.email)
@@ -116,19 +117,25 @@ export default {
         }
       })
     },
+    // 忘记密码？
     gotoFindback () {
       this.$emit('gotoFindback')
     },
+    // 没有账号？注册
     gotoRegister () {
       this.$emit('gotoRegister')
     },
+
+    // 验证码
     randomNum (min, max) {
       return Math.floor(Math.random() * (max - min) + min)
     },
+    // 点击刷新验证码
     refreshCode () {
       this.identifyCode = ''
       this.makeCode(this.identifyCodes, 4)
     },
+    // 生成验证码
     makeCode (o, l) {
       for (let i = 0; i < l; i++) {
         this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
@@ -143,23 +150,18 @@ export default {
 .login-wrap {
   width: 300px;
   height: 250px;
-  /* background-image: url('/static/img/login.jpg'); */
-}
-.ms-title {
-  width: 100%;
-  text-align: center;
-  font-size: 30px;
-  color:black;
 }
 .ms-login {
   width: 300px;
-  height: 210px;
-  padding: 0px 40px 40px 40px;
+  padding: 0px 40px;
   border-radius: 5px;
   background-color: rgba(125, 125, 125, 0);
 }
-.ms-login span {
+.errdiv {
+  position:absolute;
   color: red;
+  font-size:14px;
+  top:60px;
 }
 .login-btn {
   text-align: center;
@@ -168,6 +170,7 @@ export default {
   width: 100%;
   height: 36px;
 }
+/* 验证码 */
 .code {
   width: 112px;
   height: 35px;
@@ -175,6 +178,7 @@ export default {
   float: right;
   border-radius: 2px;
 }
+/* 验证码输入框 */
 .validate-code {
   width: 136px;
   float: left;
