@@ -121,7 +121,7 @@ export default {
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
     }
-  },
+  }
 
 }
 </script>
@@ -143,8 +143,8 @@ export default {
   right:0px;
   top:4.2px;
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: #ffffff;
   outline: none;

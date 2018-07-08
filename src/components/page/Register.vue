@@ -2,36 +2,24 @@
   <div class="login-wrap">
     <div class="ms-register">
       <el-form ref="form" :model="form" :rules="rules">
-        <div v-if="errorInfo">
+        <div class="errdiv" v-if="errorInfo">
           <span>{{errInfo}}</span>
         </div>
         <el-form-item prop="studentName">
-          <el-row>
-            <el-col span="24">
-              <el-input v-model="form.studentName" placeholder="昵称"></el-input>
-            </el-col>
-          </el-row>
+          <el-input v-model="form.studentName" placeholder="昵称"></el-input>
         </el-form-item>
         <el-form-item prop="studentID">
-          <el-row>
-            <el-col span="24">
-              <el-input v-model="form.studentID" placeholder="学号"></el-input>
-            </el-col>
-          </el-row>
+          <el-input v-model="form.studentID" placeholder="学号"></el-input>
         </el-form-item>
         <el-form ref="emailform" :model="form" :rules="emailrules">
           <el-form-item prop="email">
-            <el-row>
-              <el-col span="24">
-                <el-input v-model="form.email" placeholder="邮箱"></el-input>
-              </el-col>
-            </el-row>
+            <el-input v-model="form.email" placeholder="邮箱"></el-input>
           </el-form-item>
         </el-form>
         <el-form-item prop="verificationCode">
           <el-row>
             <el-col span="12">
-              <el-input v-model="form.verificationCode" placeholder="邮箱验证码"></el-input>
+              <el-input v-model="form.verificationCode" placeholder="验证码"></el-input>
             </el-col>
             <el-col span="10" offset="1">
               <el-button width="100%" @click="generateVerificationCode(form.email)">获取邮箱验证码</el-button>
@@ -39,18 +27,10 @@
           </el-row>
         </el-form-item>
         <el-form-item prop="password">
-          <el-row>
-            <el-col span="24">
-              <el-input v-model="form.password" type="password" placeholder="密码"></el-input>
-            </el-col>
-          </el-row>
+          <el-input v-model="form.password" type="password" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item prop="checkpassword">
-          <el-row>
-            <el-col span="24">
-              <el-input v-model="form.checkpassword" type="password" placeholder="请再次输入密码"></el-input>
-            </el-col>
-          </el-row>
+          <el-input v-model="form.checkpassword" type="password" placeholder="确认密码"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="onSubmit('form')">注册</el-button>
@@ -99,8 +79,9 @@ export default {
           { max: 30, message: '不能超过30个字符', trigger: 'blur' }
         ],
         studentID: [
-          { required: true, message: '请输入正确的学号!', trigger: 'blur' },
-          { pattern: /^[0-9]{12}$/, message: '请输入正确的学号!' }
+          { required: true, message: '请输入学号!', trigger: 'blur' },
+          { pattern: /^[0-9]*$/, message: '不能含非数字字符' },
+          { min: 12, max: 12, message: '学号长度为12位', trigger: 'blur' }
         ],
         password: [
           {required: true, message: '请输入密码!', trigger: 'blur'},
@@ -136,8 +117,12 @@ export default {
     // 判断studentID是否存在  存在   则返回state = 0   message :"学号已经被注册"
     //                       不存在 如果验证码和属性正确  插入数据库 返回state=1 message:"注册成功"
     //                       如果验证码或属性不正确  返回state = -1   message :"验证码错误"
+
+    // 获取邮箱验证码按钮
     generateVerificationCode (email) {
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs['emailform'].validate((valid) => {
         if (valid) {
           self.$axios.post('/api/user_function/generateVerificationCode', {email: self.form.email})
@@ -145,7 +130,7 @@ export default {
               if (response.data.state === 0) {
                 self.errorInfo = true
                 self.errInfo = response.data.message
-              } else if (response.status.state === 1) {
+              } else if (response.data.state === 1) {
                 Message({
                   message: '邮箱可用',
                   type: 'success',
@@ -163,8 +148,12 @@ export default {
         }
       })
     },
+
+    // 注册按钮
     onSubmit (formName) {
       const self = this
+      self.errorInfo = false
+      self.errInfo = ''
       self.$refs[formName].validate((valid) => {
         if (valid) {
           self.$refs['emailform'].validate((valid) => {
@@ -199,14 +188,10 @@ export default {
         }
       })
     },
+
+    // 已有账号？登陆
     gotoLogin () {
-      console.log(this)
       this.$emit('gotoLogin')
-      // this.$router.push('/login')
-    },
-    getDateTimes (str) {
-      var str = new Date(str)
-      return str
     }
   }
 }
@@ -217,21 +202,11 @@ export default {
   width: 300px;
   height: 435px;
 }
-.ms-title {
-  width: 100%;
-  text-align: center;
-  font-size: 30px;
-  color:black;
-}
 .ms-register {
   width: 300px;
-  height: 350px;
-  padding: 0px 40px 40px 40px;
+  padding: 0px 40px;
   border-radius: 5px;
   background-color: rgba(125, 125, 125, 0);
-}
-.label {
-  color: black;
 }
 .login-btn {
   text-align: center;
@@ -240,19 +215,11 @@ export default {
   width: 100%;
   height: 36px;
 }
-.ms-login span {
+.errdiv {
+  position:absolute;
   color: red;
-}
-.code {
-  width: 112px;
-  height: 35px;
-  border: 1px solid #ccc;
-  float: right;
-  border-radius: 2px;
-}
-.validate-code {
-  width: 136px;
-  float: left;
+  font-size:14px;
+  top:60px;
 }
 .register {
   font-size: 14px;

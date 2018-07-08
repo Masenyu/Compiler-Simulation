@@ -21,11 +21,8 @@
                 <br>
             </article>
         </div>
-
     </div>
-  </div>  
-        
-    
+  </div>
 </template>
 
 <script>
@@ -35,25 +32,21 @@ export default {
     turnToHome () {
       this.$router.push('/')
     },
-    randomNum(minNum,maxNum){
-      switch(arguments.length){
+    randomNum (minNum, maxNum) {
+      switch (arguments.length) {
         case 1:
-          return parseInt(Math.random()*minNum+1,10);
-          break;
+          return parseInt(Math.random() * minNum + 1, 10)
         case 2:
-          return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
-          break;
+          return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
         default:
-          return 0;
-          break;
+          return 0
+      }
     }
-}
   },
-  mounted() {
-    document.getElementById('p').style.height=(window.innerHeight)+'px'
-   
-    switch( this.randomNum(0,15))
-    {
+  mounted () {
+    document.getElementById('p').style.height = (window.innerHeight) + 'px'
+
+    switch (this.randomNum(0, 15)) {
       case 0:
         document.getElementById('p').style.backgroundImage = "url('/static/img/login.jpg')"
         break
@@ -87,7 +80,7 @@ export default {
       case 7:
         document.getElementById('p').style.backgroundImage = "url('/static/img/5.jpg')"
         break
-       case 8:
+      case 8:
         document.getElementById('p').style.backgroundImage = "url('/static/img/6.jpg')"
         break
       case 9:
@@ -103,7 +96,6 @@ export default {
         document.getElementById('p').style.backgroundImage = "url('/static/img/10.jpg')"
         break
     }
-
   }
 }
 </script>
