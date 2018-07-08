@@ -53,11 +53,9 @@
             </article>
         </div>
       </div>
-      
-    </div>
-       
 
-    
+    </div>
+
 </template>
 
 <script>
@@ -68,8 +66,8 @@ export default {
       this.$router.push('/')
     }
   },
-  mounted() {
-    document.getElementById('p').style.height=(window.innerHeight - 110)+'px';
+  mounted () {
+    document.getElementById('p').style.height = (window.innerHeight - 110) + 'px'
   }
 }
 </script>
@@ -90,7 +88,7 @@ export default {
   padding: 100px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
     sans-serif;
-  
+
 }
 .ms-doc h3 {
   padding: 9px 10px 10px;
@@ -101,7 +99,7 @@ export default {
   border: 1px solid #d8d8d8;
   border-bottom: 0;
   border-radius: 3px 3px 0 0;
- 
+
 }
 .ms-doc article {
   padding: 45px;
@@ -111,14 +109,14 @@ export default {
   border: 1px solid #ddd;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  
+
 }
 .ms-doc article h1 {
   font-size: 32px;
   padding-bottom: 10px;
   margin-bottom: 15px;
   border-bottom: 1px solid #ddd;
-  
+
 }
 .ms-doc article h2 {
   margin: 24px 0 16px;
@@ -131,7 +129,6 @@ export default {
 .ms-doc article p {
   margin-bottom: 15px;
   line-height: 1.5;
-  
   font-size: 1.8rem
 }
 .ms-doc article .el-checkbox {

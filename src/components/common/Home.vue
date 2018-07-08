@@ -1,6 +1,6 @@
 <template>
  <div class="wrapper">
-   <vue-canvas-nest :config="{color:'0,0,255', count: 99, opacity: 1,}"> </vue-canvas-nest>
+    <vue-canvas-nest :config="{color:'0,0,255', count: 99, opacity: 1,}"> </vue-canvas-nest>
     <v-head></v-head>
     <div class="content">
       <transition name="move" mode="out-in"><router-view></router-view></transition>
@@ -31,11 +31,10 @@ export default {
   height: auto !important;
   position: relative;
   background-color: rgba(233, 233, 233, 0.2);
-  /*background-image: url("/static/img/login.jpg")*/
 }
 .content{
   /*background-color: #bbbbbb;*/
-  padding-top:7rem;
+  padding-top:20px;
   min-height:100%;
   height: auto !important;
 }

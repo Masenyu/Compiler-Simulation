@@ -43,153 +43,142 @@
 </template>
 
 <script type="text/javascript">
-  export default {
-    data(){
-      return{
-        pageSize: 6,
-        currentPage: 1,
-        currCollection: [],
-        collection:[
-          {
-            itemId: 1,
-            studentId: '20153061380',
-            collectionId: 1,
-            collectionType: "词法分析",
-            expression: "t=do\nt=double\nt=a|b\nt=abcd",
-          },
-          {
-            itemId: 2,
-            studentId: '20153061380',
-            collectionId: 2,
-            collectionType: "词法分析",
-            expression: 't=do\nt=double',
-          },
-          {
-            itemId: 3,
-            studentId: '20153061380',
-            collectionId: 3,
-            collectionType: "词法分析",
-            expression: 't=do\nt=double', 
-          },
-          {
-            itemId: 4,
-            studentId: '20153061380',
-            collectionId: 4,
-            collectionType: "词法分析",
-            expression: 't=don\nt=double', 
-          },
-          {
-            itemId: 5,
-            studentId: '20153061380',
-            collectionId: 5,
-            collectionType: "词法分析",
-            expression: 't=do\nt=double',
-          },
-          {
-            itemId: 6,
-            studentId: '20153061380',
-            collectionId: 6,
-            collectionType: "词法分析",
-            expression: 't=do\nt=double',
-          },
-        ],
-        hostURL:  'localhost',
-      }
+export default {
+  data () {
+    return {
+      pageSize: 6,
+      currentPage: 1,
+      currCollection: [],
+      collection: [
+        {
+          itemId: 1,
+          studentId: '20153061380',
+          collectionId: 1,
+          collectionType: '词法分析',
+          expression: 't=do\nt=double\nt=a|b\nt=abcd'
+        },
+        {
+          itemId: 2,
+          studentId: '20153061380',
+          collectionId: 2,
+          collectionType: '词法分析',
+          expression: 't=do\nt=double'
+        },
+        {
+          itemId: 3,
+          studentId: '20153061380',
+          collectionId: 3,
+          collectionType: '词法分析',
+          expression: 't=do\nt=double'
+        },
+        {
+          itemId: 4,
+          studentId: '20153061380',
+          collectionId: 4,
+          collectionType: '词法分析',
+          expression: 't=don\nt=double'
+        },
+        {
+          itemId: 5,
+          studentId: '20153061380',
+          collectionId: 5,
+          collectionType: '词法分析',
+          expression: 't=do\nt=double'
+        },
+        {
+          itemId: 6,
+          studentId: '20153061380',
+          collectionId: 6,
+          collectionType: '词法分析',
+          expression: 't=do\nt=double'
+        }
+      ],
+      hostURL: 'localhost'
+    }
+  },
+  methods: {
+    handleSizeChange (val) {
+
     },
-    methods: {
-      handleSizeChange(val) {
-        
-      },
-      handleCurrentChange(val) {
-       
-      },
-      getCollectionList(){
-        var self=this;
-        var _url = '/collection/getItems?userId='+ localStorage.getItem('userId');//用户ID（long）////////////////////////////////////+this.category;
-        self.$axios({
-          url:_url,
-          methods:'get',
-          baseURL:this.hostURL
-        }).then((response)=>{
-          self.collection = response.data;
-          for(let i = 0; i < self.collection.length; i++)
-          {
-            self.collection[i].itemId = i
-          }
-        }).catch((error)=>{
+    handleCurrentChange (val) {
+
+    },
+    getCollectionList () {
+      var self = this
+      var _url = '/collection/getItems?userId=' + localStorage.getItem('userId')// 用户ID（long）////////////////////////////////////+this.category;
+      self.$axios({
+        url: _url,
+        methods: 'get',
+        baseURL: this.hostURL
+      }).then((response) => {
+        self.collection = response.data
+        for (let i = 0; i < self.collection.length; i++) {
+          self.collection[i].itemId = i
+        }
+      }).catch((error) => {
+        this.$message({
+          type: 'info',
+          message: 'connection fail,press F12 to see the error in console'
+        })
+        console.log('ERROR:')
+        console.log(error)
+      })
+    },
+    deleteItem (val) {
+      var self = this
+      var _url = '/collection/deleteItem?collectionId=' + val
+      self.$axios({
+        url: _url,
+        methods: 'get',
+        baseURL: this.hostURL
+      }).then((response) => {
+        if (response.data.success == true) {
           this.$message({
-            type:'info',
-            message:'connection fail,press F12 to see the error in console'
-          });
-          console.log("ERROR:");
-          console.log(error);
-        });
-      },
-      deleteItem(val){
-        var self=this;
-        var _url = '/collection/deleteItem?collectionId=' + val;
-        self.$axios({
-          url:_url,
-          methods:'get',
-          baseURL:this.hostURL
-        }).then((response)=>{
-          if(response.data.success == true)
-          {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            });
-            this.fresh();
-          }
-          else
-            this.$message({
-              type: 'info',
-              message: '删除失败'
-            });
-        }).catch((error)=>{
+            type: 'success',
+            message: '删除成功'
+          })
+          this.fresh()
+        } else {
           this.$message({
-            type:'info',
-            message:'connection fail,press F12 to see the error in console'
-          });
-          console.log("ERROR:");
-          console.log(error);
-        });
-      },
-      gotoWatch(val) {
-        if(val.collectionType === '词法分析')
-        {
-          localStorage.setItem('collectionToWatch', val.expression)
-          this.$router.push('/index/lexical-analysis')
+            type: 'info',
+            message: '删除失败'
+          })
         }
-      }
+      }).catch((error) => {
+        this.$message({
+          type: 'info',
+          message: 'connection fail,press F12 to see the error in console'
+        })
+        console.log('ERROR:')
+        console.log(error)
+      })
     },
-    mounted() {
-      document.getElementById('p').style.height=(window.innerHeight - 110)+'px'
-      this.getCollectionList()
-      for(let i = 0; i < this.pageSize; i++)
-        {
-          if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
-            this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
-          else
-            break
-        }
-       console.log(this.currCollection)
-    },
-    watch: {
-      currentPage: function() {
-        console.log(this.currentPage)
-        this.currCollection = []
-        for(let i = 0; i < this.pageSize; i++)
-        {
-          if(this.pageSize * (this.currentPage-1) + i < this.collection.length)
-            this.currCollection.push(this.collection[this.pageSize * (this.currentPage-1) + i])
-          else
-            break
-        }
-        console.log(this.currCollection)
+    gotoWatch (val) {
+      if (val.collectionType === '词法分析') {
+        localStorage.setItem('collectionToWatch', val.expression)
+        this.$router.push('/index/lexical-analysis')
       }
     }
+  },
+  mounted () {
+    document.getElementById('p').style.height = (window.innerHeight - 110) + 'px'
+    this.getCollectionList()
+    for (let i = 0; i < this.pageSize; i++) {
+      if (this.pageSize * (this.currentPage - 1) + i < this.collection.length) { this.currCollection.push(this.collection[this.pageSize * (this.currentPage - 1) + i]) } else { break }
+    }
+    console.log(this.currCollection)
+  },
+  watch: {
+    currentPage: function () {
+      console.log(this.currentPage)
+      this.currCollection = []
+      for (let i = 0; i < this.pageSize; i++) {
+        if (this.pageSize * (this.currentPage - 1) + i < this.collection.length) { this.currCollection.push(this.collection[this.pageSize * (this.currentPage - 1) + i]) } else { break }
+      }
+      console.log(this.currCollection)
+    }
   }
+}
 </script>
 
 <style scoped>

@@ -70,15 +70,12 @@ export default {
     this.setmirror()
     let str = ''
     console.log('2018/7/6')
-    if(str = localStorage.getItem('collectionToWatch'))
-    {
+    if (str = localStorage.getItem('collectionToWatch')) {
       console.log(str)
       this.$nextTick(() => {
-       
-         this.showcode(str)
-      localStorage.removeItem('collectionToWatch')
+        this.showcode(str)
+        localStorage.removeItem('collectionToWatch')
       })
-      
     }
     // this.$nextTick(() => {
     //   this._initScroll()
@@ -144,54 +141,50 @@ export default {
     },
     showcode (str) {
       console.log('收到了')
-     this.CodeMirrorEditor.setValue(str)
+      this.CodeMirrorEditor.setValue(str)
       this.$nextTick(() => {
         this.$emit('reformchange', this.CodeMirrorEditor.getValue())
       })
     },
     collect (str) {
-      var self=this;
-      if(self.hasinput === true)
-      {
-        var _url = '/collect/addItem';
+      var self = this
+      if (self.hasinput === true) {
+        var _url = '/collect/addItem'
         self.$axios({
-          url:_url,
+          url: _url,
           method: 'post',
-          data:{
+          data: {
             expression: this.CodeMirrorEditor.getValue(),
-            studentId: userId,
+            studentId: userId
           },
-          baseURL:this.hostURL,
-        }).then((response)=>{
-          console.log(response.data);
-          if(response.data.success == true)
-          {
+          baseURL: this.hostURL
+        }).then((response) => {
+          console.log(response.data)
+          if (response.data.success == true) {
             this.$message({
               type: 'success',
               message: '添加成功'
-            });
-          }
-          else
+            })
+          } else {
             this.$message({
               type: 'info',
               message: '添加失败'
-            });
-        }).catch((error)=>{
+            })
+          }
+        }).catch((error) => {
           this.$message({
-            type:'info',
-            message:'connection fail,press F12 to see the error in console'
-          });
-          console.log("ERROR:");
-          console.log(error);
-        });
-      }
-      else
-      {
+            type: 'info',
+            message: 'connection fail,press F12 to see the error in console'
+          })
+          console.log('ERROR:')
+          console.log(error)
+        })
+      } else {
         alert('请输入语法规则')
       }
     }
   }
- 
+
 }
 </script>
 
@@ -212,8 +205,8 @@ export default {
   right: 0px;
   top: 4.2px;
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: #ffffff;
   outline: none;
