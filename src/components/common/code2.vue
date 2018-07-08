@@ -99,20 +99,18 @@ export default {
       this.CodeMirrorEditor.setValue('')
     },
     showcode (str, language) {
-     
       this.$nextTick(() => {
-        var headElement=document.body;
-        var element=document.createElement("script");
-        element.setAttribute("src",this.transToSrc(language));
-        headElement.appendChild(element);
-        element.onload=() => {
-          this.CodeMirrorEditor.setOption("mode",language)
+        var headElement = document.body
+        var element = document.createElement('script')
+        element.setAttribute('src', this.transToSrc(language))
+        headElement.appendChild(element)
+        element.onload = () => {
+          this.CodeMirrorEditor.setOption('mode', language)
         }
         this.CodeMirrorEditor.setValue(str)
       })
-      
     }
-  },
+  }
 
 }
 </script>
@@ -133,8 +131,8 @@ export default {
   right:0px;
   top:4.2px;
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: #ffffff;
   outline: none;
