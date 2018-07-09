@@ -6,12 +6,13 @@ var $sql = require('../../db/sqlMap_new');
 var MailService = require('../MailService')
 var generateVerificationCode= require('./generateVerificationCode')
 var conn = mysql.createConnection(models.mysql);
-var sender = '13427532895';
-var code = 'qq594978168';
-// var recipient = '3556350883@qq.com'
-// var verCode = '123456'
-var mailService = MailService(sender, code);
-// mailService.resetPassword(recipient, verCode);
+var smtpProvider = 'qq';
+var sender = '2369969039';
+var code = 'ngyoikiaeegndjhj';
+// var smtpProvider = '163';
+// var sender = '13427532895';
+// var code = 'qq594978168';
+var mailService = MailService(sender, code, smtpProvider);
 conn.connect();
 var jsonWrite = function(res, ret) {
   if(typeof ret === 'undefined') {
