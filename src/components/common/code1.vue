@@ -134,7 +134,7 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)
-      // this.CodeMirrorEditor.setSize(350, 280)
+      this.CodeMirrorEditor.setSize(350, window.innerHeight*0.32)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')

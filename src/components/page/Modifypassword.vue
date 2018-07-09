@@ -1,9 +1,8 @@
 <template>
-<div class="page">
-  <el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item >我的账号</el-breadcrumb-item>
-    <el-breadcrumb-item >修改密码</el-breadcrumb-item>
-  </el-breadcrumb>
+<div id="p" class="page">
+  <el-header>
+      <h1 class="head">修改密码</h1>
+  </el-header>
   <div class="login-wrap">
     <div class="ms-forget">
         <el-form ref="form" :model="form" :rules="rules">
@@ -114,18 +113,23 @@ export default {
     resetForm (formName) {
       this.$refs[formName].resetFields()
     }
-  }
+  },
+  mounted () {
+    document.getElementById('p').style.height = (window.innerHeight - 110) + 'px'
+  },
 }
 </script>
 
 <style scoped>
 .page {
-  width: 65%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 40px;
   min-width: 900px;
-  min-height: 100%;
+}
+.head {
+  padding: 3rem;
+  font-size: 2.5rem;
 }
 .login-wrap {
   margin:50px auto;
