@@ -3,14 +3,14 @@ function MailService(sender, code) {
     let transporter = nodemailer.createTransport({
         host: 'smtp.163.com',
         port: 25,
-        secure: false, 
+        secure: false,
         auth: {
             user: `${sender}@163.com`,
             pass: code
         }
     });
 	return {
-		resetPassword: function (recipient, verCode) {
+		createAccount: function (recipient, verCode) {
 			let mailOptions = {
 				from: `<${sender}@163.com>`,
 				to: recipient,
@@ -30,7 +30,7 @@ function MailService(sender, code) {
 				return true;
 			})
 		},
-		createAccount: function (recipient, verCode) {
+    resetPassword: function (recipient, verCode) {
 			let mailOptions = {
 				from: `${sender}@163.com`,
 				to: recipient,

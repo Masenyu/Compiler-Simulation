@@ -11,7 +11,7 @@ var code = 'qq594978168';
 // var recipient = '3556350883@qq.com'
 // var verCode = '123456'
 var mailService = MailService(sender, code);
-// mailService.resetPassword(recipient, verCode);
+// resetPassword(recipient, verCode);
 conn.connect();
 var jsonWrite = function(res, ret) {
   if(typeof ret === 'undefined') {
@@ -60,7 +60,7 @@ router.post('/generateVerificationCode', (req, res) => {
                   console.log(err);
                 } else {
                   var recipient = params.email
-                  mailService.resetPassword(recipient, verCode);
+                  mailService.createAccount(recipient, verCode);
                   var result3 = {state: 1, message: "sending email successfully!", email: recipient}
                   jsonWrite(res, result3);
                 }
@@ -73,7 +73,7 @@ router.post('/generateVerificationCode', (req, res) => {
                   console.log(err);
                 } else {
                   var recipient = params.email
-                  mailService.resetPassword(recipient, verCode);
+                  mailService.createAccount(recipient, verCode);
                   var result3 = {state: 1, message: "sending email successfully!", email: recipient}
                   jsonWrite(res, result3);
                 }
