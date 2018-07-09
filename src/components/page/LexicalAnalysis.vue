@@ -16,13 +16,13 @@
                         <el-row>
                           <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
                           <el-col span="5">
-                            <p>红色为进行读取字符</p>
+                            <p style="font-size: 12px">红色为进行读取字符</p>
                           </el-col>
                         </el-row>
                         <el-row>
                           <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
                           <el-col span="5">
-                            <p>蓝色为进行闭包操作</p>
+                            <p style="font-size: 12px">蓝色为进行闭包操作</p>
                           </el-col>
                         </el-row>
                       </div>
@@ -37,24 +37,16 @@
                                   <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
                                   <!-- button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                                   <button class="buttonInGraph" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA, 'javascript')"><img src="static/img/description_24.png" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA, 'javascript')"><img src="static/img/description_24.png" /></button>
                                   <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.fullscreenText" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.fullscreenText" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                                 </span>
                               </div>
                               <div class="token">
@@ -87,22 +79,14 @@
                               <div style="min-height: 5rem"></div>
                               <div style="min-height: 3.5rem; margin-buttom: 20px">
                                 <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA.autoicon" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.fullscreenText" @click="full_screen(DFA)"><img :src="DFA.zoomicon" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA.fullscreenText" @click="full_screen(DFA)"><img :src="DFA.zoomicon" /></button>
                                 </span>
                               </div>
                               <div class="token">
@@ -136,22 +120,14 @@
                               <div style="min-height: 5rem"></div>
                               <div style="min-height: 3.5rem; margin-buttom: 20px">
                                 <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
                                 </span>
                                 <span style=" float:right; padding-right: 1%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button>
-                                  <!--
-                                  -->
-                                  <button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.fullscreenText" @click="full_screen(DFA_S)"><img :src="DFA_S.zoomicon" /></button>
+                                  <button class="buttonInGraph buttonInGraph-top" data-tip="鹰眼" @click="fitAnimated(DFA_S)"><img src="static/img/visibility_24.png" /></button><!--
+                                  --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.fullscreenText" @click="full_screen(DFA_S)"><img :src="DFA_S.zoomicon" /></button>
                                 </span>
                               </div>
                               <div class="token">
@@ -191,14 +167,14 @@
                     <el-input style="font-size:20px;display:none" placeholder="请输入词法规则: 例子： T_1=do T_2=double T_3=(a|b)*" type="textarea" :autosize="{ minRows: 0, maxRows: 0}" v-model="REForm.RE"></el-input>
                   </el-form-item>
                 </el-form>
-                <el-button class="generateFA1" size="small" @click="collect()">收藏</el-button>
+                <el-button id="collect" class="generateFA1" size="small" @click="collect()">收藏</el-button>
                 <el-popover placement="top" width="160" :disabled="!available" v-model="visible2">
                   <p>构建新的状态机将清空已有的记录，确定要执行吗？</p>
                   <div style="text-align: right; margin: 0">
                     <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
                     <el-button type="primary" size="mini" @click="judgeGenerateSure()">确定</el-button>
                   </div>
-                  <el-button class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
+                  <el-button id="generate" class="generateFA" size="small" slot="reference" type="primary" @click="judgeGenerate()">构建状态机</el-button>
                 </el-popover>
               </el-col>
             </el-row>
@@ -409,15 +385,15 @@ export default {
   },
   methods: {
     collect(){
-      let studentId = sessionStorage.getItem('studentId')
-      console.log(sessionStorage.getItem('studentId'))
-      if(studentId === null)
+      let studentID = sessionStorage.getItem('studentID')
+      console.log(sessionStorage.getItem('studentID'))
+      if(studentID === null)
       {
         alert('请先登录！')
       }
       else
       {
-        console.log(sessionStorage.getItem('studentId'))
+        console.log(sessionStorage.getItem('studentID'))
         var self=this;
 
         if(self.REForm.RE != '')
@@ -427,7 +403,7 @@ export default {
             data_content: self.REForm.RE,
             collectionType: 0,
             displayOrNot: true,
-            studentID: studentId}
+            studentID: studentID}
 
           self.$axios.post('/api/user_function/collectionAdd', Params)
             .then((response)=>{
@@ -513,7 +489,9 @@ export default {
                 // sessionStorage.setItem('regulation', regulation)
                 self.addCSS(self.getCsstext())
                 self.isFirsttime = false
+                
                 self.fresh()
+                
               } else { // 报错
                 console.log('error: ' + response.data.message)
                 Message({
@@ -547,29 +525,28 @@ export default {
       if (this.available === false) { this.generateFA('REForm') }
     },
     judgeGenerateSure () {
+      if(this.hasbegin === true)
+        this.startButton()
       this.visible2 = false
       this.hasbegin = false
       this.clearData(this.NFA)
       this.clearData(this.DFA)
-      this.clearData(this.DFA_S)
+      this.clearData(this.DFA_S)   
       this.generateFA('REForm')
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
       this.startbuttonType = 'primary'
       this.startbuttonText = '开始分词'
-      this.NFA.Token = ''
-      this.DFA.Token = ''
-      this.DFA_S.Token = ''
+      this.autobuttonType= 'primary'
+      this.autoicon= 'static/img/play_24.png'
+      this.autobuttonText= '自动展示'
+      this.hasbegin= false
       object = {
         data: {
-          transitionTable: [
-          ],
-
+          transitionTable: [],
           alphabet: [],
-
-          acceptState: [
-          ]
+          acceptState: []
         },
         machine: null,
         nodes: null,
@@ -579,13 +556,15 @@ export default {
         TokenForm: '',
         Token: '',
         autobuttonType: 'primary',
+        autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
         zoomicon: 'static/img/fullscreen_24.png',
         fullscreenText: '全屏',
         messBoxScroll: null,
-        tokenBoxScroll: null
+        first: true,
+        code: ''
       }
       console.log(object.Token)
     },
@@ -795,16 +774,19 @@ export default {
         self.NFA.machine = null
         self.refresh(self.NFA)
         self.NFA.Token = ''
+        self.NFA.first = true
         self.NFA.messBoxScroll.scrollTo(0, self.NFA.messBoxScroll.minScrollY, 700, 'bounce')
 
         self.DFA.machine = null
         self.refresh(self.DFA)
         self.DFA.Token = ''
+        self.DFA.first = true
         self.DFA.messBoxScroll.scrollTo(0, self.DFA.messBoxScroll.minScrollY, 700, 'bounce')
 
         self.DFA_S.machine = null
         self.refresh(self.DFA_S)
         self.DFA_S.Token = ''
+        self.DFA_S.first = true
         self.DFA_S.messBoxScroll.scrollTo(0, self.DFA_S.messBoxScroll.minScrollY, 700, 'bounce')
 
         if (self.NFA.autobuttonText === '停止') {
@@ -1389,6 +1371,13 @@ export default {
         object.magnifier = true
       })
     }
+  },
+  mounted() {
+    document.getElementById('NFAvis').style.height = (window.innerHeight*0.66) + 'px'
+    document.getElementById('DFAvis').style.height = (window.innerHeight*0.66) + 'px'
+    document.getElementById('DFA_Svis').style.height = (window.innerHeight*0.66) + 'px'
+    document.getElementById('collect').style.top = (window.innerHeight*0.33) + 'px'
+    document.getElementById('generate').style.top = (window.innerHeight*0.33) + 'px'
   }
 }
 </script>
@@ -1464,7 +1453,6 @@ export default {
 .scroll_bar {
   /* background-color: #bbbbbb; */
   height: 80px;
-  overflow: hidden;
 }
 div.graph {
   background: #eef0f1;
@@ -1568,12 +1556,10 @@ div.graph div.vis {
 .generateFA {
   position: absolute;
   right: 0px;
-  top: 310px;
 }
 .generateFA1 {
   position: absolute;
   right: 100px;
-  top: 310px;
 }
 .autobutton {
   width: 80px;

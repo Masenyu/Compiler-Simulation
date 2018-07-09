@@ -115,13 +115,13 @@ export default {
       // // this.CodeMirrorEditor.addOverlay("coconut");
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
-      // this.CodeMirrorEditor.setCursor(0)
-      // this.CodeMirrorEditor.setSize(350, 280)
+      // this.CodeMirrorEditor.setCursor(0)document.getElementById('p').style.minHeight = (window.innerHeight) + 'px'
+      this.CodeMirrorEditor.setSize(350, window.innerHeight*0.32)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
     }
-  },
+  }
 
 }
 </script>
@@ -143,8 +143,8 @@ export default {
   right:0px;
   top:4.2px;
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: #ffffff;
   outline: none;

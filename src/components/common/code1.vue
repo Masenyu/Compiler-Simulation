@@ -70,15 +70,12 @@ export default {
     this.setmirror()
     let str = ''
     console.log('2018/7/6')
-    if(str = localStorage.getItem('collectionToWatch'))
-    {
+    if (str = localStorage.getItem('collectionToWatch')) {
       console.log(str)
       this.$nextTick(() => {
-
-         this.showcode(str)
-      localStorage.removeItem('collectionToWatch')
+        this.showcode(str)
+        localStorage.removeItem('collectionToWatch')
       })
-
     }
     // this.$nextTick(() => {
     //   this._initScroll()
@@ -137,18 +134,18 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)
-      // this.CodeMirrorEditor.setSize(350, 280)
+      this.CodeMirrorEditor.setSize(350, window.innerHeight*0.32)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')
     },
     showcode (str) {
       console.log('收到了')
-     this.CodeMirrorEditor.setValue(str)
+      this.CodeMirrorEditor.setValue(str)
       this.$nextTick(() => {
         this.$emit('reformchange', this.CodeMirrorEditor.getValue())
       })
-    },
+    }
   }
 
 }
@@ -171,8 +168,8 @@ export default {
   right: 0px;
   top: 4.2px;
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: #ffffff;
   outline: none;

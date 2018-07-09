@@ -13,19 +13,4 @@ export default {
 <style>
 @import "./components/main.css";
 @import 'http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css';
-  /*TODO：
-body{
-  padding:0px;
-  margin:0px auto;
-}
-a{
-  text-decoration:none;
-}
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-}*/
 </style>
