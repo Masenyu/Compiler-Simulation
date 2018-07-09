@@ -6,7 +6,6 @@
     </el-header>
     <div class="cartTable">
       <el-row>
-        <el-col :span="2"> </el-col>
         <el-col :span="2">编号</el-col>
         <el-col :span="4">类型</el-col>
         <el-col :span="12">文法</el-col>
@@ -212,6 +211,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   border: 1px solid #cccccc;
+  font-size: 16px;
   background-color: rgba(255, 255, 255, 1);
 }
 .head {
@@ -229,7 +229,7 @@ export default {
   overflow: hidden;
 }
 .table-block {
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   min-height: 80%;
 }
@@ -239,6 +239,7 @@ export default {
   margin-bottom: 0px;
   background-color: #fafafa;
   padding: 10px;
+
   border: 1px solid #ccd0d2;
   border-bottom-color: #ececec;
   border-top-color: #ececec;

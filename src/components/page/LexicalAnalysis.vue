@@ -489,7 +489,9 @@ export default {
                 // sessionStorage.setItem('regulation', regulation)
                 self.addCSS(self.getCsstext())
                 self.isFirsttime = false
+                
                 self.fresh()
+                
               } else { // 报错
                 console.log('error: ' + response.data.message)
                 Message({
@@ -523,29 +525,28 @@ export default {
       if (this.available === false) { this.generateFA('REForm') }
     },
     judgeGenerateSure () {
+      if(this.hasbegin === true)
+        this.startButton()
       this.visible2 = false
       this.hasbegin = false
       this.clearData(this.NFA)
       this.clearData(this.DFA)
-      this.clearData(this.DFA_S)
+      this.clearData(this.DFA_S)   
       this.generateFA('REForm')
     },
     // 重新生成状态机，刷新数据
     clearData (object) {
       this.startbuttonType = 'primary'
       this.startbuttonText = '开始分词'
-      this.NFA.Token = ''
-      this.DFA.Token = ''
-      this.DFA_S.Token = ''
+      this.autobuttonType= 'primary'
+      this.autoicon= 'static/img/play_24.png'
+      this.autobuttonText= '自动展示'
+      this.hasbegin= false
       object = {
         data: {
-          transitionTable: [
-          ],
-
+          transitionTable: [],
           alphabet: [],
-
-          acceptState: [
-          ]
+          acceptState: []
         },
         machine: null,
         nodes: null,
@@ -555,13 +556,15 @@ export default {
         TokenForm: '',
         Token: '',
         autobuttonType: 'primary',
+        autoicon: 'static/img/play_24.png',
         autobuttonText: '自动展示',
         isFull_screen: false,
         magnifier: false,
         zoomicon: 'static/img/fullscreen_24.png',
         fullscreenText: '全屏',
         messBoxScroll: null,
-        tokenBoxScroll: null
+        first: true,
+        code: ''
       }
       console.log(object.Token)
     },
@@ -733,8 +736,8 @@ export default {
               self.$nextTick(() => {
                 self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                  click: false,
-                  bounce: false
+                  click: true,
+                  bounce: true
                 // disableMouse: true
                 })
               })
@@ -1450,7 +1453,6 @@ export default {
 .scroll_bar {
   /* background-color: #bbbbbb; */
   height: 80px;
-  overflow: hidden;
 }
 div.graph {
   background: #eef0f1;
