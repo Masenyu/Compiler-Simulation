@@ -109,6 +109,42 @@ export default {
               type: 'success',
               message: response.data.message
             })
+            
+
+          this.currCollection = []
+          const self = this
+          let Params = {
+            studentID: sessionStorage.getItem('studentID')}
+          self.$axios.post('/api/user_function/collectionQuery', Params)
+            .then((response) => {
+              // console.log(response.data);
+              self.collection = response.data.data
+              console.log(self.collection)
+              for (let i = 0; i < this.pageSize; i++) {
+                if (this.pageSize * (this.currentPage - 1) + i < this.collection.length) {
+                  this.currCollection.push(this.collection[this.pageSize * (this.currentPage - 1) + i])
+                  this.currCollection[i].itemID = this.pageSize * (this.currentPage - 1) + i + 1
+                  switch (this.currCollection[i].collectionType) {
+                    case 0:
+                      this.currCollection[i].leixing = '词法分析'
+                      break
+                  }
+                } else { break }
+              }
+              console.log(12313213)
+              console.log(this.currCollection)
+            }).catch((error) => {
+              this.$message({
+                type: 'info',
+                message: 'connection fail,press F12 to see the error in console'
+              })
+              console.log('ERROR:')
+              console.log(error)
+            })
+
+
+
+
           } else {
             this.$message({
               type: 'info',
@@ -133,7 +169,10 @@ export default {
   },
   mounted () {
     document.getElementById('p').style.height = (window.innerHeight - 110) + 'px'
-
+    if(window.innerHeight>700)
+      this.pageSize = 6
+    else
+      this.pageSize = 4
     this.getCollectionList()
     // this.$nextTick(()=>{
     //   for(let i = 0; i < this.pageSize; i++)
