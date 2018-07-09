@@ -110,6 +110,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        let re = /#\/index\/./
+        if (!re.test(window.location.hash)) {
+          this.$router.push('/index')
+        }
         sessionStorage.removeItem('studentID')
         sessionStorage.removeItem('studentName')
         sessionStorage.removeItem('email')
@@ -120,11 +124,11 @@ export default {
     // 处理账号下来菜单的点击事件
     handleCommand (command) {
       if (command === 'modifypassword') {
-        this.gotoUrl('/index/modifypassword')
+        this.gotoUrl('/user/modifypassword')
       } else if (command === 'logout') {
         this.logout()
       } else if (command === 'my-collection') {
-        this.$router.push('/index/my-collection')
+        this.$router.push('/user/my-collection')
       }
     },
     // 改变URL
