@@ -16,13 +16,13 @@
                         <el-row>
                           <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
                           <el-col span="5">
-                            <p>红色为进行读取字符</p>
+                            <p style="font-size: 12px">红色为进行读取字符</p>
                           </el-col>
                         </el-row>
                         <el-row>
                           <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
                           <el-col span="5">
-                            <p>蓝色为进行闭包操作</p>
+                            <p style="font-size: 12px">蓝色为进行闭包操作</p>
                           </el-col>
                         </el-row>
                       </div>
@@ -736,8 +736,8 @@ export default {
               self.$nextTick(() => {
                 self.NFA.messBoxScroll = new BScroll(this.$refs.messBoxNFA, {
                 // better-scroll 会将点击事件去掉，要在这里开启，同时点击在PC 会被执行两次，要在这里控制
-                  click: true,
-                  bounce: true
+                  click: false,
+                  bounce: false
                 // disableMouse: true
                 })
               })
