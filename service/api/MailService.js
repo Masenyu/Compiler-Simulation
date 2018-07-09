@@ -3,8 +3,6 @@
 
 function MailService(sender, code, smtpProvider='163') {
     let nodemailer = require("nodemailer");
-   // let transporter = nodemailer.createTransport(`smtps://${sender}:${code}@smtp.qq.com`);
-
     let transporter = nodemailer.createTransport({
         host: `smtp.${smtpProvider}.com`,
         auth: {
@@ -15,7 +13,7 @@ function MailService(sender, code, smtpProvider='163') {
 
 
     return {
-                resetPassword: function (recipient, verCode) {
+                createAccount: function (recipient, verCode) {
                         let mailOptions = {
                                 from: `<${sender}@${smtpProvider}.com>`,
                                 to: recipient,
@@ -35,7 +33,7 @@ function MailService(sender, code, smtpProvider='163') {
                                 return true;
                         })
                 },
-                createAccount: function (recipient, verCode) {
+                resetPassword: function (recipient, verCode) {
                         let mailOptions = {
                                 from: `${sender}@${smtpProvider}.com`,
                                 to: recipient,

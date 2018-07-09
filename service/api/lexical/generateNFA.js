@@ -326,7 +326,11 @@ function OperatorInToStack()
                     else{
                       //a-b
                       var startIndex=IndexChar(str_content[j])
+                      if(startIndex===-1){return {state:0,message:"‘-’前存在符号表中不存在的字符“"+str_content[j]+"”，无法进行编译"}}
                       var endIndex=IndexChar(str_content[j+2])
+                      if(endIndex===-1){return {state:0,message:"‘-’后存在符号表中不存在的字符“"+str_content[j+2]+"”，无法进行编译"}}
+
+                      if(startIndex>endIndex){return {state:0,message:""+str_content[j]+"的顺序在"+str_content[j+2]+"之前，请调换顺序后重试"}}
                       j+=3
                       for(var k=startIndex;k<=endIndex;k++)
                       {
@@ -348,6 +352,7 @@ function OperatorInToStack()
                 }
                 else{
                   console.log("error start with -")
+                  return {state:0,message:"error start with '-' in medium bracket"}
                 }
               }
               this.NFAStack.push(res)
@@ -433,11 +438,17 @@ function OperatorInToStack()
               }
               else{
                 for( var m = i+1 ; m < tempCount ; m++ ){
+                  if(str[m]!='0'&&str[m]!='1'&&str[m]!='2'&&str[m]!='3'&&str[m]!='4'&&str[m]!='5'&&str[m]!='6'&&str[m]!='7'&&str[m]!='8'&&str[m]!='9')
+                  {return{state:0,message:"请输入数字！！！！！！"}}
                   numStr += str[m]
                 }
                 num = parseInt(numStr)
-              }
 
+                console.log("num!!!!!!!!!!",num)
+              }
+              if(num<0){
+                return{state:0,message:"num<0 after \'\{\'"}
+              }
               //console.log('test generate {: num = ' + num)
               if( num === 0 ){
                 var op2=new NFA(0,0);

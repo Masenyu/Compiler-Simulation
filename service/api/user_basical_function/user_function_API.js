@@ -61,7 +61,7 @@ router.post('/generateVerificationCode', (req, res) => {
                   console.log(err);
                 } else {
                   var recipient = params.email
-                  mailService.resetPassword(recipient, verCode);
+                  mailService.createAccount(recipient, verCode);
                   var result3 = {state: 1, message: "sending email successfully!", email: recipient}
                   jsonWrite(res, result3);
                 }
@@ -74,7 +74,7 @@ router.post('/generateVerificationCode', (req, res) => {
                   console.log(err);
                 } else {
                   var recipient = params.email
-                  mailService.resetPassword(recipient, verCode);
+                  mailService.createAccount(recipient, verCode);
                   var result3 = {state: 1, message: "sending email successfully!", email: recipient}
                   jsonWrite(res, result3);
                 }
