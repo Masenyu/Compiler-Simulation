@@ -132,7 +132,7 @@ export default {
                 self.errInfo = response.data.message
               } else if (response.data.state === 1) {
                 Message({
-                  message: '邮箱可用',
+                  message: '已发送验证码，请查收',
                   type: 'success',
                   center: true
                 })

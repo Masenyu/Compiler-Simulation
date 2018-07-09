@@ -6,7 +6,6 @@
     </el-header>
     <div class="cartTable">
       <el-row>
-        <el-col :span="2"> </el-col>
         <el-col :span="2">编号</el-col>
         <el-col :span="4">类型</el-col>
         <el-col :span="12">文法</el-col>
@@ -109,6 +108,42 @@ export default {
               type: 'success',
               message: response.data.message
             })
+            
+
+          this.currCollection = []
+          const self = this
+          let Params = {
+            studentID: sessionStorage.getItem('studentID')}
+          self.$axios.post('/api/user_function/collectionQuery', Params)
+            .then((response) => {
+              // console.log(response.data);
+              self.collection = response.data.data
+              console.log(self.collection)
+              for (let i = 0; i < this.pageSize; i++) {
+                if (this.pageSize * (this.currentPage - 1) + i < this.collection.length) {
+                  this.currCollection.push(this.collection[this.pageSize * (this.currentPage - 1) + i])
+                  this.currCollection[i].itemID = this.pageSize * (this.currentPage - 1) + i + 1
+                  switch (this.currCollection[i].collectionType) {
+                    case 0:
+                      this.currCollection[i].leixing = '词法分析'
+                      break
+                  }
+                } else { break }
+              }
+              console.log(12313213)
+              console.log(this.currCollection)
+            }).catch((error) => {
+              this.$message({
+                type: 'info',
+                message: 'connection fail,press F12 to see the error in console'
+              })
+              console.log('ERROR:')
+              console.log(error)
+            })
+
+
+
+
           } else {
             this.$message({
               type: 'info',
@@ -133,7 +168,10 @@ export default {
   },
   mounted () {
     document.getElementById('p').style.height = (window.innerHeight - 110) + 'px'
-
+    if(window.innerHeight>700)
+      this.pageSize = 6
+    else
+      this.pageSize = 4
     this.getCollectionList()
     // this.$nextTick(()=>{
     //   for(let i = 0; i < this.pageSize; i++)
@@ -173,6 +211,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   border: 1px solid #cccccc;
+  font-size: 16px;
   background-color: rgba(255, 255, 255, 1);
 }
 .head {
@@ -190,7 +229,7 @@ export default {
   overflow: hidden;
 }
 .table-block {
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   min-height: 80%;
 }
@@ -200,6 +239,7 @@ export default {
   margin-bottom: 0px;
   background-color: #fafafa;
   padding: 10px;
+
   border: 1px solid #ccd0d2;
   border-bottom-color: #ececec;
   border-top-color: #ececec;

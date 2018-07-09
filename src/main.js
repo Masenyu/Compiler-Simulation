@@ -7,6 +7,7 @@ import ElementUI from 'element-ui'
 import '../static/theme-chalk/index.css'
 import VIS from 'vis'
 import axios from 'axios'
+import 'babel-polyfill'
 import SIdentify from './components/common/Identify' // 自定义组件
 
 Vue.component('SIdentify', SIdentify)
