@@ -703,7 +703,7 @@ export default {
             self.DFA_S.data.alphabet,
             self.DFA_S.data.acceptState
           )
-
+          self.TokenForm = self.TokenForm.replace('\n', ' ')
           self.NFA.machine.feedText(self.TokenForm)
           self.NFA.nextState = self.NFA.machine.init()
           self.changeNode(self.NFA, self.NFA.nextState.graphInfo.highlightNodes, 1)
