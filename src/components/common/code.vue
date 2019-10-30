@@ -4,7 +4,8 @@
       <textarea id="editor" name="editor">
       </textarea>
     </div>
-    <div v-if="!hasinput" @click="focusevent()" style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">请输入待分析源码：</div>
+    <div v-if="!hasinput" @click="focusevent()"
+         style="z-index:1;position:absolute;top:2px;left:40px;font-size:18px;font-family: Arial;color:#b4b7b9;">请输入待分析源码：</div>
     <el-tooltip class="item" effect="dark" content="清空" placement="top">
       <button v-if="hasinput" class="resetbutton" @click="resetForm ('REForm')"><img src="static/img/reset.png"/></button>
     </el-tooltip>
@@ -53,11 +54,11 @@ import 'codemirror/addon/selection/active-line'
 export default {
   data () {
     return {
-      nameArray: [],
-      modeArray: [],
-      mapArray: [],
+      //nameArray: [],
+      //modeArray: [],
+      //mapArray: [],
       CodeMirrorEditor: null,
-      something: '',
+      //something: '',
       hasinput: false
     }
   },
@@ -116,7 +117,7 @@ export default {
       // // this.CodeMirrorEditor.markText({line:0,ch:0},{line:0,ch:0})
       // this.CodeMirrorEditor.setBookmark({line:0,ch:0},{line:0,ch:1},{readOnly:true});
       // this.CodeMirrorEditor.setCursor(0)document.getElementById('p').style.minHeight = (window.innerHeight) + 'px'
-      this.CodeMirrorEditor.setSize(350, window.innerHeight*0.32)
+      this.CodeMirrorEditor.setSize(300, window.innerHeight*0.32)
     },
     resetForm (formName) {
       this.CodeMirrorEditor.setValue('')

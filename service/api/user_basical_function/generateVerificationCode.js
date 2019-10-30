@@ -18,13 +18,13 @@ function randomNum(minNum,maxNum){
   }
 }
 function generateVerificationCode(){
-  var code="";
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
-  code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
+  var code="1";
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length - 1)];
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
+  // code+=MiddlePackageAlphabet[randomNum(0,MiddlePackageAlphabet.length-1)];
   return code;
 }
 // console.log(generateVerificationCode())

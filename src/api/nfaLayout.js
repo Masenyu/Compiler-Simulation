@@ -1,8 +1,8 @@
 /* eslint-disable */
 export { NFALayout }
 function NFALayout(TB, A) {
-	let _range = length => Array.from({ length }).map((v, k) => k);
-	let _new_arr_with_v = (length, value) => Array.from({ length }).map((v) => value);
+	let _range = length => Array.from({ length }).map((v, k) => k);//创建一个从0到n-1的数组
+	let _new_arr_with_v = (length, value) => Array.from({ length }).map((v) => value);//生成一个长度为length的数组，每个值为value
 	var transitionTable = TB;
 	var alphabet = A;
 
@@ -12,7 +12,7 @@ function NFALayout(TB, A) {
 			prenNodes: [],
 			nextNodes: []
 		});
-	}
+	}//node从0到length-1
 	for (let row of _range(transitionTable.length)) {
 		for (let col of _range(alphabet.length)) {
 			for (let e of transitionTable[row][col]) {
@@ -37,7 +37,7 @@ function NFALayout(TB, A) {
 		});
 		if (indexes.length === 0) return -1;
 		else return indexes;
-	}
+	}//indexes数组里存储着value出现在数组array中的下标
 
 	function _indexsOf_2(arrayOfarray, value) {
 		let indexes = [];
@@ -48,14 +48,14 @@ function NFALayout(TB, A) {
 		});
 		if (indexes.length === 0) return -1;
 		else return indexes;
-	}
+	}//indexes数组里存储着value出现在二维数组array中哪一行
 
 	function traceback(node) {
 		//  从 0 到达 node 走过的轨迹
 		let trace = [node];
 		if (node === 0) return trace;
 		let preNode = stems[node][0];
-		trace.unshift(preNode);
+		trace.unshift(preNode);//将preNode插到trace数组的最前面
 		while (preNode != 0) {
 			preNode = stems[preNode][0];
 			trace.unshift(preNode);
@@ -155,7 +155,7 @@ function NFALayout(TB, A) {
 								// nextNode 存在，但是之前设置的 stem 是错的，正解为 node
 								stems[nextNode] = [node];
 								// 把所有受影响的 node 的 levels 改正确
-								// 注意后面的节点的排序目前认为是正确的，故只需要遍历一下改正 level 就 ok 
+								// 注意后面的节点的排序目前认为是正确的，故只需要遍历一下改正 level 就 ok
 								resetLevelsOf(nextNode);
 							} else {
 								// nextNode 是一个并点

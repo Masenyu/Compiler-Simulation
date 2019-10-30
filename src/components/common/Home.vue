@@ -16,6 +16,8 @@ import vueCanvasNest from 'vue-canvas-nest'
 
 export default {
   data () {
+    return{
+    }
   },
   components: {
     vHead,

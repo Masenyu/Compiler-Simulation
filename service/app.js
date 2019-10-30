@@ -14,5 +14,6 @@ app.use(express.static(path.join(__dirname, 'dist')))
 
 app.use('/api/lexical', lexical);
 app.use('/api/user_function',user_basical_function );
+
 app.listen(3000);
 console.log('success listen at port: 3000')

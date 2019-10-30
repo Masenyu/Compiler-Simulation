@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <el-row>
-      <el-col :span="14" :offset="1">
+      <el-col :span="16" :offset="1">
         <!-- <div v-if="isFirsttime" >
           <p>词法分析是编译的第一阶段</p>
         </div> -->
@@ -14,14 +14,14 @@
                     <div :class="{'active':NFA.isFull_screen,'graph':true}">
                       <div style="position: absolute; width:100%; margin: 2px">
                         <el-row>
-                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
-                          <el-col span="5">
+                          <el-col :span="1"><img style="height: 2rem; width: 2rem" src="static/img/red.png" /></el-col>
+                          <el-col :span="5">
                             <p style="font-size: 12px">红色为进行读取字符</p>
                           </el-col>
                         </el-row>
                         <el-row>
-                          <el-col span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
-                          <el-col span="5">
+                          <el-col :span="1"><img style="height: 2rem; width: 2rem" src="static/img/blue.png" /></el-col>
+                          <el-col :span="5">
                             <p style="font-size: 12px">蓝色为进行闭包操作</p>
                           </el-col>
                         </el-row>
@@ -37,10 +37,11 @@
                                   <!-- <el-button @click="layoutChange()">{{layoutText}}</el-button> -->
                                   <!-- button class="buttonInGraph" @click="full_screen(NFA)"><img :src="NFA.zoomicon" /></button>
                                   <button class="buttonInGraph" @click="fitAnimated(NFA)"><img src="static/img/visibility_24.png" /></button -->
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                     <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="NFA.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="NFA.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(NFA, 'javascript')"><img src="static/img/description_24.png" /></button>
+                                     <button class="buttonInGraph buttonInGraph-top" data-tip="查看过程" :disabled="isFirsttime" @click="process()"><img src="static/img/process_24.png" /></button>
                                   <!-- el-button type="info" icon="fullscreen" circle @click="full_screen(NFA)"><img src="../../assets/fullscreen_24.png" /></el-button>
                                   <el-button type="info" icon="el-icon-view" circle @click="fitAnimated(NFA)"></el-button -->
                                 </span>
@@ -120,7 +121,7 @@
                               <div style="min-height: 5rem"></div>
                               <div style="min-height: 3.5rem; margin-buttom: 20px">
                                 <span style="test-align: center; display:inline-block; width: 40%; padding-left: 40%">
-                                  <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
+                                     <button class="buttonInGraph buttonInGraph-top" data-tip="上一步" :disabled="!hasbegin" @click="previous()"><img src="static/img/arrow_back_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" :data-tip="DFA_S.autobuttonText" :disabled="!hasbegin" @click="autoControl()"><img :src="DFA_S.autoicon" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="下一步" :disabled="!hasbegin" @click="next()"><img src="static/img/arrow_forward_24.png" /></button><!--
                                   --><button class="buttonInGraph buttonInGraph-top" data-tip="查看代码" :disabled="isFirsttime" @click="code(DFA_S, 'text/x-c++src')"><img src="static/img/description_24.png" /></button>
@@ -149,14 +150,13 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-        <el-dialog title="代码" :visible.sync="dialogVisible" width="900px" style="height: 950px; margin-top: -5%" :before-close="handleClose">
+        <el-dialog title="代码" :visible.sync="dialogVisible" width="900px" style="height: 950px; margin-top: -5%" >
           <div>
             <code-area2 ref="codearea2"></code-area2>
           </div>
         </el-dialog>
-
       </el-col>
-      <el-col :span="7" :offset="1">
+      <el-col :span="5" :offset="1">
         <div>
 
             <el-row>
@@ -200,6 +200,7 @@
                 </div> -->
               </el-col>
             </el-row>
+          <code-area3 ref="codearea3" :treeArray="tree" :RE="REForm.RE"></code-area3>
 
 
         </div>
@@ -214,16 +215,19 @@ import { Message } from 'element-ui'
 import { createNodes, createEdges } from '../../api/vis_api'
 import { create_NFA, NFA_CODE } from '../../api/NFA'
 import { create_DFA, DFA_CODE } from '../../api/DFA'
+import { process } from '../../api/test_process'
 import BScroll from 'better-scroll'
 import codeArea from '../common/code'
 import codeArea1 from '../common/code1'
 import codeArea2 from '../common/code2'
+import codeArea3 from '../common/code3'
 
 export default {
   components: {
     codeArea,
     codeArea1,
-    codeArea2
+    codeArea2,
+    codeArea3,
   },
   props: {
     messBoxNFA: {
@@ -295,6 +299,7 @@ export default {
       autobuttonText: '自动展示',
       TokenForm: '',
       hasbegin: false,
+      tree: [],
       NFA: {
         data: {
           transitionTable: [],
@@ -380,11 +385,13 @@ export default {
 
   computed: {
     available () {
+      this.tree=process().treeArray
       return this.hasbegin
     }
   },
+
   methods: {
-    collect(){
+    collect ( ){
       let studentID = sessionStorage.getItem('studentID')
       console.log(sessionStorage.getItem('studentID'))
       if(studentID === null)
@@ -442,6 +449,11 @@ export default {
         this.$refs.codearea2.showcode(object.code, lan)
       })
     },
+    process(){
+      this.$nextTick(() => {
+        this.$refs.codearea3.showPopBox()
+      })
+    },
     updatere (data) {
       const self = this
       self.REForm.RE = data
@@ -469,8 +481,8 @@ export default {
           let url = '/api/lexical/regularExpression'
           let Params = { RE: re }
           self.$axios
-            .post(url, Params)
-            .then(function (response) {
+            .post(url, Params) //前端传后端数据
+            .then(function (response) { //接受后端数据
               if (response.data.state === 1) {
                 // self.$refs.codearea.resetForm('REForm')
                 self.NFA.code = response.data.code[0]
@@ -489,9 +501,10 @@ export default {
                 // sessionStorage.setItem('regulation', regulation)
                 self.addCSS(self.getCsstext())
                 self.isFirsttime = false
-                
+                self.tree=response.data.result[3].dataStore;
+                console.log(self.tree);
                 self.fresh()
-                
+
               } else { // 报错
                 console.log('error: ' + response.data.message)
                 Message({
@@ -531,7 +544,7 @@ export default {
       this.hasbegin = false
       this.clearData(this.NFA)
       this.clearData(this.DFA)
-      this.clearData(this.DFA_S)   
+      this.clearData(this.DFA_S)
       this.generateFA('REForm')
     },
     // 重新生成状态机，刷新数据
@@ -617,7 +630,7 @@ export default {
               background: 'white'
             }
           },
-          shape: 'dot',
+          //shape: 'dot',
           size: 30,
           font: {
             size: 18
@@ -1385,14 +1398,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .page {
-  width: 70%;
+ /* width: 95%;*/
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 40px;
   min-width: 1200px;
   min-height: 100%;
   border: 1px solid #cccccc;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(240, 240, 240, 1);
 }
 .tab {
   height: auto;
@@ -1455,7 +1468,7 @@ export default {
   height: 80px;
 }
 div.graph {
-  background: #eef0f1;
+  background: #ffffff;
 }
 div.graph.active {
   position: fixed;
@@ -1484,12 +1497,13 @@ div.graph div.vis {
   background: rgba(0, 0, 0, 0.3);
   width: 3rem;
   height: 3rem;
-  border: none;
+  /*border: none;*/
   outline: none;
   margin: 0;
   display: inline-block;
   position: relative;
   z-index: 5;
+  float:left
   /*background-image: url("../../assets/fullscreen.png")*/
 }
 .buttonInGraph:hover {
@@ -1565,6 +1579,7 @@ div.graph div.vis {
   width: 80px;
   margin-right: 10px;
 }
+
 </style>
 
 <style>

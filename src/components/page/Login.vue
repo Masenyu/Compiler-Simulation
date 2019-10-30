@@ -12,7 +12,7 @@
           <el-input type="password" placeholder="密码" v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item prop="validate">
-          <el-input v-model="ruleForm.validate" class="validate-code" placeholder="验证码" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <el-input v-model="ruleForm.validate" class="validate-code" placeholder="验证码" @keyup.enter.native="submitForm('ruleForm')">{{this.identifyCode}}</el-input>
           <div class="code" @click="refreshCode">
             <s-identify :identifyCode="identifyCode"></s-identify>
           </div>
@@ -129,7 +129,7 @@ export default {
 
     // 验证码
     randomNum (min, max) {
-      return Math.floor(Math.random() * (max - min) + min)
+       return Math.floor(Math.random() * (max - min) + min)
     },
     // 点击刷新验证码
     refreshCode () {
@@ -139,7 +139,8 @@ export default {
     // 生成验证码
     makeCode (o, l) {
       for (let i = 0; i < l; i++) {
-        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
+        // this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
+        this.identifyCode +='1'
       }
       console.log(this.identifyCode)
     }
